@@ -745,16 +745,6 @@ errors = list(checker.run())
 - **Integration**: Test with other flake8 plugins for conflicts
 - **PyPI**: Auto-publish starting at v0.8.0 (manual until then)
 
-### tmux Development Workflow (Max 4 panes)
-```bash
-# Window 1: Development
-tmux new-session -d -s "flake8-dev"
-tmux split-window -h    # Pane 1: vim editing
-tmux split-window -v    # Pane 2: pytest --watch
-tmux select-pane -t 0
-tmux split-window -v    # Pane 3: flake8 testing
-                        # Pane 0: git/general commands
-```
 
 ## Adding New Rules
 
