@@ -5,12 +5,12 @@ Guidelines for Gemini when handling tasks in the flake8-patterns educational lin
 ## 🎯 Project Context
 
 **flake8-patterns** is an educational flake8 plugin that detects anti-patterns from:
-- "Effective Python" (3rd Edition) by Brett Slatkin
-- "High Performance Python" (3rd Edition) by Micha Gorelick and Ian Ozsvald
+- **"Effective Python" (3rd Edition)** by Brett Slatkin (PRIMARY FOCUS)
+- "High Performance Python" (3rd Edition) by Micha Gorelick and Ian Ozsvald (FUTURE)
 
-*Note: We're starting with Effective Python patterns as they tend to be more objective and easier to implement, but both books are equally important to the project.*
+*Note: We're starting with Effective Python patterns as they tend to be more objective and easier to implement. Comprehensive analysis identified 26 implementable rules across 3 priority tiers.*
 
-**Current Status:** v0.1.0-dev, implementing EP201 (single-element tuples)
+**Current Status:** v0.1.0-dev, implementing EP105 (multiple-assignment unpacking over indexing)
 
 **Your Role:** Handle simple, routine tasks while Claude focuses on complex architecture and implementation decisions.
 
@@ -29,11 +29,11 @@ For **any complex task** (implementation, analysis, multi-file changes), use str
 }
 ```
 
-### Example: Implementing EP201 Detection
+### Example: Implementing EP105 Detection
 ```json
 // Thought 1
 {
-  "thought": "Need to analyze EP201 requirements: detect single-element tuples missing commas like (item) vs (item,)",
+  "thought": "Need to analyze EP105 requirements: detect sequential indexing like x = item[0]; y = item[1] that should use unpacking",
   "thoughtNumber": 1,
   "totalThoughts": 4,
   "nextThoughtNeeded": true
@@ -41,7 +41,7 @@ For **any complex task** (implementation, analysis, multi-file changes), use str
 
 // Thought 2
 {
-  "thought": "Should examine existing AST visitor patterns in checker.py to understand the codebase style for tuple detection",
+  "thought": "Should examine existing AST visitor patterns in checker.py to understand codebase style for assignment detection",
   "thoughtNumber": 2,
   "totalThoughts": 4,
   "nextThoughtNeeded": true
@@ -49,7 +49,7 @@ For **any complex task** (implementation, analysis, multi-file changes), use str
 
 // Thought 3
 {
-  "thought": "Implementation requires: 1) visit_Tuple method 2) check len(node.elts)==1 3) detect missing comma 4) call self.error()",
+  "thought": "Implementation requires: 1) visit_Assign method 2) track sequential indexing patterns 3) detect x=item[0], y=item[1] 4) call self.error()",
   "thoughtNumber": 3,
   "totalThoughts": 4,
   "nextThoughtNeeded": true
@@ -57,7 +57,7 @@ For **any complex task** (implementation, analysis, multi-file changes), use str
 
 // Thought 4
 {
-  "thought": "Ready to implement. Will add visitor method, create tests, and ensure book reference accuracy.",
+  "thought": "Ready to implement. Will add visitor method, create tests, and ensure book reference accuracy for Item 5.",
   "thoughtNumber": 4,
   "totalThoughts": 4,
   "nextThoughtNeeded": false
@@ -142,28 +142,28 @@ examples/
 ### Python Code Standards
 ```python
 # Type hints REQUIRED (Python 3.10+)
-def visit_Tuple(self, node: ast.Tuple) -> None:
-    """Check single-element tuple patterns.
+def visit_Assign(self, node: ast.Assign) -> None:
+    """Check assignment patterns for unpacking opportunities.
 
-    Detects EP201: Missing comma in single-element tuples.
-    Reference: "Effective Python" (3rd Edition), Chapter 2.
+    Detects EP105: Sequential indexing that should use unpacking.
+    Reference: "Effective Python" (3rd Edition), Item 5, Chapter 1.
     """
-    if len(node.elts) == 1 and not self._has_trailing_comma(node):
-        self.error(node, "EP201")
+    if self._is_sequential_indexing(node):
+        self.error(node, "EP105")
     self.generic_visit(node)
 
 # Error message format (CRITICAL - get approval for changes)
-EP201_MESSAGE = (
-    "Single-element tuple missing comma, add trailing comma for clarity",
-    "'Effective Python' (3rd Edition), Chapter 2: Strings and Slicing",
-    "Readability: Prevents confusion with grouping parentheses"
+EP105_MESSAGE = (
+    "Sequential indexing detected, use multiple-assignment unpacking",
+    "'Effective Python' (3rd Edition), Item 5, Chapter 1: Pythonic Thinking",
+    "Readability: Cleaner, less error-prone, same performance"
 )
 
 # Git commit format (use conventional commits)
-git commit -m "feat(EP201): implement single-element tuple detection"
-git commit -m "test(EP201): add edge cases for nested tuples"
+git commit -m "feat(EP105): implement multiple-assignment unpacking detection"
+git commit -m "test(EP105): add edge cases for nested indexing"
 git commit -m "fix(utils): handle None values in get_variable_name"
-git commit -m "docs: update README with EP201 examples"
+git commit -m "docs: update README with EP105 examples"
 ```
 
 ## 🔍 Large Codebase Analysis Commands
@@ -174,7 +174,7 @@ git commit -m "docs: update README with EP201 examples"
 gemini -p "@src/ @tests/ Are all EP### rules properly implemented and tested?"
 
 # Verify book reference accuracy
-gemini -p "@src/book_refs.py @src/messages.py Do all error codes cite correct book chapters?"
+gemini -p "@src/book_refs.py @src/messages.py Do all error codes cite correct Item numbers and chapters?"
 
 # Documentation consistency
 gemini -p "@README.md @examples/ @src/ Do README examples match implemented rules?"
@@ -188,8 +188,8 @@ gemini -p "@src/ Are there any error code conflicts with flake8-bugbear or flake
 # Message quality assessment
 gemini -p "@src/messages.py Are error messages clear and educational for Python learners?"
 
-# Performance claims verification
-gemini -p "@src/messages.py @examples/ Are performance estimates accurate and well-demonstrated?"
+# Impact claims verification
+gemini -p "@src/messages.py @examples/ Are readability/performance estimates accurate and well-demonstrated?"
 
 # Test coverage analysis
 gemini -p "@tests/ @examples/ Which rules lack comprehensive test coverage?"
@@ -204,7 +204,7 @@ gemini -p "@src/ Identify areas for simple refactoring to improve consistency"
 ```bash
 # Standard commits (use conventional format)
 git commit -m "fix(docs): correct typo in README examples"
-git commit -m "test(EP201): add edge case for empty parentheses"
+git commit -m "test(EP105): add edge case for different variable names"
 git commit -m "style: format code with black and isort"
 git commit -m "chore(deps): update pytest to latest version"
 ```
@@ -217,7 +217,7 @@ isort src/ tests/
 ruff check src/ tests/ --fix
 
 # Run specific tests
-pytest tests/test_effective_python.py::test_ep201_detection
+pytest tests/test_effective_python.py::test_ep105_detection
 pytest --cov=flake8_patterns --cov-report=html
 ```
 
@@ -271,16 +271,16 @@ pytest --cov=flake8_patterns --cov-report=html
 
 **Files modified:**
 - src/flake8_patterns/utils.py (minor typo fix)
-- tests/test_effective_python.py (added EP201 edge case)
+- tests/test_effective_python.py (added EP105 edge case)
 
 **Issues found:**
-- EP201 test coverage missing for nested tuples
+- EP105 test coverage missing for nested indexing
 - README example shows outdated syntax
 
 **Recommended next steps:**
-1. Claude review: EP201 nested tuple handling
+1. Claude review: EP105 nested indexing handling
 2. Update README examples for current implementation
-3. Add performance benchmarks for EP201 detection
+3. Add performance benchmarks for EP105 detection
 
 **Status:** Ready for Claude review of complex issues
 ```
@@ -297,14 +297,18 @@ pytest --cov=flake8_patterns --cov-report=html
 
 ## 🎯 Current Implementation Priorities
 
-### Phase 1: Starting with Effective Python (Practical Reasons)
-*Note: Both books are equally valuable - starting with EP because patterns are more objective and easier to implement first.*
+### Phase 1: Tier 1 Rules (Highest Impact, Clear Gaps)
+*Based on comprehensive analysis of all 125 Effective Python items*
 
-#### EP201 (Single-Element Tuples)
+#### EP105 (Multiple-Assignment Unpacking) - CURRENT PRIORITY
 ```python
 # Pattern to detect:
-coordinates = (42)     # Missing comma - should trigger EP201
-good_tuple = (42,)     # Correct - should not trigger
+item = (1, 2, 3)
+first = item[0]     # Should trigger EP105
+second = item[1]    # Part of sequential pattern
+
+# Good pattern:
+first, second, third = item
 
 # Files involved:
 - src/flake8_patterns/checker.py     # Core detection (Claude)
@@ -313,15 +317,22 @@ good_tuple = (42,)     # Correct - should not trigger
 - examples/bad_patterns.py          # Examples (You)
 ```
 
+#### Next Tier 1 Rules in Pipeline (6 total)
+- **EP213**: Context-Aware String Concatenation (Item 13, Chapter 2)
+- **EP318**: Parallel Iteration with zip() (Item 18, Chapter 3)
+- **EP320**: Loop Variables After Loop Ends (Item 20, Chapter 3)
+- **EP321**: Be Defensive when Iterating over Arguments (Item 21, Chapter 3)
+- **EP426**: Comprehensive dict.get() patterns (Item 26, Chapter 4)
+
 ### Future: High Performance Python Integration
 - **HP001**: String concatenation in loops → str.join()
 - **PC001**: List membership testing → set for O(1) lookup
 - **MC001**: Missing __slots__ → memory optimization
 
-### Next Effective Python Rules in Pipeline
-- **EP202**: F-strings over C-style formatting
-- **EP203**: Explicit string concatenation
-- **EP301**: enumerate() over range(len())
+### Total Verified Rules: 26 across 3 tiers
+- **Tier 1**: 6 rules (highest impact, clear detection)
+- **Tier 2**: 14 rules (code quality, API design)
+- **Tier 3**: 6 rules (advanced patterns, nice to have)
 
 ## 🔄 Environment & Configuration
 
