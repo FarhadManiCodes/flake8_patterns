@@ -2,6 +2,14 @@
 """
 Comprehensive verification script for flake8-patterns installation.
 Run this to verify everything is working correctly.
+
+Updated for verified Tier 1 rules from "Effective Python" (3rd Edition):
+- EP105: Multiple-Assignment Unpacking over Indexing
+- EP213: Context-Aware String Concatenation  
+- EP318: Parallel Iteration with zip()
+- EP320: Loop Variables After Loop Ends
+- EP321: Be Defensive when Iterating over Arguments
+- EP426: Comprehensive dict.get() patterns
 """
 
 import os
@@ -116,7 +124,7 @@ def check_import_system():
 
     # Test main checker import
     try:
-        from flake8_patterns import PerformanceChecker
+        from flake8_patterns.checker import PerformanceChecker
 
         log_success("PerformanceChecker import works")
         print(f"   Checker class: {PerformanceChecker}")
@@ -126,20 +134,22 @@ def check_import_system():
 
     # Test other components
     components = [
-        "get_error_message",
-        "ALL_MESSAGES",
-        "get_book_reference",
+        ("messages", "get_error_message"),
+        ("messages", "ALL_MESSAGES"),
+        ("book_refs", "get_book_reference"),
+        ("book_refs", "EFFECTIVE_PYTHON_REFS"),
     ]
 
-    for component in components:
+    for module, component in components:
         try:
-            obj = getattr(flake8_patterns, component, None)
+            mod = __import__(f"flake8_patterns.{module}", fromlist=[component])
+            obj = getattr(mod, component, None)
             if obj is not None:
-                log_success(f"{component} import works")
+                log_success(f"{module}.{component} import works")
             else:
-                log_warning(f"{component} not available (may not be implemented yet)")
+                log_warning(f"{module}.{component} not available (may not be implemented yet)")
         except Exception as e:
-            log_warning(f"{component} import issue: {e}")
+            log_warning(f"{module}.{component} import issue: {e}")
 
     return True
 
@@ -168,35 +178,84 @@ def check_flake8_integration():
 
 
 def check_plugin_functionality():
-    """Test actual plugin functionality."""
+    """Test actual plugin functionality with verified Tier 1 rules."""
     print(f"\n{Colors.BLUE}⚡ Plugin Functionality Check{Colors.NC}")
 
-    # Create temporary test file
+    # Test cases for verified Tier 1 rules
     test_cases = [
         {
-            "name": "HP001 - String concatenation in loop",
+            "name": "EP105 - Sequential indexing patterns",
             "code": """
-result = ""
-for i in range(10):
-    result += str(i)  # Should trigger HP001
+# Sequential indexing that should trigger EP105
+item = ("Alice", 25, "Engineer")
+name = item[0]      # Sequential indexing
+age = item[1]       # Should trigger EP105
+job = item[2]       # Continues pattern
 """,
-            "expected_error": "HP001",
+            "expected_error": "EP105",
         },
         {
-            "name": "HP002 - Multiple string concatenations",
+            "name": "EP213 - Implicit string concatenation in collections",
             "code": """
-message = "Hello" + " " + "beautiful" + " " + "world"  # Should trigger HP002
+# Missing comma - dangerous implicit concatenation
+items = [
+    "first_item" "second_item",  # Should trigger EP213
+    "third_item",
+]
 """,
-            "expected_error": "HP002",
+            "expected_error": "EP213",
         },
         {
-            "name": "EP001 - range(len()) pattern",
+            "name": "EP318 - Manual parallel iteration",
             "code": """
-items = ["a", "b", "c"]
-for i in range(len(items)):  # Should trigger EP001
-    print(i, items[i])
+# Manual parallel iteration that should trigger EP318
+names = ["Alice", "Bob", "Charlie"]
+ages = [25, 30, 35]
+for i in range(len(names)):     # Should trigger EP318
+    name = names[i]
+    age = ages[i]
+    print(f"{name} is {age}")
 """,
-            "expected_error": "EP001",
+            "expected_error": "EP318",
+        },
+        {
+            "name": "EP320 - Loop variable used after loop",
+            "code": """
+# Loop variable used after loop ends
+def find_user(users):
+    for user in users:
+        if user.is_admin:
+            break
+    
+    if user.is_admin:           # Should trigger EP320
+        return user
+""",
+            "expected_error": "EP320",
+        },
+        {
+            "name": "EP321 - Multiple iterations over same parameter",
+            "code": """
+# Function iterating over parameter multiple times
+def normalize(numbers):
+    total = sum(numbers)        # First iteration
+    result = []
+    for value in numbers:       # Second iteration - should trigger EP321
+        percent = 100 * value / total
+        result.append(percent)
+    return result
+""",
+            "expected_error": "EP321",
+        },
+        {
+            "name": "EP426 - try/except KeyError patterns",
+            "code": """
+# try/except KeyError that should use dict.get()
+try:
+    value = my_dict[key]        # Should trigger EP426
+except KeyError:
+    value = default_value
+""",
+            "expected_error": "EP426",
         },
     ]
 
@@ -210,7 +269,7 @@ for i in range(len(items)):  # Should trigger EP001
 
         try:
             # Run flake8 on the test file
-            success, stdout, stderr = run_command(f"flake8 {temp_file}")
+            success, stdout, stderr = run_command(f"flake8 --select=EP {temp_file}")
 
             if test_case["expected_error"] in stdout:
                 log_success(f"Detected {test_case['expected_error']} correctly")
@@ -235,12 +294,16 @@ def check_entry_points():
         import pkg_resources
 
         # Look for flake8 extension entry points
+        found_entry_point = False
         for entry_point in pkg_resources.iter_entry_points("flake8.extension"):
-            if "flake8_patterns" in str(entry_point):
+            if "flake8_patterns" in str(entry_point) or entry_point.name == "EP":
                 log_success(f"Entry point found: {entry_point}")
-                return True
+                found_entry_point = True
 
-        log_warning("No flake8-patterns entry point found")
+        if not found_entry_point:
+            log_warning("No flake8-patterns entry point found")
+
+        return found_entry_point
 
     except ImportError:
         log_info("pkg_resources not available, skipping entry point check")
@@ -259,52 +322,99 @@ def check_console_commands():
         "flake8-pp-info",
     ]
 
+    found_any = False
     for cmd in commands:
         success, stdout, stderr = run_command(f"which {cmd}")
         if success:
             log_success(f"Console command '{cmd}' available")
+            found_any = True
         else:
             log_info(f"Console command '{cmd}' not found (may not be implemented)")
 
+    return found_any
+
 
 def run_comprehensive_test():
-    """Run a comprehensive functionality test."""
+    """Run a comprehensive functionality test with verified patterns."""
     print(f"\n{Colors.BLUE}🧪 Comprehensive Test{Colors.NC}")
 
-    # Create a more complex test file
+    # Create a more complex test file with verified Tier 1 patterns
     test_code = '''
 """Test file for flake8-patterns comprehensive check."""
 
-# HP001: String concatenation in loop
-def bad_string_building():
+# EP105: Sequential indexing patterns
+def process_user_data():
+    user_tuple = ("Alice", 25, "Engineer")
+    name = user_tuple[0]    # EP105
+    age = user_tuple[1]     # EP105
+    job = user_tuple[2]     # EP105
+    return f"{name} ({age}) - {job}"
+
+# EP213: Implicit string concatenation in collections
+config_items = [
+    "database_host" "database_port",  # EP213 - missing comma!
+    "redis_url",
+    "api_key",
+]
+
+# EP318: Manual parallel iteration
+def calculate_scores():
+    names = ["Alice", "Bob", "Charlie"]
+    scores = [85, 92, 78]
+    for i in range(len(names)):      # EP318
+        name = names[i]
+        score = scores[i]
+        print(f"{name}: {score}")
+
+# EP320: Loop variable used after loop
+def find_admin(users):
+    for user in users:
+        if user.is_admin:
+            break
+    
+    if user.is_admin:               # EP320
+        return user
+
+# EP321: Multiple iterations over same parameter
+def analyze_data(items):
+    count = len(items)              # First iteration
+    total = sum(items)              # Second iteration - EP321
+    return total / count
+
+# EP426: try/except KeyError patterns
+def get_config_value(config, key):
+    try:
+        value = config[key]         # EP426
+    except KeyError:
+        value = "default"
+    return value
+
+# Good patterns (should not trigger errors)
+def good_unpacking():
+    user_tuple = ("Alice", 25, "Engineer")
+    name, age, job = user_tuple     # Good!
+    return f"{name} ({age}) - {job}"
+
+def good_parallel_iteration():
+    names = ["Alice", "Bob", "Charlie"]
+    scores = [85, 92, 78]
+    for name, score in zip(names, scores):  # Good!
+        print(f"{name}: {score}")
+
+def good_dict_access():
+    def get_config_value(config, key):
+        return config.get(key, "default")   # Good!
+
+# Future High Performance Python patterns (for v0.8.0+)
+def future_hp_patterns():
+    # HP001: String concatenation in loops (future)
     result = ""
     for item in ["a", "b", "c"]:
-        result += item  # HP001
-
-# HP002: Multiple concatenations
-message = "Hello" + " " + "world" + "!"  # HP002
-
-# HP003: % formatting
-name = "Alice"
-greeting = "Hello %s" % name  # HP003
-
-# EP001: range(len()) pattern
-items = [1, 2, 3]
-for i in range(len(items)):  # EP001
-    print(items[i])
-
-# Good code (should not trigger errors)
-def good_string_building():
-    return "".join(["a", "b", "c"])
-
-def good_formatting():
-    name = "Alice"
-    return f"Hello {name}"
-
-def good_iteration():
-    items = [1, 2, 3]
-    for i, item in enumerate(items):
-        print(item)
+        result += item  # Will be HP001 in future
+    
+    # PC001: List membership testing (future)
+    if "item" in ["a", "b", "c", "d", "e"]:  # Will be PC001 in future
+        print("found")
 '''
 
     with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
@@ -312,31 +422,73 @@ def good_iteration():
         temp_file = f.name
 
     try:
-        # Run flake8 with specific error codes
-        success, stdout, stderr = run_command(f"flake8 --select=HP,PC,EP {temp_file}")
+        # Run flake8 with Effective Python rules
+        success, stdout, stderr = run_command(f"flake8 --select=EP {temp_file}")
 
         if stdout.strip():
-            print("   Detected issues:")
+            print("   Detected Effective Python issues:")
             for line in stdout.strip().split("\n"):
                 if line.strip():
                     print(f"     {line}")
-            log_success("Plugin is detecting issues correctly")
+            log_success("Plugin is detecting EP patterns correctly")
         else:
-            log_info("No issues detected (rules may need implementation)")
+            log_info("No EP issues detected (rules may need implementation)")
 
-        # Try with all error codes
+        # Count different rule types
+        ep_issues = len([line for line in stdout.split("\n") if "EP" in line])
+        print(f"   Effective Python (EP) issues found: {ep_issues}")
+
+        # Try with all error codes to see what else is detected
         success, stdout, stderr = run_command(f"flake8 {temp_file}")
-        error_count = len([line for line in stdout.split("\n") if line.strip()])
-        print(f"   Total flake8 issues found: {error_count}")
+        total_issues = len([line for line in stdout.split("\n") if line.strip()])
+        print(f"   Total flake8 issues found: {total_issues}")
+
+        return ep_issues > 0
 
     finally:
         os.unlink(temp_file)
 
 
+def check_book_references():
+    """Check if book reference system is working."""
+    print(f"\n{Colors.BLUE}📚 Book Reference System Check{Colors.NC}")
+
+    try:
+        from flake8_patterns.book_refs import get_book_reference, EFFECTIVE_PYTHON_REFS
+
+        # Check Tier 1 rule references
+        tier1_rules = ["EP105", "EP213", "EP318", "EP320", "EP321", "EP426"]
+        
+        for rule in tier1_rules:
+            ref = get_book_reference(rule)
+            if ref:
+                log_success(f"{rule} book reference found: {ref.item}")
+            else:
+                log_warning(f"{rule} book reference missing")
+
+        # Check total reference count
+        total_refs = len(EFFECTIVE_PYTHON_REFS)
+        print(f"   Total Effective Python references: {total_refs}")
+        
+        if total_refs >= 26:
+            log_success("Complete reference coverage (26+ rules)")
+        elif total_refs >= 6:
+            log_success("Tier 1 reference coverage (6+ rules)")
+        else:
+            log_warning("Limited reference coverage")
+
+        return True
+
+    except Exception as e:
+        log_warning(f"Book reference check failed: {e}")
+        return False
+
+
 def main():
     """Run all verification checks."""
     print(f"{Colors.BLUE}🔍 flake8-patterns Installation Verification{Colors.NC}")
-    print("=" * 50)
+    print(f"{Colors.BLUE}Educational Effective Python Plugin (v0.1.0-dev){Colors.NC}")
+    print("=" * 60)
 
     checks = [
         ("Python Environment", check_python_version),
@@ -344,9 +496,10 @@ def main():
         ("Import System", check_import_system),
         ("flake8 Integration", check_flake8_integration),
         ("Entry Points", check_entry_points),
-        ("Console Commands", check_console_commands),
+        ("Book Reference System", check_book_references),
         ("Plugin Functionality", check_plugin_functionality),
         ("Comprehensive Test", run_comprehensive_test),
+        ("Console Commands", check_console_commands),
     ]
 
     results = []
@@ -385,9 +538,15 @@ def main():
         print("• Try reinstalling: pip uninstall flake8-patterns && pip install -e .")
         print("• Check that you're in the right virtual environment")
 
-    print("• Test on your actual code: flake8 your_file.py")
-    print("• Implement more rules if functionality checks show warnings")
-    print("• Set up pre-commit hooks for development")
+    print("• Test on your actual code: flake8 --select=EP your_file.py")
+    print("• Start with EP105 implementation (current priority)")
+    print("• Check docs/rules/ for detailed rule documentation")
+    print("• Implement Tier 1 rules: EP105, EP213, EP318, EP320, EP321, EP426")
+    
+    print(f"\n{Colors.BLUE}📚 Educational Resources{Colors.NC}")
+    print("• Rule documentation: docs/rules/")
+    print("• Implementation roadmap: docs/index.md")
+    print("• Book reference: 'Effective Python' (3rd Edition) by Brett Slatkin")
 
 
 if __name__ == "__main__":
