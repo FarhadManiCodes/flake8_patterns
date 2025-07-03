@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Project Overview
 
 This is a flake8 plugin called `flake8-patterns` (formerly `flake8-performance-patterns`) that detects performance anti-patterns in Python code. The plugin is based on patterns from two authoritative books:
-- **"Effective Python" (3rd Edition)** by Brett Slatkin - **PRIMARY FOCUS**
+- **"Effective Python" (3rd Edition)** by Brett Slatkin
 - "High Performance Python" (3rd Edition) by Micha Gorelick and Ian Ozsvald
 
 ## Technical Requirements & Compatibility
@@ -100,7 +100,28 @@ if PYTHON_313_PLUS:
 
 ## Using Gemini CLI for Large Codebase Analysis
 
-When analyzing the entire flake8-patterns codebase or verifying project-wide patterns, use Gemini CLI with its massive context window.
+When analyzing the entire flake8-patterns codebase or verifying project-wide patterns, use Gemini CLI with its massive context window and structured thinking protocols.
+
+### MCP Sequential Thinking Integration
+
+For complex analysis tasks, structure your thinking process:
+
+```json
+{
+  "thought": "Analyzing EP201 implementation across all files to ensure consistency",
+  "thoughtNumber": 1,
+  "totalThoughts": 5,
+  "nextThoughtNeeded": true,
+  "context": "Reviewing checker.py, messages.py, tests, and examples for EP201"
+}
+```
+
+**Use Sequential Thinking for:**
+- 🧠 **Rule implementation planning** - Multi-step AST visitor design
+- 🔍 **Cross-file consistency analysis** - Pattern verification across codebase
+- 📚 **Book reference validation** - Ensuring accuracy across all citations
+- 🏗️ **Architecture decisions** - Plugin structure and design choices
+- ⚡ **Performance impact analysis** - System-wide performance considerations
 
 ### When to Use Gemini CLI vs Claude
 
@@ -110,12 +131,53 @@ When analyzing the entire flake8-patterns codebase or verifying project-wide pat
 - 🧪 **Test coverage analysis** - Comprehensive testing verification
 - 📚 **Book reference validation** - Ensuring all rules cite correct chapters
 - 🏗️ **Large file analysis** - When multiple files exceed Claude's context
+- 🔄 **Refactoring identification** - Simple improvements across multiple files
 
 **Use Claude for:**
 - 🎯 **Implementation decisions** - New rules, AST logic, architecture
 - 🧠 **Complex reasoning** - Rule prioritization, design choices
 - ✍️ **Detailed coding** - Writing visitor methods, error detection logic
 - 📖 **Educational content** - Book reference accuracy, example creation
+- 🎓 **Strategic planning** - Project roadmap and rule prioritization
+
+### Context Management
+
+The project uses a single GEMINI.md file for project-wide context:
+
+```
+flake8-patterns/
+├── GEMINI.md                    # Project guidelines (Gemini-specific)
+├── CLAUDE.md                    # Development guidance (Claude-specific)
+├── README.md                    # User documentation
+└── src/flake8_patterns/         # Implementation code
+```
+
+**Note**: Unlike some projects that use hierarchical GEMINI.md files in subdirectories, flake8-patterns uses a single root-level GEMINI.md for simplicity. All project context and guidelines are consolidated in this file.
+
+### Configuration & Environment Management
+
+**Environment Variable Precedence:**
+1. **CLI arguments** (highest priority)
+2. **Project .env** (.gemini/.env)
+3. **Global .env** (~/.env)
+4. **Default values** (lowest priority)
+
+**Project Configuration:**
+```json
+// .gemini/settings.json
+{
+  "checkpointing": true,
+  "contextFileName": "GEMINI.md",
+  "mcpServers": {
+    "flake8-patterns-analyzer": {
+      "command": "python",
+      "args": ["scripts/mcp_analyzer.py"],
+      "cwd": "./tools",
+      "timeout": 10000
+    }
+  }
+}
+```
 
 ### File Analysis Examples for flake8-patterns
 
@@ -186,6 +248,34 @@ gemini -p "@README.md @examples/ @src/ Do README examples match actual implement
 gemini -p "@src/ Identify areas for simple refactoring to improve code consistency and readability"
 ```
 
+### Development Safety & Checkpointing
+
+**Safe Development Protocol:**
+1. **Before major changes**: Create manual checkpoint
+2. **During implementation**: Enable automatic checkpointing
+3. **After completion**: Verify changes and create tagged checkpoint
+
+**Checkpointing Commands:**
+```bash
+# Enable checkpointing for session
+gemini --checkpointing
+
+# Manual checkpoint before major changes
+/checkpoint save "before-EP201-implementation"
+
+# Restore if needed
+/restore <checkpoint-id>
+
+# List available checkpoints
+/restore
+```
+
+**Git Integration:**
+- **Shadow repository**: Checkpoints stored in ~/.gemini/history/flake8-patterns_hash
+- **No interference**: Main git repository remains clean
+- **Full context**: Conversation history + file state + tool calls preserved
+- **Easy rollback**: Complete state restoration with one command
+
 ### Most Valuable Analysis Types for flake8-patterns
 
 **Priority 1 (Critical for Educational Plugin):**
@@ -202,6 +292,167 @@ gemini -p "@src/ Identify areas for simple refactoring to improve code consisten
 - 🔍 **Integration conflict detection** - Prevents ecosystem problems
 - 🏗️ **Refactoring opportunities** - Code maintainability
 - 📐 **Architecture consistency** - Long-term project health
+
+## MCP Sequential Thinking for Implementation
+
+For complex rule implementation and architectural decisions, use structured thinking protocols.
+
+### When to Use Sequential Thinking
+
+**Always use for:**
+- 🧠 **New rule implementation** (EP201, EP202, etc.)
+- 🏗️ **AST visitor design** (complex pattern detection)
+- 📚 **Book reference validation** (accuracy critical)
+- ⚡ **Performance optimization** (system-wide impact)
+- 🔧 **Plugin architecture changes** (affects multiple components)
+
+### Structured Implementation Protocol
+
+```json
+// Example: Implementing EP201 (Single-Element Tuples)
+{
+  "thought": "Analyzing EP201 requirements: detect (item) vs (item,) patterns",
+  "thoughtNumber": 1,
+  "totalThoughts": 6,
+  "nextThoughtNeeded": true,
+  "context": "Effective Python Chapter 2, AST.Tuple analysis needed"
+}
+
+{
+  "thought": "Need to examine existing AST visitor patterns in checker.py for consistency",
+  "thoughtNumber": 2,
+  "totalThoughts": 6,
+  "nextThoughtNeeded": true,
+  "context": "visit_For, visit_BinOp patterns as reference"
+}
+
+{
+  "thought": "Implementation plan: 1) Add visit_Tuple method 2) Check len(node.elts)==1 3) Detect missing comma 4) Add EP201 to messages.py",
+  "thoughtNumber": 3,
+  "totalThoughts": 6,
+  "nextThoughtNeeded": true
+}
+
+{
+  "thought": "Book reference verification: Effective Python Chapter 2 discusses tuple syntax and clarity",
+  "thoughtNumber": 4,
+  "totalThoughts": 6,
+  "nextThoughtNeeded": true,
+  "context": "Must cite exact page and section"
+}
+
+{
+  "thought": "Test strategy: positive cases (missing comma), negative cases (correct comma), edge cases (nested tuples)",
+  "thoughtNumber": 5,
+  "totalThoughts": 6,
+  "nextThoughtNeeded": true
+}
+
+{
+  "thought": "Ready to implement with clear plan, book reference verified, test strategy defined",
+  "thoughtNumber": 6,
+  "totalThoughts": 6,
+  "nextThoughtNeeded": false
+}
+```
+
+### Implementation Quality Gates
+
+**Before coding:**
+- ✅ Book reference verified (manual check)
+- ✅ AST pattern understood (examine similar rules)
+- ✅ Test cases planned (positive/negative/edge)
+- ✅ Error message format consistent
+- ✅ No conflicts with existing plugins
+
+**During implementation:**
+- ✅ Sequential thinking documented
+- ✅ Code follows existing patterns
+- ✅ Type hints comprehensive
+- ✅ Docstrings include book references
+- ✅ Tests written before/during coding
+
+**After implementation:**
+- ✅ All tests pass
+- ✅ Book reference accurate
+- ✅ Error message educational
+- ✅ Integration with flake8 verified
+- ✅ Performance impact acceptable
+
+## Configuration Management & Tool Integration
+
+### Environment Configuration Hierarchy
+
+**Precedence Order (highest to lowest):**
+1. **Command-line arguments** - Immediate overrides
+2. **Project environment** - `.gemini/.env` in project root
+3. **Global environment** - `~/.env` in home directory
+4. **Default values** - Hardcoded fallbacks
+
+```bash
+# Project-specific settings (.gemini/.env)
+PYTHON_VERSION=3.13
+COVERAGE_TARGET=95
+BOOK_VALIDATION=strict
+PERFORMANCE_THRESHOLD=0.15
+
+# Global development settings (~/.env)
+GEMINI_API_KEY=your_api_key_here
+DEVELOPMENT_MODE=true
+LOG_LEVEL=INFO
+```
+
+### Tool Integration Configuration
+
+```json
+// .gemini/settings.json - Project configuration
+{
+  "checkpointing": true,
+  "contextFileName": "GEMINI.md",
+  "mcpServers": {
+    "flake8-analyzer": {
+      "command": "python",
+      "args": ["scripts/analyze_rules.py"],
+      "cwd": "./tools",
+      "timeout": 10000,
+      "trust": false
+    },
+    "book-validator": {
+      "command": "python",
+      "args": ["scripts/validate_references.py"],
+      "cwd": "./tools",
+      "timeout": 5000,
+      "trust": true
+    }
+  },
+  "allowedTools": ["ReadFile", "Edit", "TestExecutor", "Linter"],
+  "restrictedTools": ["WriteFile", "GitPush", "WebFetch"]
+}
+```
+
+### Development Workflow Integration
+
+**Session Management:**
+```bash
+# Start development session with checkpointing
+gemini --checkpointing
+
+# Load project context automatically
+# (GEMINI.md files are loaded hierarchically)
+
+# Create checkpoint before major changes
+/checkpoint save "before-EP201-visitor-implementation"
+
+# Use MCP tools for analysis
+/tools show  # List available analysis tools
+```
+
+**Safe Development Protocol:**
+1. **Project analysis** - Use Gemini CLI for codebase review
+2. **Planning** - Apply sequential thinking for complex tasks
+3. **Implementation** - Use checkpointing for safety
+4. **Verification** - Run comprehensive tests and validation
+5. **Documentation** - Update context files and examples
 
 ## Essential Commands
 
