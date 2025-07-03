@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a flake8 plugin called `flake8-performance-patterns` that detects performance anti-patterns in Python code. The plugin is based on patterns from two authoritative books:
+This is a flake8 plugin called `flake8-patterns` that detects performance anti-patterns in Python code. The plugin is based on patterns from two authoritative books:
 - "High Performance Python" (3rd Edition) by Micha Gorelick and Ian Ozsvald
 - "Effective Python" (3rd Edition) by Brett Slatkin
 
@@ -20,7 +20,7 @@ pip install -e ".[dev]"
 
 # Verify installation
 python scripts/verify_migration.py
-flake8 --version  # Should show flake8-performance-patterns
+flake8 --version  # Should show flake8-patterns
 ```
 
 ### Testing
@@ -29,7 +29,7 @@ flake8 --version  # Should show flake8-performance-patterns
 pytest
 
 # Run tests with coverage
-pytest --cov=flake8_performance_patterns
+pytest --cov=flake8_patterns
 
 # Test specific module
 pytest tests/test_string_operations.py
@@ -50,7 +50,7 @@ isort src/ tests/
 ruff check src/ tests/ --fix
 
 # Type checking
-mypy src/flake8_performance_patterns --strict
+mypy src/flake8_patterns --strict
 
 # Run pre-commit hooks
 pre-commit run --all-files
@@ -61,7 +61,7 @@ pre-commit run --all-files
 # Test plugin manually
 python -c "
 import ast
-from flake8_performance_patterns.checker import PerformanceChecker
+from flake8_patterns.checker import PerformanceChecker
 code = '''
 result = \"\"
 for item in items:
@@ -102,7 +102,7 @@ for error in checker.run():
 
 ### Project Structure
 ```
-src/flake8_performance_patterns/
+src/flake8_patterns/
 ├── __init__.py          # Main exports and plugin metadata
 ├── checker.py           # Core checker implementation
 ├── messages.py          # Error messages and book references

@@ -1,6 +1,6 @@
 """Book chapter and item references for error codes."""
 
-from typing import Dict, NamedTuple, Optional
+from typing import NamedTuple
 
 
 class BookReference(NamedTuple):
@@ -15,7 +15,7 @@ class BookReference(NamedTuple):
 
 
 # High Performance Python references (3rd Edition)
-HIGH_PERFORMANCE_PYTHON_REFS: Dict[str, BookReference] = {
+HIGH_PERFORMANCE_PYTHON_REFS: dict[str, BookReference] = {
     "HP001": BookReference(
         "High Performance Python",
         "3rd Edition",
@@ -117,7 +117,7 @@ HIGH_PERFORMANCE_PYTHON_REFS: Dict[str, BookReference] = {
 }
 
 # Effective Python references (3rd Edition)
-EFFECTIVE_PYTHON_REFS: Dict[str, BookReference] = {
+EFFECTIVE_PYTHON_REFS: dict[str, BookReference] = {
     "EP001": BookReference(
         "Effective Python",
         "3rd Edition",
@@ -178,7 +178,7 @@ ALL_BOOK_REFS = {
 }
 
 
-def get_book_reference(error_code: str) -> Optional[BookReference]:
+def get_book_reference(error_code: str) -> BookReference | None:
     """Get book reference for an error code."""
     return ALL_BOOK_REFS.get(error_code)
 
@@ -201,7 +201,7 @@ def get_formatted_reference(error_code: str) -> str:
     return reference_str
 
 
-def get_references_by_book() -> Dict[str, Dict[str, BookReference]]:
+def get_references_by_book() -> dict[str, dict[str, BookReference]]:
     """Get references organized by book."""
     by_book = {}
 
@@ -214,7 +214,7 @@ def get_references_by_book() -> Dict[str, Dict[str, BookReference]]:
     return by_book
 
 
-def get_chapter_mapping() -> Dict[str, list[str]]:
+def get_chapter_mapping() -> dict[str, list[str]]:
     """Get error codes organized by book chapters."""
     chapter_map = {}
 
@@ -227,7 +227,7 @@ def get_chapter_mapping() -> Dict[str, list[str]]:
     return chapter_map
 
 
-def validate_references() -> Dict[str, list[str]]:
+def validate_references() -> dict[str, list[str]]:
     """Validate that all error codes have proper references."""
     from .messages import ALL_MESSAGES
 
@@ -238,12 +238,12 @@ def validate_references() -> Dict[str, list[str]]:
     }
 
     # Check for error codes without references
-    for code in ALL_MESSAGES.keys():
+    for code in ALL_MESSAGES:
         if code not in ALL_BOOK_REFS:
             issues["missing_references"].append(code)
 
     # Check for references without error codes
-    for code in ALL_BOOK_REFS.keys():
+    for code in ALL_BOOK_REFS:
         if code not in ALL_MESSAGES:
             issues["orphaned_references"].append(code)
 
@@ -255,7 +255,7 @@ def validate_references() -> Dict[str, list[str]]:
     return issues
 
 
-def get_book_stats() -> Dict[str, any]:
+def get_book_stats() -> dict[str, any]:
     """Get statistics about book references."""
     from .messages import ALL_MESSAGES
 
@@ -263,8 +263,8 @@ def get_book_stats() -> Dict[str, any]:
         "total_error_codes": len(ALL_MESSAGES),
         "total_references": len(ALL_BOOK_REFS),
         "coverage_percentage": len(ALL_BOOK_REFS) / len(ALL_MESSAGES) * 100,
-        "books_referenced": len(set(ref.book for ref in ALL_BOOK_REFS.values())),
-        "chapters_covered": len(set(ref.chapter for ref in ALL_BOOK_REFS.values())),
+        "books_referenced": len({ref.book for ref in ALL_BOOK_REFS.values()}),
+        "chapters_covered": len({ref.chapter for ref in ALL_BOOK_REFS.values()}),
     }
 
     # Count by book

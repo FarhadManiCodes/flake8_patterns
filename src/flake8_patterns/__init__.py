@@ -1,26 +1,22 @@
-"""
-flake8-performance-patterns: A flake8 plugin for performance patterns.
+"""flake8_patterns: A flake8 plugin for performance patterns.
 
-Based on patterns from "High Performance Python" (3rd Edition) and "Effective Python" (3rd Edition).
+Based on patterns from "High Performance Python" (3rd Edition) and
+"Effective Python" (3rd Edition).
 
 This plugin detects performance anti-patterns and suggests better alternatives
 with direct references to authoritative Python performance books.
 """
 
+from .book_refs import get_book_reference, get_book_stats, get_formatted_reference
 from .checker import PerformanceChecker
 from .messages import (
     ALL_MESSAGES,
-    get_error_message,
-    get_error_info,
     get_all_error_codes,
     get_error_codes_by_category,
+    get_error_info,
+    get_error_message,
 )
-from .book_refs import (
-    get_book_reference,
-    get_formatted_reference,
-    get_book_stats,
-)
-from .utils import PYTHON_VERSION, PYTHON_313_PLUS
+from .utils import PYTHON_313_PLUS, PYTHON_VERSION
 
 __version__ = "0.1.0"
 __author__ = "Your Name"
@@ -28,25 +24,25 @@ __email__ = "your.email@example.com"
 
 # Main exports
 __all__ = [
-    # Main checker class
-    "PerformanceChecker",
     # Message system
     "ALL_MESSAGES",
-    "get_error_message",
-    "get_error_info",
-    "get_all_error_codes",
-    "get_error_codes_by_category",
-    # Book reference system
-    "get_book_reference",
-    "get_formatted_reference",
-    "get_book_stats",
+    "PYTHON_313_PLUS",
     # Utilities
     "PYTHON_VERSION",
-    "PYTHON_313_PLUS",
-    # Metadata
-    "__version__",
+    # Main checker class
+    "PerformanceChecker",
     "__author__",
     "__email__",
+    # Metadata
+    "__version__",
+    "get_all_error_codes",
+    # Book reference system
+    "get_book_reference",
+    "get_book_stats",
+    "get_error_codes_by_category",
+    "get_error_info",
+    "get_error_message",
+    "get_formatted_reference",
 ]
 
 
@@ -54,11 +50,13 @@ __all__ = [
 def get_plugin_info() -> dict:
     """Get plugin information."""
     return {
-        "name": "flake8-performance-patterns",
+        "name": "flake8-patterns",
         "version": __version__,
         "author": __author__,
-        "description": "Performance patterns from High Performance Python and Effective Python",
-        "python_version": f"{PYTHON_VERSION.major}.{PYTHON_VERSION.minor}.{PYTHON_VERSION.micro}",
+        "description": "Performance patterns from High Performance Python and "
+        "Effective Python",
+        "python_version": f"{PYTHON_VERSION.major}.{PYTHON_VERSION.minor}."
+        f"{PYTHON_VERSION.micro}",
         "total_rules": len(ALL_MESSAGES),
         "rule_categories": len(get_error_codes_by_category()),
         "book_coverage": f"{len(get_book_reference.__defaults__ or [])} books referenced",
@@ -67,49 +65,34 @@ def get_plugin_info() -> dict:
 
 # Quick access to rule counts
 RULE_COUNTS = {
-    "string_operations": len([k for k in ALL_MESSAGES.keys() if k.startswith("HP")]),
-    "collection_performance": len(
-        [k for k in ALL_MESSAGES.keys() if k.startswith("PC")]
-    ),
-    "iteration_patterns": len([k for k in ALL_MESSAGES.keys() if k.startswith("EP")]),
-    "memory_optimization": len([k for k in ALL_MESSAGES.keys() if k.startswith("MC")]),
-    "numpy_patterns": len([k for k in ALL_MESSAGES.keys() if k.startswith("NP")]),
+    "string_operations": len([k for k in ALL_MESSAGES if k.startswith("HP")]),
+    "collection_performance": len([k for k in ALL_MESSAGES if k.startswith("PC")]),
+    "iteration_patterns": len([k for k in ALL_MESSAGES if k.startswith("EP")]),
+    "memory_optimization": len([k for k in ALL_MESSAGES if k.startswith("MC")]),
+    "numpy_patterns": len([k for k in ALL_MESSAGES if k.startswith("NP")]),
 }
 
 
 # Development utilities
 def print_rule_summary() -> None:
     """Print a summary of all rules (useful for development)."""
-    print(f"flake8-performance-patterns v{__version__}")
-    print(
-        f"Python {PYTHON_VERSION.major}.{PYTHON_VERSION.minor}.{PYTHON_VERSION.micro}"
-    )
-    print(f"Total rules: {len(ALL_MESSAGES)}")
-    print("")
-
     categories = get_error_codes_by_category()
-    for category, codes in categories.items():
+    for codes in categories.values():
         if codes:
-            print(f"{category}: {len(codes)} rules")
             for code in sorted(codes)[:3]:  # Show first 3
                 info = get_error_info(code)
                 if info:
-                    print(f"  {code}: {info[0][:60]}...")
+                    pass
             if len(codes) > 3:
-                print(f"  ... and {len(codes) - 3} more")
-            print("")
+                pass
 
 
 def print_book_coverage() -> None:
     """Print book reference coverage (useful for development)."""
     stats = get_book_stats()
-    print(f"Book Reference Coverage: {stats['coverage_percentage']:.1f}%")
-    print(f"Books referenced: {stats['books_referenced']}")
-    print(f"Chapters covered: {stats['chapters_covered']}")
-    print("")
 
-    for book, count in stats.get("by_book", {}).items():
-        print(f"{book}: {count} rules")
+    for _book, _count in stats.get("by_book", {}).items():
+        pass
 
 
 # Version compatibility info
@@ -125,7 +108,8 @@ def get_version_info() -> dict:
     """Get detailed version and compatibility information."""
     return {
         "plugin_version": __version__,
-        "python_version": f"{PYTHON_VERSION.major}.{PYTHON_VERSION.minor}.{PYTHON_VERSION.micro}",
+        "python_version": f"{PYTHON_VERSION.major}.{PYTHON_VERSION.minor}."
+        f"{PYTHON_VERSION.micro}",
         "python_version_tuple": PYTHON_VERSION,
         "performance_tier": (
             "optimized"

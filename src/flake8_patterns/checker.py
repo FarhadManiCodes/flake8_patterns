@@ -1,20 +1,18 @@
-"""
-Main checker module for flake8-performance-patterns.
+"""Main checker module for flake8_patterns.
 
 Based on patterns from "High Performance Python" (3rd Edition) and "Effective Python" (3rd Edition).
 Follows the successful flake8-bugbear plugin architecture.
 """
 
 import ast
-import sys
-from typing import Any, Generator, List, Optional, Tuple, Type
+from collections.abc import Generator
+from typing import Any
 
-from .messages import ALL_MESSAGES, get_error_message
+from .messages import get_error_message
 from .utils import (
     PYTHON_310_PLUS,
     PYTHON_313_PLUS,
     NodeVisitorWithParents,
-    find_parent_loop,
     get_function_name,
     is_string_literal,
 )
@@ -23,36 +21,34 @@ from .utils import (
 __version__ = "0.1.0"
 
 # Error type: (line, column, message, type)
-Error = Tuple[int, int, str, Type[Any]]
+Error = tuple[int, int, str, type[Any]]
 
 
 class PerformanceChecker(NodeVisitorWithParents):
-    """
-    Main checker class for performance patterns.
+    """Main checker class for performance patterns.
 
     Detects performance anti-patterns from "High Performance Python" (3rd Edition)
     and "Effective Python" (3rd Edition) books.
     """
 
-    name = "flake8-performance-patterns"
+    name = "flake8-patterns"
     version = __version__
 
-    def __init__(self, tree: ast.AST, filename: str = "(none)"):
+    def __init__(self, tree: ast.AST, filename: str = "(none)") -> None:
         """Initialize the checker with an AST tree."""
         super().__init__()
         self.tree = tree
         self.filename = filename
-        self.errors: List[Error] = []
+        self.errors: list[Error] = []
 
     def run(self) -> Generator[Error, None, None]:
         """Run the checker and yield errors."""
         self.errors = []
         self.visit(self.tree)
 
-        for error in self.errors:
-            yield error
+        yield from self.errors
 
-    def error(self, node: ast.AST, code: str, vars: Optional[dict] = None) -> None:
+    def error(self, node: ast.AST, code: str, vars: dict | None = None) -> None:
         """Record an error for the given node and code."""
         message = get_error_message(code)
         if vars:
@@ -125,7 +121,7 @@ class PerformanceChecker(NodeVisitorWithParents):
 
     def _is_in_loop(self) -> bool:
         """Check if we're currently inside a loop."""
-        return any(isinstance(parent, (ast.For, ast.While)) for parent in self.parents)
+        return any(isinstance(parent, ast.For | ast.While) for parent in self.parents)
 
     def _count_string_concatenations(self, node: ast.BinOp) -> int:
         """Count consecutive string concatenations."""
@@ -143,7 +139,7 @@ class PerformanceChecker(NodeVisitorWithParents):
 
     def _is_list_literal_or_comprehension(self, node: ast.AST) -> bool:
         """Check if node is a list literal or list comprehension."""
-        return isinstance(node, (ast.List, ast.ListComp))
+        return isinstance(node, ast.List | ast.ListComp)
 
     def _is_range_len_pattern(self, node: ast.For) -> bool:
         """Check for range(len(iterable)) pattern."""
@@ -151,15 +147,12 @@ class PerformanceChecker(NodeVisitorWithParents):
             return False
 
         # Check if it's range(len(...))
-        if (
+        return bool(
             get_function_name(node.iter) == "range"
             and len(node.iter.args) == 1
             and isinstance(node.iter.args[0], ast.Call)
             and get_function_name(node.iter.args[0]) == "len"
-        ):
-            return True
-
-        return False
+        )
 
     # Python version specific features
 

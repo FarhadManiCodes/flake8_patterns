@@ -3,7 +3,7 @@ requires = ["setuptools>=65.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "flake8-performance-patterns"
+name = "flake8-patterns"
 version = "0.1.0"
 description = "Flake8 plugin detecting performance anti-patterns from High Performance Python and Effective Python"
 readme = "README.md"
@@ -66,14 +66,14 @@ docs = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/yourusername/flake8-performance-patterns"
-Documentation = "https://github.com/yourusername/flake8-performance-patterns#readme"
-Repository = "https://github.com/yourusername/flake8-performance-patterns"
-Issues = "https://github.com/yourusername/flake8-performance-patterns/issues"
-Changelog = "https://github.com/yourusername/flake8-performance-patterns/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/yourusername/flake8-patterns"
+Documentation = "https://github.com/yourusername/flake8-patterns#readme"
+Repository = "https://github.com/yourusername/flake8-patterns"
+Issues = "https://github.com/yourusername/flake8-patterns/issues"
+Changelog = "https://github.com/yourusername/flake8-patterns/blob/main/CHANGELOG.md"
 
 [project.entry-points."flake8.extension"]
-HP = "flake8_performance_patterns.checker:PerformanceChecker"
+HP = "flake8_patterns.checker:PerformanceChecker"
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -82,11 +82,11 @@ where = ["src"]
 "" = "src"
 
 [tool.setuptools.package-data]
-"flake8_performance_patterns" = ["py.typed"]
+"flake8_patterns" = ["py.typed"]
 
 [tool.black]
 line-length = 88
-target-version = ['py310', 'py311', 'py312', 'py313']
+target-version = ['py310', 'py311', 'py312']
 include = '\.pyi?$'
 extend-exclude = '''
 /(
@@ -226,7 +226,7 @@ minversion = "8.0"
 addopts = [
     "--strict-markers",
     "--strict-config",
-    "--cov=flake8_performance_patterns",
+    "--cov=flake8_patterns",
     "--cov-report=term-missing",
     "--cov-report=html",
     "--cov-report=xml",

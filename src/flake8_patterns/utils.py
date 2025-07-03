@@ -2,7 +2,7 @@
 
 import ast
 import sys
-from typing import Any, List, Optional, Set, Union
+from typing import Any
 
 # Python version detection for feature compatibility
 PYTHON_VERSION = sys.version_info
@@ -19,7 +19,7 @@ def is_string_literal(node: ast.AST) -> bool:
 
 def is_numeric_literal(node: ast.AST) -> bool:
     """Check if a node is a numeric literal."""
-    return isinstance(node, ast.Constant) and isinstance(node.value, (int, float))
+    return isinstance(node, ast.Constant) and isinstance(node.value, int | float)
 
 
 def is_none_literal(node: ast.AST) -> bool:
@@ -27,27 +27,27 @@ def is_none_literal(node: ast.AST) -> bool:
     return isinstance(node, ast.Constant) and node.value is None
 
 
-def get_string_value(node: ast.AST) -> Optional[str]:
+def get_string_value(node: ast.AST) -> str | None:
     """Extract string value from a string literal node."""
     if is_string_literal(node):
         return node.value  # type: ignore
     return None
 
 
-def get_function_name(node: ast.Call) -> Optional[str]:
+def get_function_name(node: ast.Call) -> str | None:
     """Extract function name from a Call node."""
     if isinstance(node.func, ast.Name):
         return node.func.id
-    elif isinstance(node.func, ast.Attribute):
+    if isinstance(node.func, ast.Attribute):
         return node.func.attr
     return None
 
 
-def get_full_function_name(node: ast.Call) -> Optional[str]:
+def get_full_function_name(node: ast.Call) -> str | None:
     """Extract full function name including module/object."""
     if isinstance(node.func, ast.Name):
         return node.func.id
-    elif isinstance(node.func, ast.Attribute):
+    if isinstance(node.func, ast.Attribute):
         # Try to build full name like 'obj.method'
         parts = []
         current = node.func
@@ -62,15 +62,17 @@ def get_full_function_name(node: ast.Call) -> Optional[str]:
 
 def is_loop_node(node: ast.AST) -> bool:
     """Check if node is a loop (for/while)."""
-    return isinstance(node, (ast.For, ast.While))
+    return isinstance(node, ast.For | ast.While)
 
 
 def is_comprehension_node(node: ast.AST) -> bool:
     """Check if node is a comprehension."""
-    return isinstance(node, (ast.ListComp, ast.SetComp, ast.DictComp, ast.GeneratorExp))
+    return isinstance(
+        node, ast.ListComp | ast.SetComp | ast.DictComp | ast.GeneratorExp
+    )
 
 
-def find_parent_loop(node: ast.AST, parents: List[ast.AST]) -> Optional[ast.AST]:
+def find_parent_loop(node: ast.AST, parents: list[ast.AST]) -> ast.AST | None:
     """Find the nearest parent loop node."""
     for parent in reversed(parents):
         if is_loop_node(parent):
@@ -78,15 +80,15 @@ def find_parent_loop(node: ast.AST, parents: List[ast.AST]) -> Optional[ast.AST]
     return None
 
 
-def find_parent_function(node: ast.AST, parents: List[ast.AST]) -> Optional[ast.AST]:
+def find_parent_function(node: ast.AST, parents: list[ast.AST]) -> ast.AST | None:
     """Find the nearest parent function/method."""
     for parent in reversed(parents):
-        if isinstance(parent, (ast.FunctionDef, ast.AsyncFunctionDef)):
+        if isinstance(parent, ast.FunctionDef | ast.AsyncFunctionDef):
             return parent
     return None
 
 
-def find_parent_class(node: ast.AST, parents: List[ast.AST]) -> Optional[ast.AST]:
+def find_parent_class(node: ast.AST, parents: list[ast.AST]) -> ast.AST | None:
     """Find the nearest parent class."""
     for parent in reversed(parents):
         if isinstance(parent, ast.ClassDef):
@@ -94,13 +96,13 @@ def find_parent_class(node: ast.AST, parents: List[ast.AST]) -> Optional[ast.AST
     return None
 
 
-def get_variable_name(node: ast.AST) -> Optional[str]:
+def get_variable_name(node: ast.AST) -> str | None:
     """Extract variable name from various node types."""
     if isinstance(node, ast.Name):
         return node.id
-    elif isinstance(node, ast.Attribute):
+    if isinstance(node, ast.Attribute):
         return node.attr
-    elif isinstance(node, ast.Subscript):
+    if isinstance(node, ast.Subscript):
         return get_variable_name(node.value)
     return None
 
@@ -112,7 +114,7 @@ def is_builtin_function(name: str) -> bool:
     return hasattr(builtins, name)
 
 
-def is_method_call(node: ast.Call, method_names: Union[str, Set[str]]) -> bool:
+def is_method_call(node: ast.Call, method_names: str | set[str]) -> bool:
     """Check if node is a method call with specific name(s)."""
     if isinstance(method_names, str):
         method_names = {method_names}
@@ -122,7 +124,7 @@ def is_method_call(node: ast.Call, method_names: Union[str, Set[str]]) -> bool:
     return False
 
 
-def is_function_call(node: ast.Call, function_names: Union[str, Set[str]]) -> bool:
+def is_function_call(node: ast.Call, function_names: str | set[str]) -> bool:
     """Check if node is a function call with specific name(s)."""
     if isinstance(function_names, str):
         function_names = {function_names}
@@ -140,33 +142,32 @@ def count_nodes_in_tree(tree: ast.AST, node_type: type) -> int:
     return count
 
 
-def get_assigned_name(node: ast.AST) -> Optional[str]:
+def get_assigned_name(node: ast.AST) -> str | None:
     """Get the variable name being assigned to."""
     if isinstance(node, ast.Assign):
         if len(node.targets) == 1:
             target = node.targets[0]
             if isinstance(target, ast.Name):
                 return target.id
-    elif isinstance(node, ast.AugAssign):
-        if isinstance(node.target, ast.Name):
-            return node.target.id
+    elif isinstance(node, ast.AugAssign) and isinstance(node.target, ast.Name):
+        return node.target.id
     return None
 
 
 def is_constant_value(node: ast.AST) -> bool:
     """Check if node represents a constant value."""
-    return isinstance(node, (ast.Constant, ast.Num, ast.Str, ast.NameConstant))
+    return isinstance(node, ast.Constant | ast.Num | ast.Str | ast.NameConstant)
 
 
 def extract_constant_value(node: ast.AST) -> Any:
     """Extract the constant value from a node."""
     if isinstance(node, ast.Constant):
         return node.value
-    elif isinstance(node, ast.Num):  # Python < 3.8 compatibility
+    if isinstance(node, ast.Num):  # Python < 3.8 compatibility
         return node.n
-    elif isinstance(node, ast.Str):  # Python < 3.8 compatibility
+    if isinstance(node, ast.Str):  # Python < 3.8 compatibility
         return node.s
-    elif isinstance(node, ast.NameConstant):  # Python < 3.8 compatibility
+    if isinstance(node, ast.NameConstant):  # Python < 3.8 compatibility
         return node.value
     return None
 
@@ -174,9 +175,9 @@ def extract_constant_value(node: ast.AST) -> Any:
 class NodeVisitorWithParents(ast.NodeVisitor):
     """AST visitor that tracks parent nodes."""
 
-    def __init__(self):
-        self.parents: List[ast.AST] = []
-        self._node_stack: List[ast.AST] = []
+    def __init__(self) -> None:
+        self.parents: list[ast.AST] = []
+        self._node_stack: list[ast.AST] = []
 
     def visit(self, node: ast.AST) -> Any:
         """Visit a node and track parents."""
@@ -189,13 +190,13 @@ class NodeVisitorWithParents(ast.NodeVisitor):
             self._node_stack.pop()
         return result
 
-    def get_parent(self, offset: int = 1) -> Optional[ast.AST]:
+    def get_parent(self, offset: int = 1) -> ast.AST | None:
         """Get parent node at given offset (1 = immediate parent)."""
         if len(self.parents) > offset:
             return self.parents[-(offset + 1)]
         return None
 
-    def get_ancestors(self) -> List[ast.AST]:
+    def get_ancestors(self) -> list[ast.AST]:
         """Get all ancestor nodes (excluding current)."""
         return self.parents[:-1] if self.parents else []
 
@@ -203,7 +204,7 @@ class NodeVisitorWithParents(ast.NodeVisitor):
         """Check if we're currently inside a node of given type."""
         return any(isinstance(parent, node_type) for parent in self.parents)
 
-    def get_nearest_ancestor(self, node_type: type) -> Optional[ast.AST]:
+    def get_nearest_ancestor(self, node_type: type) -> ast.AST | None:
         """Get the nearest ancestor of given type."""
         for parent in reversed(self.parents[:-1]):
             if isinstance(parent, node_type):
@@ -214,10 +215,10 @@ class NodeVisitorWithParents(ast.NodeVisitor):
 class ASTAnalyzer:
     """Helper class for complex AST analysis."""
 
-    def __init__(self, tree: ast.AST):
+    def __init__(self, tree: ast.AST) -> None:
         self.tree = tree
 
-    def find_all_nodes(self, node_type: type) -> List[ast.AST]:
+    def find_all_nodes(self, node_type: type) -> list[ast.AST]:
         """Find all nodes of given type."""
         nodes = []
         for node in ast.walk(self.tree):
@@ -225,17 +226,17 @@ class ASTAnalyzer:
                 nodes.append(node)
         return nodes
 
-    def find_assignments_to(self, var_name: str) -> List[ast.AST]:
+    def find_assignments_to(self, var_name: str) -> list[ast.AST]:
         """Find all assignments to a specific variable."""
         assignments = []
         for node in ast.walk(self.tree):
-            if isinstance(node, (ast.Assign, ast.AugAssign)):
+            if isinstance(node, ast.Assign | ast.AugAssign):
                 assigned_name = get_assigned_name(node)
                 if assigned_name == var_name:
                     assignments.append(node)
         return assignments
 
-    def find_function_calls(self, func_name: str) -> List[ast.Call]:
+    def find_function_calls(self, func_name: str) -> list[ast.Call]:
         """Find all calls to a specific function."""
         calls = []
         for node in ast.walk(self.tree):

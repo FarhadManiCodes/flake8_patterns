@@ -1,13 +1,13 @@
-"""Pytest configuration and fixtures for flake8-performance-patterns tests."""
+"""Pytest configuration and fixtures for flake8_patterns tests."""
 
 import ast
-from typing import List, Tuple
+
 import pytest
 
-from flake8_performance_patterns.checker import PerformanceChecker
+from flake8_patterns.checker import PerformanceChecker
 
 
-@pytest.fixture
+@pytest.fixture()
 def checker():
     """Create a PerformanceChecker instance."""
 
@@ -18,11 +18,11 @@ def checker():
     return _checker
 
 
-@pytest.fixture
+@pytest.fixture()
 def run_checker():
     """Run checker on code and return errors."""
 
-    def _run_checker(code: str) -> List[Tuple[int, int, str]]:
+    def _run_checker(code: str) -> list[tuple[int, int, str]]:
         tree = ast.parse(code)
         checker = PerformanceChecker(tree, filename="test.py")
         return list(checker.run())
@@ -48,7 +48,7 @@ for i in range(len(items)):  # Should trigger EP001
 """
 
 
-@pytest.fixture
+@pytest.fixture()
 def sample_codes():
     """Provide sample code snippets for testing."""
     return {

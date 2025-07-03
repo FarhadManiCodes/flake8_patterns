@@ -1,1 +1,1 @@
-"""Tests for flake8-performance-patterns."""
+"""Tests for flake8_patterns."""

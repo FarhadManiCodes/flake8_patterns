@@ -1,12 +1,10 @@
-"""Error messages and codes for flake8-performance-patterns."""
-
-from typing import Dict, Tuple
+"""Error messages and codes for flake8_patterns."""
 
 # Error message format: (message_template, book_reference, performance_impact)
-ErrorInfo = Tuple[str, str, str]
+ErrorInfo = tuple[str, str, str]
 
 # String operation errors (HP001-HP020)
-STRING_MESSAGES: Dict[str, ErrorInfo] = {
+STRING_MESSAGES: dict[str, ErrorInfo] = {
     "HP001": (
         "String concatenation using += in loop, consider str.join()",
         "'High Performance Python' (3rd Edition), Chapter 2: Profiling, p.45",
@@ -35,7 +33,7 @@ STRING_MESSAGES: Dict[str, ErrorInfo] = {
 }
 
 # Collection performance errors (PC001-PC020)
-COLLECTION_MESSAGES: Dict[str, ErrorInfo] = {
+COLLECTION_MESSAGES: dict[str, ErrorInfo] = {
     "PC001": (
         "List membership testing, consider using set for O(1) lookup",
         "'High Performance Python' (3rd Edition), Chapter 3: Lists and Tuples, p.67",
@@ -64,7 +62,7 @@ COLLECTION_MESSAGES: Dict[str, ErrorInfo] = {
 }
 
 # Effective Python iteration patterns (EP001-EP020)
-ITERATION_MESSAGES: Dict[str, ErrorInfo] = {
+ITERATION_MESSAGES: dict[str, ErrorInfo] = {
     "EP001": (
         "Use enumerate() instead of range(len()) for cleaner iteration",
         "'Effective Python' (3rd Edition), Item 10: Prefer enumerate, p.23",
@@ -93,7 +91,7 @@ ITERATION_MESSAGES: Dict[str, ErrorInfo] = {
 }
 
 # Memory optimization patterns (MC001-MC020)
-MEMORY_MESSAGES: Dict[str, ErrorInfo] = {
+MEMORY_MESSAGES: dict[str, ErrorInfo] = {
     "MC001": (
         "Class without __slots__, consider adding for memory efficiency",
         "'High Performance Python' (3rd Edition), Chapter 6: Matrices and Vectors, p.145",
@@ -112,7 +110,7 @@ MEMORY_MESSAGES: Dict[str, ErrorInfo] = {
 }
 
 # NumPy performance patterns (NP001-NP020)
-NUMPY_MESSAGES: Dict[str, ErrorInfo] = {
+NUMPY_MESSAGES: dict[str, ErrorInfo] = {
     "NP001": (
         "Manual loop over array, consider vectorized operations",
         "'High Performance Python' (3rd Edition), Chapter 6: Matrices and Vectors, p.152",
@@ -154,22 +152,22 @@ def get_all_error_codes() -> list[str]:
     return sorted(ALL_MESSAGES.keys())
 
 
-def get_error_codes_by_category() -> Dict[str, list[str]]:
+def get_error_codes_by_category() -> dict[str, list[str]]:
     """Get error codes organized by category."""
     return {
         "String Operations (HP001-HP020)": [
-            k for k in ALL_MESSAGES.keys() if k.startswith("HP")
+            k for k in ALL_MESSAGES if k.startswith("HP")
         ],
         "Collection Performance (PC001-PC020)": [
-            k for k in ALL_MESSAGES.keys() if k.startswith("PC")
+            k for k in ALL_MESSAGES if k.startswith("PC")
         ],
         "Iteration Patterns (EP001-EP020)": [
-            k for k in ALL_MESSAGES.keys() if k.startswith("EP")
+            k for k in ALL_MESSAGES if k.startswith("EP")
         ],
         "Memory Optimization (MC001-MC020)": [
-            k for k in ALL_MESSAGES.keys() if k.startswith("MC")
+            k for k in ALL_MESSAGES if k.startswith("MC")
         ],
         "NumPy Performance (NP001-NP020)": [
-            k for k in ALL_MESSAGES.keys() if k.startswith("NP")
+            k for k in ALL_MESSAGES if k.startswith("NP")
         ],
     }

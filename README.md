@@ -1,4 +1,4 @@
-# flake8-performance-patterns
+# flake8-patterns
 
 > A comprehensive flake8 plugin that detects performance anti-patterns based on **"High Performance Python"** and **"Effective Python"**.
 
@@ -19,7 +19,7 @@
 
 ```bash
 # Install
-pip install flake8-performance-patterns
+pip install flake8-patterns
 
 # Use with flake8
 flake8 your_code.py
@@ -110,8 +110,8 @@ select = HP,PC,EP,MC
 
 ```bash
 # Clone and setup
-git clone https://github.com/your-username/flake8-performance-patterns.git
-cd flake8-performance-patterns
+git clone https://github.com/your-username/flake8-patterns.git
+cd flake8-patterns
 
 # Create a virtual environment and activate it
 python -m venv .venv
@@ -121,7 +121,7 @@ source .venv/bin/activate  # or .venv\Scripts\activate on Windows
 pip install -e ".[dev]"
 
 # Verify the installation
-flake8 --version  # Should show flake8-performance-patterns
+flake8 --version  # Should show flake8-patterns
 ```
 
 ## 🧪 Testing
@@ -134,7 +134,7 @@ pytest
 pytest tests/test_string_operations.py
 
 # Test with coverage
-pytest --cov=flake8_performance_patterns
+pytest --cov=flake8_patterns
 
 # Test integration
 flake8 examples/bad_patterns.py
