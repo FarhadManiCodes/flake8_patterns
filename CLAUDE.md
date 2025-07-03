@@ -4,9 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a flake8 plugin called `flake8-patterns` (formerly `flake8-performance-patterns`) that detects performance anti-patterns in Python code. The plugin is based on patterns from two authoritative books:
-- **"Effective Python" (3rd Edition)** by Brett Slatkin
-- "High Performance Python" (3rd Edition) by Micha Gorelick and Ian Ozsvald
+This is a flake8 plugin called `flake8-patterns` that detects anti-patterns in Python code based on patterns from authoritative books:
+- **"Effective Python" (3rd Edition)** by Brett Slatkin (PRIMARY FOCUS)
+- "High Performance Python" (3rd Edition) by Micha Gorelick and Ian Ozsvald (FUTURE)
+
+**Current Status**: Implementing Effective Python patterns first (26 verified rules across 3 tiers), with High Performance Python integration planned for later phases.
 
 ## Technical Requirements & Compatibility
 
@@ -51,52 +53,63 @@ if PYTHON_313_PLUS:
 
 ## Development Strategy & Priorities
 
-### Implementation Roadmap (Starting with Effective Python)
+### Implementation Roadmap (Verified 26 Rules)
 
-*Starting with Effective Python patterns for practical reasons - they tend to be more objective and easier to implement. Both books are equally important to the project.*
+*Based on comprehensive analysis of all 125 Effective Python items. Starting with Tier 1 rules that have the highest impact and clearest detection patterns.*
 
-**Phase 1: Simple & Objective Rules (v0.1.0-0.3.0)**
-- EP201: Always Surround Single-Element Tuples with Parentheses (Chapter 2)
-- EP202: Prefer F-Strings over C-Style Format Strings (Chapter 2)
-- EP203: Prefer Explicit String Concatenation (Chapter 2)
-- EP301: Prefer enumerate over range (Chapter 3)
-- EP302: Use zip to Process Iterators in Parallel (Chapter 3)
-- EP303: Never Use for Loop Variables After Loop Ends (Chapter 3)
-- EP304: Never Modify Containers While Iterating (Chapter 3)
-- EP401: Prefer get over in and KeyError (Chapter 4)
+**Phase 1: High Impact, Clear Gaps (v0.1.0-0.3.0) - 6 Rules**
+- EP105: Multiple-Assignment Unpacking over Indexing (Item 5, Chapter 1)
+- EP213: Context-Aware String Concatenation (Item 13, Chapter 2)
+- EP318: Parallel Iteration with zip() (Item 18, Chapter 3)
+- EP320: Loop Variables After Loop Ends (Item 20, Chapter 3)
+- EP321: Be Defensive when Iterating over Arguments (Item 21, Chapter 3)
+- EP426: Comprehensive dict.get() patterns (Item 26, Chapter 4)
 
-**Phase 2: Moderate Complexity (v0.4.0-0.6.0)**
-- EP601: Use Comprehensions Instead of map and filter (Chapter 6)
-- EP602: Consider Generators Instead of Returning Lists (Chapter 6)
-- EP1201: Prefer deque for Producer-Consumer Queues (Chapter 12)
-- EP1202: Know Difference Between sort and sorted (Chapter 12)
+**Phase 2: Code Quality/API Design (v0.4.0-0.6.0) - 14 Rules**
+- EP216: Catch-All Unpacking over Slicing (Item 16, Chapter 2)
+- EP427: defaultdict over setdefault (Item 27, Chapter 4)
+- EP12103: deque for Producer-Consumer Queues (Item 103, Chapter 12)
+- EP531: Return Objects vs >3 Tuple Unpacking (Item 31, Chapter 5)
+- EP538: functools.wraps for Decorators (Item 38, Chapter 5)
+- EP429: Avoid Deep Nesting → Classes (Item 29, Chapter 4)
+- EP537: Keyword-Only/Positional-Only Arguments (Item 37, Chapter 5)
+- EP748: Functions vs Classes for Simple Interfaces (Item 48, Chapter 7)
+- EP755: Public vs Private Attributes (Item 55, Chapter 7)
+- EP769: Use Lock to Prevent Data Races (Item 69, Chapter 9)
+- EP770: Use Queue for Thread Coordination (Item 70, Chapter 9)
+- EP881: assert vs raise patterns (Item 81, Chapter 10)
+- EP12121: Root Exception Hierarchies (Item 121, Chapter 14)
+- EP12122: Circular Dependencies (Item 122, Chapter 14)
 
-**Phase 3: High Performance Python Integration (v0.7.0+)**
+**Phase 3: Advanced Patterns (v0.7.0+) - 6 Rules**
+- EP104: Helper Functions over Complex Expressions (Item 4, Chapter 1)
+- EP108: Assignment Expressions for Repetition (Item 8, Chapter 1)
+- EP215: Avoid Striding and Slicing Together (Item 15, Chapter 2)
+- EP317: Comprehensive enumerate suggestions (Item 17, Chapter 3)
+- EP641: Complex Comprehension Control (Item 41, Chapter 6)
+- EP645: yield from for Generator Composition (Item 45, Chapter 6)
+
+**Phase 4: High Performance Python Integration (v0.8.0+)**
 - HP001: String concatenation in loops → use `str.join()`
 - PC001: List membership testing → use `set` for O(1) lookup
 - MC001: Missing `__slots__` → memory optimization
 - NP001: Manual loops over arrays → use NumPy vectorization
 
-**Phase 4: Advanced & Subjective Rules (v0.8.0+)**
-- EP101: Write Helper Functions Instead of Complex Expressions (Chapter 1)
-- EP102: Consider Conditional Expressions for Simple Logic (Chapter 1)
-- HP010-HP020: Advanced High Performance Python patterns
+### Competitive Analysis ✅ VERIFIED COMPLETE
 
-### Competitive Analysis ✅ COMPLETED
+**CONFIRMED**: No existing educational plugins with book-based rules found!
 
-**GOOD NEWS**: No existing performance-focused educational plugins found!
-
-**Existing plugins focus on:**
+**Existing tools cover different areas:**
 - flake8-comprehensions (19 rules) - Only comprehensions/generators
-- flake8-bugbear (50+ rules) - General bugs, minimal performance overlap
-- flake8-simplify - Code simplification, not performance-focused
-- ruff - Fast replacement, lacks educational book-based approach
+- flake8-bugbear (50+ rules) - General bugs, minimal overlap with our patterns
+- flake8-simplify - Code simplification, not book-based education
+- ruff - Fast replacement, lacks educational book references
 
 **Our Unique Value:**
-1. **Educational focus** - Book references + performance impact estimates
-2. **Performance-specific** - Not just style or bugs
-3. **Comprehensive coverage** - Both authoritative Python books
-4. **Beginner-friendly** - Clear explanations with examples
+1. **Educational focus** - Book references + learning-oriented error messages
+2. **Comprehensive book coverage** - Systematic implementation of authoritative patterns
+3. **No conflicts** - Verified compatibility with existing flake8 ecosystem
+4. **Clear pedagogy** - Each rule teaches specific Pythonic patterns with examples
 
 ## Using Gemini CLI for Large Codebase Analysis
 
@@ -108,11 +121,11 @@ For complex analysis tasks, structure your thinking process:
 
 ```json
 {
-  "thought": "Analyzing EP201 implementation across all files to ensure consistency",
+  "thought": "Analyzing EP105 implementation across all files to ensure consistency",
   "thoughtNumber": 1,
   "totalThoughts": 5,
   "nextThoughtNeeded": true,
-  "context": "Reviewing checker.py, messages.py, tests, and examples for EP201"
+  "context": "Reviewing checker.py, messages.py, tests, and examples for EP105"
 }
 ```
 
@@ -154,31 +167,6 @@ flake8-patterns/
 
 **Note**: Unlike some projects that use hierarchical GEMINI.md files in subdirectories, flake8-patterns uses a single root-level GEMINI.md for simplicity. All project context and guidelines are consolidated in this file.
 
-### Configuration & Environment Management
-
-**Environment Variable Precedence:**
-1. **CLI arguments** (highest priority)
-2. **Project .env** (.gemini/.env)
-3. **Global .env** (~/.env)
-4. **Default values** (lowest priority)
-
-**Project Configuration:**
-```json
-// .gemini/settings.json
-{
-  "checkpointing": true,
-  "contextFileName": "GEMINI.md",
-  "mcpServers": {
-    "flake8-patterns-analyzer": {
-      "command": "python",
-      "args": ["scripts/mcp_analyzer.py"],
-      "cwd": "./tools",
-      "timeout": 10000
-    }
-  }
-}
-```
-
 ### File Analysis Examples for flake8-patterns
 
 **Project structure overview:**
@@ -213,14 +201,14 @@ gemini -p "@src/messages.py Are all error messages following the same format tem
 
 ### Implementation Verification Commands
 
-**Check EP201 implementation:**
+**Check EP105 implementation:**
 ```bash
-gemini -p "@src/ @tests/ Is EP201 (single-element tuples) fully implemented with tests and examples?"
+gemini -p "@src/ @tests/ Is EP105 (multiple-assignment unpacking) fully implemented with tests and examples?"
 ```
 
 **Verify book accuracy:**
 ```bash
-gemini -p "@src/book_refs.py Do all Effective Python references cite real chapters and sections?"
+gemini -p "@src/book_refs.py Do all Effective Python references cite real Item numbers and chapters?"
 ```
 
 **Pattern detection verification:**
@@ -230,7 +218,7 @@ gemini -p "@src/checker.py @tests/ Are AST visitor methods properly handling edg
 
 **Performance impact verification:**
 ```bash
-gemini -p "@src/messages.py @examples/ Are our performance claims (e.g., '10x faster') accurate and well-demonstrated?"
+gemini -p "@src/messages.py @examples/ Are our readability/performance claims accurate and well-demonstrated?"
 ```
 
 **Error message quality assessment:**
@@ -261,7 +249,7 @@ gemini -p "@src/ Identify areas for simple refactoring to improve code consisten
 gemini --checkpointing
 
 # Manual checkpoint before major changes
-/checkpoint save "before-EP201-implementation"
+/checkpoint save "before-EP105-implementation"
 
 # Restore if needed
 /restore <checkpoint-id>
@@ -286,7 +274,7 @@ gemini --checkpointing
 **Priority 2 (Quality Assurance):**
 - 🧪 **Test coverage analysis** - Ensures reliable rule detection
 - 📊 **Documentation consistency** - User experience and adoption
-- ⚡ **Performance claims verification** - Backing up our impact estimates
+- ⚡ **Impact claims verification** - Backing up our readability/performance estimates
 
 **Priority 3 (Development Efficiency):**
 - 🔍 **Integration conflict detection** - Prevents ecosystem problems
@@ -300,7 +288,7 @@ For complex rule implementation and architectural decisions, use structured thin
 ### When to Use Sequential Thinking
 
 **Always use for:**
-- 🧠 **New rule implementation** (EP201, EP202, etc.)
+- 🧠 **New rule implementation** (EP105, EP213, etc.)
 - 🏗️ **AST visitor design** (complex pattern detection)
 - 📚 **Book reference validation** (accuracy critical)
 - ⚡ **Performance optimization** (system-wide impact)
@@ -309,13 +297,13 @@ For complex rule implementation and architectural decisions, use structured thin
 ### Structured Implementation Protocol
 
 ```json
-// Example: Implementing EP201 (Single-Element Tuples)
+// Example: Implementing EP105 (Multiple-Assignment Unpacking)
 {
-  "thought": "Analyzing EP201 requirements: detect (item) vs (item,) patterns",
+  "thought": "Analyzing EP105 requirements: detect x = item[0]; y = item[1] patterns",
   "thoughtNumber": 1,
   "totalThoughts": 6,
   "nextThoughtNeeded": true,
-  "context": "Effective Python Chapter 2, AST.Tuple analysis needed"
+  "context": "Effective Python Item 5, Chapter 1, AST assignment analysis needed"
 }
 
 {
@@ -327,22 +315,22 @@ For complex rule implementation and architectural decisions, use structured thin
 }
 
 {
-  "thought": "Implementation plan: 1) Add visit_Tuple method 2) Check len(node.elts)==1 3) Detect missing comma 4) Add EP201 to messages.py",
+  "thought": "Implementation plan: 1) Add visit_Assign method 2) Track sequential indexing 3) Detect patterns like x=item[0], y=item[1] 4) Add EP105 to messages.py",
   "thoughtNumber": 3,
   "totalThoughts": 6,
   "nextThoughtNeeded": true
 }
 
 {
-  "thought": "Book reference verification: Effective Python Chapter 2 discusses tuple syntax and clarity",
+  "thought": "Book reference verification: Effective Python Item 5, Chapter 1 discusses unpacking benefits",
   "thoughtNumber": 4,
   "totalThoughts": 6,
   "nextThoughtNeeded": true,
-  "context": "Must cite exact page and section"
+  "context": "Must cite exact Item and chapter"
 }
 
 {
-  "thought": "Test strategy: positive cases (missing comma), negative cases (correct comma), edge cases (nested tuples)",
+  "thought": "Test strategy: positive cases (sequential indexing), negative cases (non-sequential), edge cases (different variables)",
   "thoughtNumber": 5,
   "totalThoughts": 6,
   "nextThoughtNeeded": true
@@ -441,7 +429,7 @@ gemini --checkpointing
 # (GEMINI.md files are loaded hierarchically)
 
 # Create checkpoint before major changes
-/checkpoint save "before-EP201-visitor-implementation"
+/checkpoint save "before-EP105-visitor-implementation"
 
 # Use MCP tools for analysis
 /tools show  # List available analysis tools
@@ -465,7 +453,7 @@ source .venv/bin/activate  # Linux/Mac
 pip install -e ".[dev]"
 
 # Verify installation
-python scripts/verify_migration.py
+python scripts/verify_installation.py
 flake8 --version  # Should show flake8-patterns
 ```
 
@@ -475,7 +463,7 @@ flake8 --version  # Should show flake8-patterns
 pytest
 
 # Test specific rule implementation
-pytest tests/test_effective_python.py::test_ep201_single_element_tuples
+pytest tests/test_effective_python.py::test_ep105_multiple_assignment_unpacking
 
 # Run tests with coverage
 pytest --cov=flake8_patterns
@@ -512,9 +500,13 @@ python -c "
 import ast
 from flake8_patterns.checker import PerformanceChecker
 code = '''
-# EP201: Single element tuple without comma
-coordinates = (42)  # Should trigger EP201
-good_tuple = (42,)  # Should not trigger
+# EP105: Sequential indexing pattern
+item = (1, 2, 3)
+first = item[0]   # Should trigger EP105
+second = item[1]  # Part of pattern
+
+# Good: Multiple assignment unpacking
+first, second, third = item
 '''
 tree = ast.parse(code)
 checker = PerformanceChecker(tree)
@@ -532,8 +524,8 @@ for error in checker.run():
    - Implements AST visitors for each rule category
 
 2. **messages.py**: Centralized error messages with book references
-   - `ALL_MESSAGES`: Dict mapping error codes to (message, book_ref, performance_impact)
-   - Error categories: EP (Effective Python), HP (High Performance Python), PC (Collections), MC (Memory), NP (NumPy)
+   - `ALL_MESSAGES`: Dict mapping error codes to (message, book_ref, impact)
+   - Error categories: EP (Effective Python), HP (High Performance Python - future)
 
 3. **utils.py**: AST analysis utilities
    - `NodeVisitorWithParents`: Base class for tracking parent nodes
@@ -541,48 +533,31 @@ for error in checker.run():
 
 4. **book_refs.py**: Book reference system for educational context
 
-### Error Code Categories & Versioning
+### Error Code System
 
-**Semantic Versioning Strategy:**
-- **0.1.0**: Initial release (EP201-EP203: String operations)
-- **0.2.0**: Add loops (EP301-EP304)
-- **0.3.0**: Add dictionaries (EP401)
-- **0.4.0**: Add comprehensions (EP601-EP602)
-- **0.8.0**: PyPI auto-publish ready
-- **1.0.0**: Stable release
-
-### Error Code Categories & Versioning
-
-**Semantic Versioning Strategy:**
-- **0.1.0**: Initial release (EP201-EP203: String operations)
-- **0.2.0**: Add loops (EP301-EP304)
-- **0.3.0**: Add dictionaries (EP401)
-- **0.4.0**: Add comprehensions (EP601-EP602)
-- **0.8.0**: PyPI auto-publish ready
-- **1.0.0**: Stable release
-
-**Error Code Format & Ranges:**
+**Error Code Format:**
 ```python
-# Error code format: [EP|HP|PC|MC|NP][001-999]
-# EP = Effective Python patterns (PRIORITY)
-# HP = High Performance Python patterns
-# PC = Collection performance patterns
-# MC = Memory optimization patterns
-# NP = NumPy performance patterns
+# Format: EP{ItemNumber} (based on actual Effective Python Item numbers)
+EP105   # Item 5: Multiple-Assignment Unpacking over Indexing
+EP213   # Item 13: Prefer Explicit String Concatenation
+EP318   # Item 18: Use zip to Process Iterators in Parallel
+EP320   # Item 20: Never Use for Loop Variables After the Loop Ends
+EP321   # Item 21: Be Defensive when Iterating over Arguments
+EP426   # Item 26: Prefer get over in and KeyError
 
-# Specific ranges:
-EP001-EP020:  Iteration patterns (Chapter 3)
-EP201-EP220:  String operations (Chapter 2)
-EP301-EP320:  Loop patterns (Chapter 3)
-EP401-EP420:  Dictionary patterns (Chapter 4)
-EP601-EP620:  Comprehension patterns (Chapter 6)
-EP1201-EP1220: Data structure patterns (Chapter 12)
-
-HP001-HP020:  String operations (High Performance Python)
-PC001-PC020:  Collection performance patterns
-MC001-MC020:  Memory optimization patterns
-NP001-NP020:  NumPy performance patterns
+# Future High Performance Python rules will use HP prefix:
+HP001-HP999   # High Performance Python patterns
+PC001-PC999   # Collection performance patterns
+MC001-MC999   # Memory optimization patterns
+NP001-NP999   # NumPy performance patterns
 ```
+
+### Semantic Versioning Strategy
+- **0.1.0**: Initial release (6 Tier 1 rules: EP105, EP213, EP318, EP320, EP321, EP426)
+- **0.2.0**: Add Tier 2 rules (code quality/API design patterns)
+- **0.3.0**: Complete Effective Python coverage (all 26 verified rules)
+- **0.7.0**: High Performance Python integration begins
+- **1.0.0**: Stable release with comprehensive book coverage
 
 ### Core Dependencies & Setup
 ```txt
@@ -610,19 +585,24 @@ src/flake8_patterns/
 ├── book_refs.py         # Book reference system
 └── rules/               # Rule implementations (expandable)
     ├── __init__.py
-    ├── effective_python.py    # EP### rules (primary focus)
-    └── high_performance.py    # HP### rules (secondary)
+    ├── effective_python.py    # EP### rules (current focus)
+    └── high_performance.py    # HP### rules (future)
 ```
 
 ## Current Development Focus
 
-### Immediate Priority: EP201 Implementation
-**Rule**: Always Surround Single-Element Tuples with Parentheses
-**Pattern**: `(item)` → `(item,)`
-**Book Reference**: "Effective Python" (3rd Edition), Chapter 2
-**Detection**: AST pattern matching for `ast.Tuple` with single element missing comma
+### Immediate Priority: EP105 Implementation
+**Rule**: Multiple-Assignment Unpacking over Indexing
+**Pattern**: `x = item[0]; y = item[1]` → `x, y = item`
+**Book Reference**: "Effective Python" (3rd Edition), Item 5, Chapter 1
+**Detection**: AST pattern matching for sequential indexing assignments
 
-### Testing Strategy: Manual Book Reference Validation
+**Why EP105 First:**
+- Clearest, most detectable pattern (high confidence implementation)
+- Common anti-pattern that beginners often use
+- Clear educational value with obvious improvement
+- No complex AST analysis required (good starting point)
+
 ### Testing Strategy: Manual Book Reference Validation
 
 **Coverage Requirements:**
@@ -638,41 +618,46 @@ src/flake8_patterns/
 5. **Book reference validation**: Manual test cases for accuracy
 
 ```python
-def test_ep201_book_reference():
-    """EP201 should reference Chapter 2 correctly."""
-    ref = get_book_reference("EP201")
-    assert ref.chapter == "Chapter 2: Strings and Slicing"
-    assert "Single-Element Tuples" in ref.section
+def test_ep105_book_reference():
+    """EP105 should reference Item 5, Chapter 1 correctly."""
+    ref = get_book_reference("EP105")
+    assert ref.item == "Item 5"
+    assert ref.chapter == "Chapter 1: Pythonic Thinking"
+    assert "Multiple-Assignment Unpacking" in ref.section
 
-def test_ep201_detection():
-    """EP201 should detect single-element tuples without commas."""
-    code = "coordinates = (42)"  # Missing comma
+def test_ep105_detection():
+    """EP105 should detect sequential indexing patterns."""
+    code = '''
+item = (1, 2, 3)
+first = item[0]   # Should trigger EP105
+second = item[1]  # Part of pattern
+'''
     errors = run_checker(code)
     assert len(errors) == 1
-    assert "EP201" in errors[0][2]
+    assert "EP105" in errors[0][2]
 
-def test_ep201_no_false_positives():
-    """EP201 should not trigger on correct tuples."""
-    code = "coordinates = (42,)"  # Correct comma
+def test_ep105_no_false_positives():
+    """EP105 should not trigger on correct unpacking."""
+    code = "first, second, third = item"
     errors = run_checker(code)
     assert len(errors) == 0
 ```
 
 **Error Message Format:**
 ```python
-# Template: Brief description + Book reference + Performance impact + Example
+# Template: Brief description + Book reference + Impact + Example
 ERROR_TEMPLATE = (
     "{brief_description}"
-    " → '{book_title}', {chapter_reference}"
-    " → Performance: {performance_impact}"
+    " → '{book_title}', {item_reference}, {chapter_reference}"
+    " → Impact: {impact_description}"
     " → Example: {before_example} → {after_example}"
 )
 
 # Example usage:
-"Single-element tuple missing comma, add trailing comma for clarity"
-" → 'Effective Python' (3rd Edition), Chapter 2: Strings and Slicing"
-" → Readability: Prevents confusion with grouping parentheses"
-" → Example: (item) → (item,)"
+"Sequential indexing detected, use multiple-assignment unpacking"
+" → 'Effective Python' (3rd Edition), Item 5, Chapter 1: Pythonic Thinking"
+" → Readability: Cleaner, less error-prone, same performance"
+" → Example: x = item[0]; y = item[1] → x, y = item"
 ```
 
 ### Performance & CI/CD
@@ -704,7 +689,7 @@ When working with uploaded files, use the `window.fs.readFile` API:
 const fileContent = await window.fs.readFile('filename.py', { encoding: 'utf8' });
 
 # Always include error handling when reading files
-try:
+try {
     const content = await window.fs.readFile('test_patterns.py', { encoding: 'utf8' });
     console.log('File content:', content);
 } catch (error) {
@@ -716,14 +701,23 @@ try:
 ```python
 # When creating test examples or analyzing patterns
 code_example = '''
-# EP201: Single element tuple without comma
-coordinates = (42)  # Should trigger EP201
-good_tuple = (42,)  # Should not trigger
+# EP105: Sequential indexing pattern
+item = (1, 2, 3)
+first = item[0]   # Should trigger EP105
+second = item[1]  # Part of pattern
 
-# EP301: range(len()) pattern
-items = ["a", "b", "c"]
-for i in range(len(items)):  # Should trigger EP301
-    print(i, items[i])
+# EP318: Manual parallel iteration
+names = ["Alice", "Bob"]
+ages = [25, 30]
+for i in range(len(names)):  # Should trigger EP318
+    name = names[i]
+    age = ages[i]
+    print(f"{name} is {age}")
+
+# Good patterns:
+first, second, third = item
+for name, age in zip(names, ages):
+    print(f"{name} is {age}")
 '''
 
 # Test the plugin
@@ -745,24 +739,23 @@ errors = list(checker.run())
 - **Integration**: Test with other flake8 plugins for conflicts
 - **PyPI**: Auto-publish starting at v0.8.0 (manual until then)
 
-
 ## Adding New Rules
 
 ### Rule Implementation Process
-1. **Choose next rule** from priority roadmap (Effective Python first, simple → complex)
-2. **Add message to messages.py**: Include in appropriate category with book reference
+1. **Choose next rule** from verified 26-rule roadmap (follow 3-tier priority)
+2. **Add message to messages.py**: Include with book reference and impact
 3. **Implement detection in checker.py**: Add visitor method for AST pattern
 4. **Add comprehensive tests**: Positive, negative, edge cases, book reference validation
-5. **Validate book reference accuracy**: Manual test case verifying chapter/section
-6. **Include educational context**: Performance/readability impact + before/after examples
+5. **Validate book reference accuracy**: Manual test case verifying Item/chapter
+6. **Include educational context**: Impact estimate + before/after examples
 7. **Test integration**: Ensure no conflicts with existing flake8 plugins
 
 ### Book Reference Requirements (CRITICAL)
 All rules must include:
 - Exact book title and edition
+- Item number and title (e.g., "Item 5: Multiple-Assignment Unpacking")
 - Chapter number and title
-- Specific section/item reference
-- Page number (when available)
+- Specific section reference
 - Performance/readability impact estimate
 - Before/after code examples
 
@@ -786,4 +779,5 @@ All rules must include:
 - AST analysis uses custom `NodeVisitorWithParents` for context-aware checking
 - Each rule includes educational context with book references and impact estimates
 - Pre-commit hooks ensure code quality with black, isort, ruff, and mypy
-- Focus on **objective, detectable patterns** first, then subjective improvements
+- Focus on **verified, detectable patterns** from our comprehensive analysis
+- **26 total rules** across 3 tiers, starting with 6 high-impact Tier 1 rules
