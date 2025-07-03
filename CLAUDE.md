@@ -51,7 +51,9 @@ if PYTHON_313_PLUS:
 
 ## Development Strategy & Priorities
 
-### Implementation Roadmap (Effective Python First)
+### Implementation Roadmap (Starting with Effective Python)
+
+*Starting with Effective Python patterns for practical reasons - they tend to be more objective and easier to implement. Both books are equally important to the project.*
 
 **Phase 1: Simple & Objective Rules (v0.1.0-0.3.0)**
 - EP201: Always Surround Single-Element Tuples with Parentheses (Chapter 2)
@@ -69,9 +71,16 @@ if PYTHON_313_PLUS:
 - EP1201: Prefer deque for Producer-Consumer Queues (Chapter 12)
 - EP1202: Know Difference Between sort and sorted (Chapter 12)
 
-**Phase 3: Subjective Rules (v0.7.0+)**
+**Phase 3: High Performance Python Integration (v0.7.0+)**
+- HP001: String concatenation in loops → use `str.join()`
+- PC001: List membership testing → use `set` for O(1) lookup
+- MC001: Missing `__slots__` → memory optimization
+- NP001: Manual loops over arrays → use NumPy vectorization
+
+**Phase 4: Advanced & Subjective Rules (v0.8.0+)**
 - EP101: Write Helper Functions Instead of Complex Expressions (Chapter 1)
 - EP102: Consider Conditional Expressions for Simple Logic (Chapter 1)
+- HP010-HP020: Advanced High Performance Python patterns
 
 ### Competitive Analysis ✅ COMPLETED
 
@@ -88,6 +97,111 @@ if PYTHON_313_PLUS:
 2. **Performance-specific** - Not just style or bugs
 3. **Comprehensive coverage** - Both authoritative Python books
 4. **Beginner-friendly** - Clear explanations with examples
+
+## Using Gemini CLI for Large Codebase Analysis
+
+When analyzing the entire flake8-patterns codebase or verifying project-wide patterns, use Gemini CLI with its massive context window.
+
+### When to Use Gemini CLI vs Claude
+
+**Use Gemini CLI (`gemini -p`) for:**
+- 🔍 **Project-wide analysis** - Architecture reviews, pattern consistency
+- 📊 **Integration verification** - Checking conflicts with other flake8 plugins
+- 🧪 **Test coverage analysis** - Comprehensive testing verification
+- 📚 **Book reference validation** - Ensuring all rules cite correct chapters
+- 🏗️ **Large file analysis** - When multiple files exceed Claude's context
+
+**Use Claude for:**
+- 🎯 **Implementation decisions** - New rules, AST logic, architecture
+- 🧠 **Complex reasoning** - Rule prioritization, design choices
+- ✍️ **Detailed coding** - Writing visitor methods, error detection logic
+- 📖 **Educational content** - Book reference accuracy, example creation
+
+### File Analysis Examples for flake8-patterns
+
+**Project structure overview:**
+```bash
+gemini -p "@./ Give me an overview of the flake8-patterns project structure and architecture"
+```
+
+**Rule consistency check:**
+```bash
+gemini -p "@src/ @tests/ Are all EP### rules properly implemented with corresponding tests?"
+```
+
+**Book reference validation:**
+```bash
+gemini -p "@src/messages.py @src/book_refs.py Are all error codes properly linked to book chapters?"
+```
+
+**Integration conflict check:**
+```bash
+gemini -p "@src/ Does flake8-patterns have any error code conflicts with flake8-bugbear or flake8-comprehensions?"
+```
+
+**Test coverage analysis:**
+```bash
+gemini -p "@tests/ @examples/ Which rules lack comprehensive test cases or examples?"
+```
+
+**Message format consistency:**
+```bash
+gemini -p "@src/messages.py Are all error messages following the same format template?"
+```
+
+### Implementation Verification Commands
+
+**Check EP201 implementation:**
+```bash
+gemini -p "@src/ @tests/ Is EP201 (single-element tuples) fully implemented with tests and examples?"
+```
+
+**Verify book accuracy:**
+```bash
+gemini -p "@src/book_refs.py Do all Effective Python references cite real chapters and sections?"
+```
+
+**Pattern detection verification:**
+```bash
+gemini -p "@src/checker.py @tests/ Are AST visitor methods properly handling edge cases?"
+```
+
+**Performance impact verification:**
+```bash
+gemini -p "@src/messages.py @examples/ Are our performance claims (e.g., '10x faster') accurate and well-demonstrated?"
+```
+
+**Error message quality assessment:**
+```bash
+gemini -p "@src/messages.py Are our educational explanations clear and helpful for learning Python best practices?"
+```
+
+**Documentation consistency check:**
+```bash
+gemini -p "@README.md @examples/ @src/ Do README examples match actual implemented rules and error codes?"
+```
+
+**Code quality and refactoring analysis:**
+```bash
+gemini -p "@src/ Identify areas for simple refactoring to improve code consistency and readability"
+```
+
+### Most Valuable Analysis Types for flake8-patterns
+
+**Priority 1 (Critical for Educational Plugin):**
+- 📚 **Book reference validation** - Accuracy is essential for credibility
+- 🎓 **Error message quality** - Core to our educational mission
+- 📋 **Rule consistency** - Professional appearance and user trust
+
+**Priority 2 (Quality Assurance):**
+- 🧪 **Test coverage analysis** - Ensures reliable rule detection
+- 📊 **Documentation consistency** - User experience and adoption
+- ⚡ **Performance claims verification** - Backing up our impact estimates
+
+**Priority 3 (Development Efficiency):**
+- 🔍 **Integration conflict detection** - Prevents ecosystem problems
+- 🏗️ **Refactoring opportunities** - Code maintainability
+- 📐 **Architecture consistency** - Long-term project health
 
 ## Essential Commands
 
