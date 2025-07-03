@@ -5,21 +5,22 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "flake8-patterns"
 version = "0.1.0"
-description = "Flake8 plugin detecting performance anti-patterns from High Performance Python and Effective Python"
-readme = "README.md"
+description = "Educational flake8 plugin teaching Pythonic patterns from 'Effective Python' (3rd Edition) with 26 verified rules"
+readme = {file = "README.md", content-type = "text/markdown"}
 license = {text = "MIT"}
 authors = [
-    {name = "Your Name", email = "your.email@example.com"},
+    {name = "Farhad Mani", email = "frhdmani@gmail.com"},
 ]
 maintainers = [
-    {name = "Your Name", email = "your.email@example.com"},
+    {name = "Farhad Mani", email = "frhdmani@gmail.com"},
 ]
-keywords = ["flake8", "performance", "linting", "python", "optimization"]
+keywords = ["flake8", "effective-python", "educational", "linting", "python", "pythonic", "patterns", "book-based"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Environment :: Console",
     "Framework :: Flake8",
     "Intended Audience :: Developers",
+    "Intended Audience :: Education",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
@@ -29,6 +30,8 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Documentation",
+    "Topic :: Education",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Software Development :: Quality Assurance",
     "Topic :: Software Development :: Testing",
@@ -71,14 +74,14 @@ docs = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/yourusername/flake8-patterns"
-Documentation = "https://github.com/yourusername/flake8-patterns#readme"
-Repository = "https://github.com/yourusername/flake8-patterns"
-Issues = "https://github.com/yourusername/flake8-patterns/issues"
-Changelog = "https://github.com/yourusername/flake8-patterns/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/FarhadManiCodes/flake8-patterns"
+Documentation = "https://github.com/FarhadManiCodes/flake8-patterns#readme"
+Repository = "https://github.com/FarhadManiCodes/flake8-patterns"
+Issues = "https://github.com/FarhadManiCodes/flake8-patterns/issues"
+Changelog = "https://github.com/FarhadManiCodes/flake8-patterns/blob/main/CHANGELOG.md"
 
 [project.entry-points."flake8.extension"]
-HP = "flake8_patterns.checker:PerformanceChecker"
+EP = "flake8_patterns.checker:PerformanceChecker"
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -91,7 +94,7 @@ where = ["src"]
 
 [tool.black]
 line-length = 88
-target-version = ['py310', 'py311', 'py312']
+target-version = ['py310', 'py311', 'py312', 'py313']
 include = '\.pyi?$'
 extend-exclude = '''
 /(
