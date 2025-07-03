@@ -38,7 +38,7 @@ your_code.py:12:5: EP105 Sequential indexing detected, use multiple-assignment u
 
 ## Implementation Roadmap: 26 Verified Rules
 
-*Based on comprehensive analysis of all 125 "Effective Python" items*
+*Based on [comprehensive analysis](analysis/summary.md) of all 125 "Effective Python" items*
 
 ### Phase 1: High Impact, Clear Gaps (v0.1.0-0.3.0) - 6 Rules ✅
 
