@@ -1,6 +1,6 @@
 """Book chapter and item references for error codes."""
 
-from typing import NamedTuple
+from typing import Any, NamedTuple
 
 
 class BookReference(NamedTuple):
@@ -189,7 +189,6 @@ def get_formatted_reference(error_code: str) -> str:
     if not ref:
         return f"No reference found for {error_code}"
 
-    # Format: "Book Title (Edition), Chapter/Item, p.XX"
     reference_str = f'"{ref.book}" ({ref.edition}), {ref.chapter}'
     if ref.item:
         reference_str += f" - {ref.item}"
@@ -203,7 +202,7 @@ def get_formatted_reference(error_code: str) -> str:
 
 def get_references_by_book() -> dict[str, dict[str, BookReference]]:
     """Get references organized by book."""
-    by_book = {}
+    by_book: dict[str, dict[str, BookReference]] = {}
 
     for code, ref in ALL_BOOK_REFS.items():
         book_key = f"{ref.book} ({ref.edition})"
@@ -216,7 +215,7 @@ def get_references_by_book() -> dict[str, dict[str, BookReference]]:
 
 def get_chapter_mapping() -> dict[str, list[str]]:
     """Get error codes organized by book chapters."""
-    chapter_map = {}
+    chapter_map: dict[str, list[str]] = {}
 
     for code, ref in ALL_BOOK_REFS.items():
         chapter_key = f"{ref.book} - {ref.chapter}"
@@ -229,9 +228,10 @@ def get_chapter_mapping() -> dict[str, list[str]]:
 
 def validate_references() -> dict[str, list[str]]:
     """Validate that all error codes have proper references."""
+    # Delayed import to avoid circular dependency
     from .messages import ALL_MESSAGES
 
-    issues = {
+    issues: dict[str, list[str]] = {
         "missing_references": [],
         "orphaned_references": [],
         "incomplete_references": [],
@@ -255,11 +255,12 @@ def validate_references() -> dict[str, list[str]]:
     return issues
 
 
-def get_book_stats() -> dict[str, any]:
+def get_book_stats() -> dict[str, Any]:
     """Get statistics about book references."""
+    # Delayed import to avoid circular dependency
     from .messages import ALL_MESSAGES
 
-    stats = {
+    stats: dict[str, Any] = {
         "total_error_codes": len(ALL_MESSAGES),
         "total_references": len(ALL_BOOK_REFS),
         "coverage_percentage": len(ALL_BOOK_REFS) / len(ALL_MESSAGES) * 100,
@@ -268,7 +269,7 @@ def get_book_stats() -> dict[str, any]:
     }
 
     # Count by book
-    book_counts = {}
+    book_counts: dict[str, int] = {}
     for ref in ALL_BOOK_REFS.values():
         book_key = f"{ref.book} ({ref.edition})"
         book_counts[book_key] = book_counts.get(book_key, 0) + 1

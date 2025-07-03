@@ -1,6 +1,7 @@
 """Main checker module for flake8_patterns.
 
-Based on patterns from "High Performance Python" (3rd Edition) and "Effective Python" (3rd Edition).
+Based on patterns from "High Performance Python" (3rd Edition) and
+"Effective Python" (3rd Edition).
 Follows the successful flake8-bugbear plugin architecture.
 """
 
@@ -48,11 +49,13 @@ class PerformanceChecker(NodeVisitorWithParents):
 
         yield from self.errors
 
-    def error(self, node: ast.AST, code: str, vars: dict | None = None) -> None:
+    def error(
+        self, node: ast.AST, code: str, format_vars: dict[str, str] | None = None
+    ) -> None:
         """Record an error for the given node and code."""
         message = get_error_message(code)
-        if vars:
-            message = message.format(**vars)
+        if format_vars:
+            message = message.format(**format_vars)
 
         self.errors.append(
             (node.lineno, node.col_offset, f"{code} {message}", type(self))
@@ -60,7 +63,7 @@ class PerformanceChecker(NodeVisitorWithParents):
 
     # String operation checks (HP001-HP020)
 
-    def visit_AugAssign(self, node: ast.AugAssign) -> None:
+    def visit_aug_assign(self, node: ast.AugAssign) -> None:
         """Check for string concatenation with += in loops."""
         # HP001: String concatenation using += in loop
         if (
@@ -72,7 +75,7 @@ class PerformanceChecker(NodeVisitorWithParents):
 
         self.generic_visit(node)
 
-    def visit_BinOp(self, node: ast.BinOp) -> None:
+    def visit_bin_op(self, node: ast.BinOp) -> None:
         """Check binary operations for various patterns."""
         # HP002: Multiple string concatenations
         if (
@@ -89,7 +92,7 @@ class PerformanceChecker(NodeVisitorWithParents):
 
     # Collection performance checks (PC001-PC020)
 
-    def visit_Compare(self, node: ast.Compare) -> None:
+    def visit_compare(self, node: ast.Compare) -> None:
         """Check for list membership testing."""
         # PC001: List membership testing
         if (
@@ -103,7 +106,7 @@ class PerformanceChecker(NodeVisitorWithParents):
 
     # Iteration pattern checks (EP001-EP020)
 
-    def visit_For(self, node: ast.For) -> None:
+    def visit_for(self, node: ast.For) -> None:
         """Check for iteration anti-patterns."""
         # EP001: range(len()) pattern
         if self._is_range_len_pattern(node):
@@ -113,7 +116,7 @@ class PerformanceChecker(NodeVisitorWithParents):
 
     # Helper methods
 
-    def _is_string_concatenation(self, node: ast.AugAssign) -> bool:
+    def _is_string_concatenation(self, _node: ast.AugAssign) -> bool:
         """Check if this is a string concatenation operation."""
         # This is a simplified check - in production we'd want more sophisticated
         # type inference or heuristics
@@ -156,13 +159,13 @@ class PerformanceChecker(NodeVisitorWithParents):
 
     # Python version specific features
 
-    def _check_modern_patterns(self, node: ast.AST) -> None:
+    def _check_modern_patterns(self, _node: ast.AST) -> None:
         """Check patterns that benefit from Python 3.10+ features."""
         if PYTHON_310_PLUS:
             # Could use match statements for complex pattern detection
             pass
 
-    def _check_latest_optimizations(self, node: ast.AST) -> None:
+    def _check_latest_optimizations(self, _node: ast.AST) -> None:
         """Check patterns optimized in Python 3.13+."""
         if PYTHON_313_PLUS:
             # Latest performance optimizations

@@ -80,7 +80,10 @@ ITERATION_MESSAGES: dict[str, ErrorInfo] = {
     ),
     "EP004": (
         "Nested loop for iteration, consider itertools.product()",
-        "'Effective Python' (3rd Edition), Item 16: Consider Generator Expressions, p.38",
+        (
+            "'Effective Python' (3rd Edition), Item 16: Consider Generator "
+            "Expressions, p.38"
+        ),
         "More memory efficient, cleaner code",
     ),
     "EP005": (
@@ -94,12 +97,18 @@ ITERATION_MESSAGES: dict[str, ErrorInfo] = {
 MEMORY_MESSAGES: dict[str, ErrorInfo] = {
     "MC001": (
         "Class without __slots__, consider adding for memory efficiency",
-        "'High Performance Python' (3rd Edition), Chapter 6: Matrices and Vectors, p.145",
+        (
+            "'High Performance Python' (3rd Edition), Chapter 6: Matrices and Vectors, "
+            "p.145"
+        ),
         "~40% less memory usage for data classes",
     ),
     "MC002": (
         "Large list comprehension, consider generator expression",
-        "'High Performance Python' (3rd Edition), Chapter 5: Iterators and Generators, p.118",
+        (
+            "'High Performance Python' (3rd Edition), Chapter 5: Iterators and "
+            "Generators, p.118"
+        ),
         "Lazy evaluation, constant memory usage",
     ),
     "MC003": (
@@ -113,12 +122,18 @@ MEMORY_MESSAGES: dict[str, ErrorInfo] = {
 NUMPY_MESSAGES: dict[str, ErrorInfo] = {
     "NP001": (
         "Manual loop over array, consider vectorized operations",
-        "'High Performance Python' (3rd Edition), Chapter 6: Matrices and Vectors, p.152",
+        (
+            "'High Performance Python' (3rd Edition), Chapter 6: Matrices and Vectors, "
+            "p.152"
+        ),
         "~50-100x faster with NumPy vectorization",
     ),
     "NP002": (
         "List comprehension on array, use NumPy operations",
-        "'High Performance Python' (3rd Edition), Chapter 6: Matrices and Vectors, p.154",
+        (
+            "'High Performance Python' (3rd Edition), Chapter 6: Matrices and Vectors, "
+            "p.154"
+        ),
         "Vectorized operations are much faster",
     ),
 }

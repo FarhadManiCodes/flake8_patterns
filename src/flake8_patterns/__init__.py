@@ -7,6 +7,8 @@ This plugin detects performance anti-patterns and suggests better alternatives
 with direct references to authoritative Python performance books.
 """
 
+from typing import Any
+
 from .book_refs import get_book_reference, get_book_stats, get_formatted_reference
 from .checker import PerformanceChecker
 from .messages import (
@@ -47,7 +49,7 @@ __all__ = [
 
 
 # Plugin information for flake8
-def get_plugin_info() -> dict:
+def get_plugin_info() -> dict[str, str | int]:
     """Get plugin information."""
     return {
         "name": "flake8-patterns",
@@ -59,7 +61,9 @@ def get_plugin_info() -> dict:
         f"{PYTHON_VERSION.micro}",
         "total_rules": len(ALL_MESSAGES),
         "rule_categories": len(get_error_codes_by_category()),
-        "book_coverage": f"{len(get_book_reference.__defaults__ or [])} books referenced",
+        "book_coverage": (
+            f"{len(get_book_reference.__defaults__ or [])} books referenced"
+        ),
     }
 
 
@@ -91,8 +95,10 @@ def print_book_coverage() -> None:
     """Print book reference coverage (useful for development)."""
     stats = get_book_stats()
 
-    for _book, _count in stats.get("by_book", {}).items():
-        pass
+    by_book = stats.get("by_book", {})
+    if isinstance(by_book, dict):
+        for _book, _count in by_book.items():
+            pass
 
 
 # Version compatibility info
@@ -104,7 +110,7 @@ else:
     _performance_note = "Running on legacy Python version with basic compatibility"
 
 
-def get_version_info() -> dict:
+def get_version_info() -> dict[str, Any]:
     """Get detailed version and compatibility information."""
     return {
         "plugin_version": __version__,

@@ -1,8 +1,8 @@
 """Utility functions for AST analysis."""
 
 import ast
+import builtins
 import sys
-from typing import Any
 
 # Python version detection for feature compatibility
 PYTHON_VERSION = sys.version_info
@@ -30,7 +30,7 @@ def is_none_literal(node: ast.AST) -> bool:
 def get_string_value(node: ast.AST) -> str | None:
     """Extract string value from a string literal node."""
     if is_string_literal(node):
-        return node.value  # type: ignore
+        return node.value  # type: ignore[attr-defined,no-any-return]
     return None
 
 
@@ -50,7 +50,7 @@ def get_full_function_name(node: ast.Call) -> str | None:
     if isinstance(node.func, ast.Attribute):
         # Try to build full name like 'obj.method'
         parts = []
-        current = node.func
+        current: ast.expr = node.func
         while isinstance(current, ast.Attribute):
             parts.append(current.attr)
             current = current.value
@@ -72,7 +72,7 @@ def is_comprehension_node(node: ast.AST) -> bool:
     )
 
 
-def find_parent_loop(node: ast.AST, parents: list[ast.AST]) -> ast.AST | None:
+def find_parent_loop(_node: ast.AST, parents: list[ast.AST]) -> ast.AST | None:
     """Find the nearest parent loop node."""
     for parent in reversed(parents):
         if is_loop_node(parent):
@@ -80,7 +80,7 @@ def find_parent_loop(node: ast.AST, parents: list[ast.AST]) -> ast.AST | None:
     return None
 
 
-def find_parent_function(node: ast.AST, parents: list[ast.AST]) -> ast.AST | None:
+def find_parent_function(_node: ast.AST, parents: list[ast.AST]) -> ast.AST | None:
     """Find the nearest parent function/method."""
     for parent in reversed(parents):
         if isinstance(parent, ast.FunctionDef | ast.AsyncFunctionDef):
@@ -88,7 +88,7 @@ def find_parent_function(node: ast.AST, parents: list[ast.AST]) -> ast.AST | Non
     return None
 
 
-def find_parent_class(node: ast.AST, parents: list[ast.AST]) -> ast.AST | None:
+def find_parent_class(_node: ast.AST, parents: list[ast.AST]) -> ast.AST | None:
     """Find the nearest parent class."""
     for parent in reversed(parents):
         if isinstance(parent, ast.ClassDef):
@@ -109,8 +109,6 @@ def get_variable_name(node: ast.AST) -> str | None:
 
 def is_builtin_function(name: str) -> bool:
     """Check if name is a Python builtin function."""
-    import builtins
-
     return hasattr(builtins, name)
 
 
@@ -159,7 +157,7 @@ def is_constant_value(node: ast.AST) -> bool:
     return isinstance(node, ast.Constant | ast.Num | ast.Str | ast.NameConstant)
 
 
-def extract_constant_value(node: ast.AST) -> Any:
+def extract_constant_value(node: ast.AST) -> object:
     """Extract the constant value from a node."""
     if isinstance(node, ast.Constant):
         return node.value
@@ -179,7 +177,7 @@ class NodeVisitorWithParents(ast.NodeVisitor):
         self.parents: list[ast.AST] = []
         self._node_stack: list[ast.AST] = []
 
-    def visit(self, node: ast.AST) -> Any:
+    def visit(self, node: ast.AST) -> object:
         """Visit a node and track parents."""
         self.parents.append(node)
         self._node_stack.append(node)
@@ -220,15 +218,11 @@ class ASTAnalyzer:
 
     def find_all_nodes(self, node_type: type) -> list[ast.AST]:
         """Find all nodes of given type."""
-        nodes = []
-        for node in ast.walk(self.tree):
-            if isinstance(node, node_type):
-                nodes.append(node)
-        return nodes
+        return [node for node in ast.walk(self.tree) if isinstance(node, node_type)]
 
     def find_assignments_to(self, var_name: str) -> list[ast.AST]:
         """Find all assignments to a specific variable."""
-        assignments = []
+        assignments: list[ast.AST] = []
         for node in ast.walk(self.tree):
             if isinstance(node, ast.Assign | ast.AugAssign):
                 assigned_name = get_assigned_name(node)
@@ -238,22 +232,27 @@ class ASTAnalyzer:
 
     def find_function_calls(self, func_name: str) -> list[ast.Call]:
         """Find all calls to a specific function."""
-        calls = []
-        for node in ast.walk(self.tree):
-            if isinstance(node, ast.Call):
-                if get_function_name(node) == func_name:
-                    calls.append(node)
-        return calls
+        return [
+            node
+            for node in ast.walk(self.tree)
+            if isinstance(node, ast.Call) and get_function_name(node) == func_name
+        ]
 
-    def get_complexity_metrics(self) -> dict:
+    def get_complexity_metrics(self) -> dict[str, int]:
         """Get basic complexity metrics for the code."""
         return {
             "total_nodes": len(list(ast.walk(self.tree))),
             "functions": len(self.find_all_nodes(ast.FunctionDef)),
             "classes": len(self.find_all_nodes(ast.ClassDef)),
-            "loops": len(self.find_all_nodes((ast.For, ast.While))),
+            "loops": len(
+                [*self.find_all_nodes(ast.For), *self.find_all_nodes(ast.While)]
+            ),
             "conditionals": len(self.find_all_nodes(ast.If)),
             "comprehensions": len(
-                self.find_all_nodes((ast.ListComp, ast.SetComp, ast.DictComp))
+                [
+                    *self.find_all_nodes(ast.ListComp),
+                    *self.find_all_nodes(ast.SetComp),
+                    *self.find_all_nodes(ast.DictComp),
+                ]
             ),
         }
