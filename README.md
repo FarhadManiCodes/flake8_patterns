@@ -1,6 +1,6 @@
 # flake8-patterns
 
-> A comprehensive flake8 plugin that detects performance and readability anti-patterns based on **"Effective Python"** and **"High Performance Python"**.
+> An educational flake8 plugin that detects anti-patterns based on **"Effective Python" (3rd Edition)** by Brett Slatkin, with future **"High Performance Python"** integration planned.
 
 ## 🎯 What Makes This Plugin Special
 
@@ -11,12 +11,17 @@
 - **🎯 Objective Patterns**: Focuses on clear, detectable anti-patterns first
 - **🚀 Complementary**: Works alongside existing flake8 plugins for comprehensive code quality
 
-## 📖 Supported Books (Equal Focus)
+## 📖 Book-Based Learning Approach
 
-- **"Effective Python" (3rd Edition)** by Brett Slatkin
-- **"High Performance Python" (3rd Edition)** by Micha Gorelick and Ian Ozsvald
+### Current Focus: "Effective Python" (3rd Edition)
+- **Primary implementation**: 26 verified rules across all chapters
+- **Systematic coverage**: Based on comprehensive analysis of all 125 items
+- **Educational focus**: Each rule teaches specific Pythonic patterns with book references
 
-*Note: We're starting implementation with Effective Python patterns as they tend to be more objective and easier to detect, but both books are equally important to the project's goals.*
+### Future Integration: "High Performance Python" (3rd Edition)
+- **Planned for v0.8.0+**: After completing Effective Python coverage
+- **Performance patterns**: Memory optimization, vectorization, profiling-based improvements
+- **Complementary focus**: Performance optimization techniques beyond basic Pythonic patterns
 
 ## 🚀 Quick Start
 
@@ -28,59 +33,82 @@ pip install flake8-patterns
 flake8 your_code.py
 
 # Example output
-your_code.py:3:5: EP201 Single-element tuple missing comma, add trailing comma for clarity
-    → 'Effective Python' (3rd Edition), Chapter 2: Strings and Slicing
-    → Readability: Prevents confusion with grouping parentheses
-    → Example: (item) → (item,)
+your_code.py:12:5: EP105 Sequential indexing detected, use multiple-assignment unpacking
+    → 'Effective Python' (3rd Edition), Item 5, Chapter 1: Pythonic Thinking
+    → Readability: Cleaner, less error-prone, same performance
+    → Example: x = item[0]; y = item[1] → x, y = item
 ```
 
-## 🔍 Error Codes & Implementation Roadmap
+## 🎯 Implementation Roadmap: 26 Verified Rules
 
-### Phase 1: Simple & Objective Rules ✅ (v0.1.0-0.3.0)
+*Based on comprehensive analysis of all 125 "Effective Python" items*
 
-#### String Operations (Chapter 2)
-- **EP201**: Single-element tuple missing comma → `(item,)`
-- **EP202**: C-style string formatting → use f-strings
-- **EP203**: Implicit string concatenation in collections → explicit concatenation
+### Phase 1: High Impact, Clear Gaps (v0.1.0-0.3.0) - 6 Rules
 
-#### Loop Patterns (Chapter 3)
-- **EP301**: `range(len())` pattern → use `enumerate()`
-- **EP302**: Manual parallel iteration → use `zip()`
-- **EP303**: Loop variable used after loop → avoid scope leakage
-- **EP304**: Container modification during iteration → use copies
+**Tier 1 rules with maximum educational value and no existing tool coverage:**
 
-#### Dictionary Operations (Chapter 4)
-- **EP401**: `in` check + `KeyError` handling → use `dict.get()`
+- **EP105**: Multiple-Assignment Unpacking over Indexing (Item 5, Chapter 1)
+  - Pattern: `x = item[0]; y = item[1]` → `x, y = item`
+  - Gap: No existing tool detects sequential indexing patterns
 
-### Phase 2: Moderate Complexity (v0.4.0-0.6.0)
+- **EP213**: Context-Aware String Concatenation (Item 13, Chapter 2)
+  - Pattern: Implicit concatenation in collections → explicit concatenation
+  - Gap: flake8-implicit-str-concat lacks context awareness
 
-#### Comprehensions & Generators (Chapter 6)
-- **EP601**: `map`/`filter` with lambda → use comprehensions
-- **EP602**: Large list comprehensions → use generators
+- **EP318**: Parallel Iteration with zip() (Item 18, Chapter 3)
+  - Pattern: `for i in range(len(names)): name=names[i]` → `zip(names, ages)`
+  - Gap: No existing tool detects manual parallel iteration
 
-#### Data Structures (Chapter 12)
-- **EP1201**: List as queue → use `collections.deque`
-- **EP1202**: `sort()` vs `sorted()` confusion → correct usage
+- **EP320**: Loop Variables After Loop Ends (Item 20, Chapter 3)
+  - Pattern: Using loop variables after loop completion
+  - Gap: flake8-bugbear B023 covers closures, not direct usage
 
-### Phase 3: High Performance Python Integration (v0.7.0+)
+- **EP321**: Be Defensive when Iterating over Arguments (Item 21, Chapter 3)
+  - Pattern: Functions iterating same parameter multiple times
+  - Gap: No existing tool detects iterator exhaustion patterns
 
-#### High Performance Python Patterns
+- **EP426**: Comprehensive dict.get() patterns (Item 26, Chapter 4)
+  - Pattern: `try: x = d[key]; except KeyError:` → `x = d.get(key, default)`
+  - Gap: flake8-simplify SIM124 covers only ~25% of patterns
+
+### Phase 2: Code Quality/API Design (v0.4.0-0.6.0) - 14 Rules
+
+**Medium-impact rules focusing on code quality and API design:**
+
+- **EP216**: Catch-All Unpacking over Slicing (Item 16, Chapter 2)
+- **EP427**: defaultdict over setdefault (Item 27, Chapter 4)
+- **EP12103**: deque for Producer-Consumer Queues (Item 103, Chapter 12)
+- **EP531**: Return Objects vs >3 Tuple Unpacking (Item 31, Chapter 5)
+- **EP538**: functools.wraps for Decorators (Item 38, Chapter 5)
+- **EP429**: Avoid Deep Nesting → Classes (Item 29, Chapter 4)
+- **EP537**: Keyword-Only/Positional-Only Arguments (Item 37, Chapter 5)
+- **EP748**: Functions vs Classes for Simple Interfaces (Item 48, Chapter 7)
+- **EP755**: Public vs Private Attributes (Item 55, Chapter 7)
+- **EP769**: Use Lock to Prevent Data Races (Item 69, Chapter 9)
+- **EP770**: Use Queue for Thread Coordination (Item 70, Chapter 9)
+- **EP881**: assert vs raise patterns (Item 81, Chapter 10)
+- **EP12121**: Root Exception Hierarchies (Item 121, Chapter 14)
+- **EP12122**: Circular Dependencies (Item 122, Chapter 14)
+
+### Phase 3: Advanced Patterns (v0.7.0+) - 6 Rules
+
+**Lower-priority but valuable patterns:**
+
+- **EP104**: Helper Functions over Complex Expressions (Item 4, Chapter 1)
+- **EP108**: Assignment Expressions for Repetition (Item 8, Chapter 1)
+- **EP215**: Avoid Striding and Slicing Together (Item 15, Chapter 2)
+- **EP317**: Comprehensive enumerate suggestions (Item 17, Chapter 3)
+- **EP641**: Complex Comprehension Control (Item 41, Chapter 6)
+- **EP645**: yield from for Generator Composition (Item 45, Chapter 6)
+
+### Phase 4: High Performance Python Integration (v0.8.0+)
+
+**Future integration with "High Performance Python" patterns:**
+
 - **HP001**: String concatenation in loops → use `str.join()`
 - **PC001**: List membership testing → use `set` for O(1) lookup
 - **MC001**: Missing `__slots__` → memory optimization
-
-### Phase 4: Advanced Patterns (v0.8.0+)
-
-#### Advanced Effective Python
-- **EP101**: Helper functions over complex expressions
-- **EP102**: Conditional expressions for simple logic
-
-#### Advanced High Performance Python
-- **HP010-HP020**: Advanced performance optimization patterns
-- **NP001-NP010**: NumPy vectorization patterns
-
-### Legacy Rules (Maintained for Compatibility)
-- **EP001**: `range(len())` pattern (legacy code from EP301)
+- **NP001**: NumPy vectorization patterns
 
 ## 💡 Before & After Examples
 
@@ -131,48 +159,50 @@ Add to your `setup.cfg` or `pyproject.toml`:
 # Enable Effective Python rules (recommended)
 select = E,W,F,EP
 
-# Focus on specific categories
-select = EP201,EP301,EP401  # String, loops, dicts
+# Focus on Tier 1 high-impact rules
+select = EP105,EP213,EP318,EP320,EP321,EP426
 
-# High-impact performance rules
-select = EP,HP,PC
+# Educational mode (all implemented rules)
+extend-select = EP
 
-# Educational mode (all rules with examples)
-extend-select = EP,HP,PC,MC
+# Combine with existing tools (recommended)
+extend-select = B,C4,EP  # bugbear + comprehensions + educational
 ```
 
-## 🤝 Relationship with Existing Tools
+## 🤝 Competitive Analysis: No Conflicts Found
 
-**flake8-patterns is designed to complement, not replace, mature linting tools.**
+**flake8-patterns fills genuine gaps in the Python linting ecosystem.**
 
-### Established & Battle-Tested Tools (Use These First!)
+### Comprehensive Analysis Against Existing Tools
 
-- **flake8-bugbear** 🐛 - Mature plugin with 50+ rules for catching likely bugs and design problems
-- **flake8-comprehensions** ⚡ - Excellent 19 rules for optimizing comprehensions and generators
-- **ruff** 🚀 - Lightning-fast modern linter replacing many flake8 plugins with superior performance
-- **flake8-simplify** 🧹 - Code simplification patterns with proven track record
+**We systematically analyzed our 26 rules against all major linting tools:**
+- `flake8-bugbear` (50+ rules) - Focuses on bugs/design problems
+- `flake8-comprehensions` (19 rules) - Optimizes comprehensions/generators
+- `flake8-simplify` (100+ rules) - Code simplification patterns
+- `ruff` (500+ rules) - Comprehensive fast linter
+- `pylint`, `perflint`, and others
 
-### Our Educational Niche 📚
+### ✅ Verified No Conflicts
 
-**flake8-patterns** fills a specific gap: **book-based learning while coding**
+**Our Tier 1 rules address genuine gaps:**
+- **EP105**: No existing tool detects sequential indexing patterns
+- **EP213**: flake8-implicit-str-concat lacks context awareness
+- **EP318**: No tool detects manual parallel iteration
+- **EP320**: flake8-bugbear B023 covers closures, not direct usage
+- **EP321**: No tool detects iterator exhaustion patterns
+- **EP426**: flake8-simplify SIM124 covers only ~25% of dict.get patterns
 
-| Aspect | flake8-patterns | Mature Tools |
-|--------|-----------------|--------------|
-| **Primary purpose** | 📖 Educational (learning tool) | ⚙️ Production (bug prevention) |
-| **Rule maturity** | 🌱 Early development | 🎯 Battle-tested, stable |
-| **Performance focus** | 📚 Book-referenced patterns | 🚀 Comprehensive coverage |
-| **Target audience** | 🎓 Developers learning best practices | 👨‍💻 Production codebases |
-| **Usage recommendation** | 🧂 With grain of salt, alongside others | ✅ Core linting foundation |
+### Our Educational Niche: Book-Based Learning
 
-### No Conflicts by Design ✅
+| **Aspect** | **flake8-patterns** | **Existing Tools** |
+|------------|---------------------|--------------------| 
+| **Focus** | 📚 Educational patterns from authoritative books | ⚙️ Production bug prevention |
+| **Error Messages** | 📚 Book references + impact + examples | 🚀 Concise problem descriptions |
+| **Coverage** | 🎯 26 verified gaps in mature ecosystem | 🔧 500+ comprehensive rules |
+| **Audience** | 🎓 Developers learning Pythonic patterns | 👨‍💻 Production codebases |
+| **Purpose** | 📚 Study guide with book chapters | ✅ Core linting foundation |
 
-I **intentionally avoided** overlapping with existing tools:
-- **flake8-bugbear**: Focuses on bugs/design problems → We focus on book patterns
-- **flake8-comprehensions**: Covers comprehensions/generators → We focus on broader patterns
-- **ruff**: Speed & comprehensive coverage → We focus on educational explanations
-- **Different error codes**: EP/HP prefixes vs. B/C/etc to avoid conflicts
-
-### Recommended Usage 🎯
+### Perfect Complement, Not Replacement
 
 ```bash
 # Recommended: Use flake8-patterns WITH mature tools
@@ -184,7 +214,7 @@ pip install flake8-patterns                       # Educational layer
 extend-select = B,C4,EP  # Bugbear + Comprehensions + Educational patterns
 ```
 
-**Think of flake8-patterns as:** A study guide that points you to book chapters while you code, not a replacement for proven production linters.
+**Think of flake8-patterns as:** A study guide that points you to "Effective Python" chapters while you code.
 
 ## 🔧 Development Setup
 
@@ -238,44 +268,42 @@ python scripts/validate_book_references.py
 ## 🗺️ Roadmap
 
 ### Current Status: v0.1.0-dev
-- ✅ **Project structure** established
-- ✅ **Book reference system** implemented
+- ✅ **Comprehensive analysis** of all 125 "Effective Python" items completed
+- ✅ **26 verified rules** identified across 3 implementation tiers
+- ✅ **Book reference system** implemented with correct Item/Chapter mappings
 - ✅ **Testing framework** with manual validation
 - ✅ **Competitive analysis** completed (no conflicts found)
-- 🔄 **EP201 implementation** in progress
+- 🔄 **EP105 implementation** in progress (current priority)
 
 ### Upcoming Releases
 
-**v0.1.0** (Next) - Foundation
-- EP201: Single-element tuples
-- EP202: F-strings over C-style formatting
-- EP203: Explicit string concatenation
+**v0.1.0-0.3.0** - Tier 1: High Impact Rules (6 rules)
+- EP105: Multiple-Assignment Unpacking over Indexing
+- EP213: Context-Aware String Concatenation
+- EP318: Parallel Iteration with zip()
+- EP320: Loop Variables After Loop Ends
+- EP321: Be Defensive when Iterating over Arguments
+- EP426: Comprehensive dict.get() patterns
 
-**v0.2.0** - Loop Patterns
-- EP301: enumerate over range(len)
-- EP302: zip for parallel iteration
-- EP303: Loop variable scope
-- EP304: Safe container iteration
+**v0.4.0-0.6.0** - Tier 2: Code Quality/API Design (14 rules)
+- EP216, EP427, EP12103, EP531, EP538, EP429, EP537, EP748, EP755, EP769, EP770, EP881, EP12121, EP12122
+- Focus on API design and code quality patterns
 
-**v0.3.0** - Dictionary Patterns
-- EP401: dict.get() over KeyError
-- Enhanced book reference integration
+**v0.7.0+** - Tier 3: Advanced Patterns (6 rules)
+- EP104, EP108, EP215, EP317, EP641, EP645
+- Complete "Effective Python" coverage (26 total rules)
 
-**v0.7.0** - High Performance Python Integration
+**v0.8.0+** - High Performance Python Integration
 - HP001: String concatenation patterns
 - PC001: Collection performance patterns
-- Book balance: Equal coverage of both sources
-
-**v0.8.0** - PyPI Auto-publish Ready
-- 20+ rules from both books
-- Comprehensive documentation
-- Performance benchmarking
-- CI/CD pipeline complete
+- MC001: Memory optimization patterns
+- NP001: NumPy vectorization patterns
 
 **v1.0.0** - Stable Release
-- Comprehensive coverage of both books
+- All 26 "Effective Python" rules implemented
+- Initial "High Performance Python" coverage
 - Production-ready performance
-- IDE integrations
+- Comprehensive documentation
 
 ## 🤝 Contributing
 
@@ -319,7 +347,7 @@ See the [LICENSE](LICENSE) file for details.
 - The **flake8** community for creating an extensible linting framework
 - **Python community** for continuous language improvements and best practices
 
-*Both books are equally valuable to this project - we're just starting with one for practical implementation reasons.*
+*"Effective Python" provides the foundation with 26 verified rules, with "High Performance Python" integration planned for v0.8.0+.*
 
 ## 📚 Educational Resources
 
