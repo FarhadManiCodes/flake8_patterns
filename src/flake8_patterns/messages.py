@@ -3,148 +3,153 @@
 # Error message format: (message_template, book_reference, performance_impact)
 ErrorInfo = tuple[str, str, str]
 
-# String operation errors (HP001-HP020)
-STRING_MESSAGES: dict[str, ErrorInfo] = {
-    "HP001": (
-        "String concatenation using += in loop, consider str.join()",
-        "'High Performance Python' (3rd Edition), Chapter 2: Profiling, p.45",
-        "O(n²) → O(n), ~10x faster for 100+ items",
+# TIER 1: High Impact, Clear Gaps (Phase 1 - v0.1.0-0.3.0)
+TIER1_MESSAGES: dict[str, ErrorInfo] = {
+    "EP105": (
+        "Sequential indexing pattern, prefer multiple-assignment unpacking",
+        "'Effective Python' (3rd Edition), Item 5: Prefer Multiple-Assignment Unpacking over Indexing",
+        "More readable, less error-prone, prevents index errors",
     ),
-    "HP002": (
-        "Multiple string concatenations, consider str.join() or f-strings",
-        "'High Performance Python' (3rd Edition), Chapter 2: Profiling, p.47",
-        "~3x faster for multiple concatenations",
+    "EP213": (
+        "Implicit string concatenation in collection, add explicit concatenation",
+        "'Effective Python' (3rd Edition), Item 13: Prefer Explicit String Concatenation",
+        "Prevents silent bugs from missing commas in lists",
     ),
-    "HP003": (
-        "String formatting using % operator, consider f-strings",
-        "'Effective Python' (3rd Edition), Item 4: Write Helper Functions, p.12",
-        "~20% faster and more readable",
-    ),
-    "HP004": (
-        "Repeated string concatenation outside loop, consider str.join()",
-        "'High Performance Python' (3rd Edition), Chapter 2: Profiling, p.46",
-        "~5x faster for 5+ concatenations",
-    ),
-    "HP005": (
-        "String multiplication for repetition, consider str.join() with repeat",
-        "'High Performance Python' (3rd Edition), Chapter 2: Profiling, p.48",
-        "~2x faster for large repetitions",
-    ),
-}
-
-# Collection performance errors (PC001-PC020)
-COLLECTION_MESSAGES: dict[str, ErrorInfo] = {
-    "PC001": (
-        "List membership testing, consider using set for O(1) lookup",
-        "'High Performance Python' (3rd Edition), Chapter 3: Lists and Tuples, p.67",
-        "O(n) → O(1), ~100x faster for large collections",
-    ),
-    "PC002": (
-        "List.pop(0) in loop, consider collections.deque.popleft()",
-        "'High Performance Python' (3rd Edition), Chapter 3: Lists and Tuples, p.72",
-        "O(n) → O(1), ~1000x faster for large lists",
-    ),
-    "PC003": (
-        "Dictionary key access without default, consider dict.get()",
-        "'High Performance Python' (3rd Edition), Chapter 4: Dictionaries, p.89",
-        "Avoids KeyError exceptions, ~20% faster",
-    ),
-    "PC004": (
-        "List comprehension where set comprehension appropriate",
-        "'High Performance Python' (3rd Edition), Chapter 3: Lists and Tuples, p.75",
-        "Better memory usage, faster membership testing",
-    ),
-    "PC005": (
-        "Manual iteration over dict.keys(), use dict.items()",
-        "'Effective Python' (3rd Edition), Item 14: Sort by Complex Criteria, p.34",
-        "More efficient, avoids extra key lookups",
-    ),
-}
-
-# Effective Python iteration patterns (EP001-EP020)
-ITERATION_MESSAGES: dict[str, ErrorInfo] = {
-    "EP001": (
-        "Use enumerate() instead of range(len()) for cleaner iteration",
-        "'Effective Python' (3rd Edition), Item 10: Prefer enumerate, p.23",
+    "EP318": (
+        "Manual parallel iteration, use zip() for cleaner code",
+        "'Effective Python' (3rd Edition), Item 18: Use zip to Process Iterators in Parallel",
         "More readable, less error-prone, same performance",
     ),
-    "EP002": (
-        "Use zip() for parallel iteration instead of manual indexing",
-        "'Effective Python' (3rd Edition), Item 11: Use zip to Process Iterators, p.25",
+    "EP320": (
+        "Loop variable used after loop completion, creates potential bugs",
+        "'Effective Python' (3rd Edition), Item 20: Never Use for Loop Variables After the Loop Ends",
+        "Prevents undefined behavior and runtime errors",
+    ),
+    "EP321": (
+        "Function iterates over same argument multiple times, check for iterator exhaustion",
+        "'Effective Python' (3rd Edition), Item 21: Be Defensive when Iterating over Arguments",
+        "Prevents silent bugs with generator arguments",
+    ),
+    "EP426": (
+        "Dictionary key access without default, consider dict.get() or try/except pattern",
+        "'Effective Python' (3rd Edition), Item 26: Prefer get over in and KeyError",
+        "Cleaner error handling, ~20% faster than try/except",
+    ),
+}
+
+# TIER 2: Code Quality/API Design (Phase 2 - v0.4.0-0.6.0)
+TIER2_MESSAGES: dict[str, ErrorInfo] = {
+    "EP216": (
+        "Slice assignment pattern, prefer catch-all unpacking",
+        "'Effective Python' (3rd Edition), Item 16: Prefer Catch-All Unpacking over Slicing",
+        "More readable, handles variable-length sequences better",
+    ),
+    "EP427": (
+        "Multiple setdefault() calls, consider collections.defaultdict",
+        "'Effective Python' (3rd Edition), Item 27: Prefer defaultdict over setdefault",
+        "Cleaner code, better performance for multiple operations",
+    ),
+    "EP12103": (
+        "list.pop(0) in loop, use collections.deque.popleft() for queue operations",
+        "'Effective Python' (3rd Edition), Item 103: Prefer deque for Producer-Consumer Queues",
+        "O(n) → O(1), ~1000x faster for large queues",
+    ),
+    "EP531": (
+        "Function returns more than 3 values as tuple, consider dedicated result object",
+        "'Effective Python' (3rd Edition), Item 31: Return Dedicated Result Objects",
+        "Better API design, clearer variable unpacking",
+    ),
+    "EP538": (
+        "Decorator function missing functools.wraps, preserves original function metadata",
+        "'Effective Python' (3rd Edition), Item 38: Define Function Decorators with functools.wraps",
+        "Preserves function metadata, better debugging experience",
+    ),
+    "EP429": (
+        "Deeply nested dictionary/list/tuple structure, consider composing classes",
+        "'Effective Python' (3rd Edition), Item 29: Compose Classes Instead of Deeply Nesting",
+        "Better maintainability, clearer data access patterns",
+    ),
+    "EP537": (
+        "Function arguments could benefit from keyword-only or positional-only",
+        "'Effective Python' (3rd Edition), Item 37: Enforce Clarity with Keyword-Only Arguments",
+        "Clearer API, prevents argument coupling issues",
+    ),
+    "EP748": (
+        "Simple class interface, consider using function instead",
+        "'Effective Python' (3rd Edition), Item 48: Accept Functions Instead of Classes",
+        "Simpler API, better performance for simple interfaces",
+    ),
+    "EP755": (
+        "Overuse of private attributes, consider protected or public",
+        "'Effective Python' (3rd Edition), Item 55: Prefer Public Attributes over Private Ones",
+        "Better API design, reduces inheritance brittleness",
+    ),
+    "EP769": (
+        "Shared state access without proper locking in threaded code",
+        "'Effective Python' (3rd Edition), Item 69: Use Lock to Prevent Data Races",
+        "Prevents race conditions and data corruption",
+    ),
+    "EP770": (
+        "Manual queue implementation, use queue.Queue for thread coordination",
+        "'Effective Python' (3rd Edition), Item 70: Use Queue to Coordinate Work Between Threads",
+        "Thread-safe operations, prevents deadlocks",
+    ),
+    "EP881": (
+        "Incorrect assert/raise usage, assert for internal assumptions, raise for API validation",
+        "'Effective Python' (3rd Edition), Item 81: assert Internal Assumptions and raise Missed Expectations",
+        "Proper error handling, better debugging experience",
+    ),
+    "EP12121": (
+        "Module raises built-in exceptions, define root exception hierarchy",
+        "'Effective Python' (3rd Edition), Item 121: Define a Root Exception to Insulate Callers",
+        "Better API design, easier exception handling for callers",
+    ),
+    "EP12122": (
+        "Circular import dependency detected, consider refactoring",
+        "'Effective Python' (3rd Edition), Item 122: Know How to Break Circular Dependencies",
+        "Better architecture, prevents import errors",
+    ),
+}
+
+# TIER 3: Nice to Have (Phase 3 - v0.7.0+)
+TIER3_MESSAGES: dict[str, ErrorInfo] = {
+    "EP104": (
+        "Complex expression, consider extracting helper function",
+        "'Effective Python' (3rd Edition), Item 4: Write Helper Functions Instead of Complex Expressions",
+        "Better readability, easier testing and debugging",
+    ),
+    "EP108": (
+        "Repeated expression, consider assignment expression (walrus operator)",
+        "'Effective Python' (3rd Edition), Item 8: Prevent Repetition with Assignment Expressions",
+        "Reduces repetition, Python 3.8+ feature",
+    ),
+    "EP215": (
+        "Striding and slicing in same expression, split for clarity",
+        "'Effective Python' (3rd Edition), Item 15: Avoid Striding and Slicing in a Single Expression",
+        "More readable, easier to understand intent",
+    ),
+    "EP317": (
+        "Manual counter increment, use enumerate() instead",
+        "'Effective Python' (3rd Edition), Item 17: Prefer enumerate over range",
         "More readable, less error-prone, same performance",
     ),
-    "EP003": (
-        "Manual index tracking in loop, consider enumerate()",
-        "'Effective Python' (3rd Edition), Item 10: Prefer enumerate, p.24",
-        "Cleaner code, reduces off-by-one errors",
+    "EP641": (
+        "Comprehension with too many control subexpressions, consider regular loop",
+        "'Effective Python' (3rd Edition), Item 41: Avoid More Than Two Control Subexpressions",
+        "Better readability, easier debugging",
     ),
-    "EP004": (
-        "Nested loop for iteration, consider itertools.product()",
-        (
-            "'Effective Python' (3rd Edition), Item 16: Consider Generator "
-            "Expressions, p.38"
-        ),
-        "More memory efficient, cleaner code",
-    ),
-    "EP005": (
-        "Manual list reversal in loop, use reversed()",
-        "'Effective Python' (3rd Edition), Item 10: Prefer enumerate, p.24",
-        "Built-in is optimized, more readable",
+    "EP645": (
+        "Manual generator composition, use yield from",
+        "'Effective Python' (3rd Edition), Item 45: Compose Multiple Generators with yield from",
+        "More efficient, cleaner generator composition",
     ),
 }
 
-# Memory optimization patterns (MC001-MC020)
-MEMORY_MESSAGES: dict[str, ErrorInfo] = {
-    "MC001": (
-        "Class without __slots__, consider adding for memory efficiency",
-        (
-            "'High Performance Python' (3rd Edition), Chapter 6: Matrices and Vectors, "
-            "p.145"
-        ),
-        "~40% less memory usage for data classes",
-    ),
-    "MC002": (
-        "Large list comprehension, consider generator expression",
-        (
-            "'High Performance Python' (3rd Edition), Chapter 5: Iterators and "
-            "Generators, p.118"
-        ),
-        "Lazy evaluation, constant memory usage",
-    ),
-    "MC003": (
-        "Creating large intermediate list, consider itertools",
-        "'Effective Python' (3rd Edition), Item 17: Be Defensive When Iterating, p.40",
-        "Memory efficient, lazy evaluation",
-    ),
-}
-
-# NumPy performance patterns (NP001-NP020)
-NUMPY_MESSAGES: dict[str, ErrorInfo] = {
-    "NP001": (
-        "Manual loop over array, consider vectorized operations",
-        (
-            "'High Performance Python' (3rd Edition), Chapter 6: Matrices and Vectors, "
-            "p.152"
-        ),
-        "~50-100x faster with NumPy vectorization",
-    ),
-    "NP002": (
-        "List comprehension on array, use NumPy operations",
-        (
-            "'High Performance Python' (3rd Edition), Chapter 6: Matrices and Vectors, "
-            "p.154"
-        ),
-        "Vectorized operations are much faster",
-    ),
-}
-
-# All messages combined
+# All messages combined by priority tier
 ALL_MESSAGES = {
-    **STRING_MESSAGES,
-    **COLLECTION_MESSAGES,
-    **ITERATION_MESSAGES,
-    **MEMORY_MESSAGES,
-    **NUMPY_MESSAGES,
+    **TIER1_MESSAGES,
+    **TIER2_MESSAGES,
+    **TIER3_MESSAGES,
 }
 
 
@@ -154,7 +159,7 @@ def get_error_message(code: str) -> str:
         return f"Unknown error code: {code}"
 
     message, book_ref, performance = ALL_MESSAGES[code]
-    return f"{message} → {book_ref} → Performance: {performance}"
+    return f"{message} → {book_ref} → Impact: {performance}"
 
 
 def get_error_info(code: str) -> ErrorInfo | None:
@@ -167,22 +172,43 @@ def get_all_error_codes() -> list[str]:
     return sorted(ALL_MESSAGES.keys())
 
 
-def get_error_codes_by_category() -> dict[str, list[str]]:
-    """Get error codes organized by category."""
+def get_error_codes_by_priority() -> dict[str, list[str]]:
+    """Get error codes organized by implementation priority."""
     return {
-        "String Operations (HP001-HP020)": [
-            k for k in ALL_MESSAGES if k.startswith("HP")
-        ],
-        "Collection Performance (PC001-PC020)": [
-            k for k in ALL_MESSAGES if k.startswith("PC")
-        ],
-        "Iteration Patterns (EP001-EP020)": [
+        "Tier 1 - High Impact (Phase 1)": list(TIER1_MESSAGES.keys()),
+        "Tier 2 - Code Quality (Phase 2)": list(TIER2_MESSAGES.keys()),
+        "Tier 3 - Nice to Have (Phase 3)": list(TIER3_MESSAGES.keys()),
+    }
+
+
+def get_error_codes_by_category() -> dict[str, list[str]]:
+    """Get error codes organized by traditional category."""
+    return {
+        "Effective Python Patterns": [
             k for k in ALL_MESSAGES if k.startswith("EP")
         ],
-        "Memory Optimization (MC001-MC020)": [
+        "High Performance Python": [
+            k for k in ALL_MESSAGES if k.startswith("HP")
+        ],
+        "Collection Performance": [
+            k for k in ALL_MESSAGES if k.startswith("PC")
+        ],
+        "Memory Optimization": [
             k for k in ALL_MESSAGES if k.startswith("MC")
         ],
-        "NumPy Performance (NP001-NP020)": [
+        "NumPy Performance": [
             k for k in ALL_MESSAGES if k.startswith("NP")
         ],
     }
+
+
+def get_tier_for_code(code: str) -> str:
+    """Get the priority tier for a given error code."""
+    if code in TIER1_MESSAGES:
+        return "Tier 1 - High Impact"
+    elif code in TIER2_MESSAGES:
+        return "Tier 2 - Code Quality"
+    elif code in TIER3_MESSAGES:
+        return "Tier 3 - Nice to Have"
+    else:
+        return "Unknown"
