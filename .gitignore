@@ -83,3 +83,4 @@ backup_*/
 # venv and project
 .venvrc
 .projectrc
+.envrc
