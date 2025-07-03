@@ -202,7 +202,11 @@ All rules must include:
 
 ## 📄 License
 
-MIT License - see [LICENSE](LICENSE) file.
+This project is licensed under the MIT License.
+
+Copyright (c) 2025 Farhad Mani (frhdmani@gmail.com - GitHub: FarhadManiCodes)
+
+See the [LICENSE](LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
