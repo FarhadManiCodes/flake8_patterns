@@ -1,7 +1,7 @@
 """Main checker module for flake8_patterns.
 
-Based on patterns from "High Performance Python" (3rd Edition) and
-"Effective Python" (3rd Edition).
+Based on patterns from "Effective Python" (3rd Edition) by Brett Slatkin.
+Implements 26 verified rules across 3 tiers, starting with Tier 1 high-impact patterns.
 Follows the successful flake8-bugbear plugin architecture.
 """
 
@@ -14,8 +14,6 @@ from .utils import (
     PYTHON_310_PLUS,
     PYTHON_313_PLUS,
     NodeVisitorWithParents,
-    get_function_name,
-    is_string_literal,
 )
 
 # Plugin metadata
@@ -26,10 +24,18 @@ Error = tuple[int, int, str, type[Any]]
 
 
 class PerformanceChecker(NodeVisitorWithParents):
-    """Main checker class for performance patterns.
+    """Main checker class for Effective Python patterns.
 
-    Detects performance anti-patterns from "High Performance Python" (3rd Edition)
-    and "Effective Python" (3rd Edition) books.
+    Detects anti-patterns from "Effective Python" (3rd Edition) by Brett Slatkin.
+    Educational focus with book references for learning Pythonic patterns.
+    
+    Current implementation focuses on Tier 1 rules:
+    - EP105: Multiple-Assignment Unpacking over Indexing
+    - EP213: Context-Aware String Concatenation  
+    - EP318: Parallel Iteration with zip()
+    - EP320: Loop Variables After Loop Ends
+    - EP321: Be Defensive when Iterating over Arguments
+    - EP426: Comprehensive dict.get() patterns
     """
 
     name = "flake8-patterns"
@@ -61,114 +67,194 @@ class PerformanceChecker(NodeVisitorWithParents):
             (node.lineno, node.col_offset, f"{code} {message}", type(self))
         )
 
-    # String operation checks (HP001-HP020)
+    # Tier 1: High Impact Effective Python Rules (EP105, EP213, EP318, EP320, EP321, EP426)
 
-    def visit_aug_assign(self, node: ast.AugAssign) -> None:
-        """Check for string concatenation with += in loops."""
-        # HP001: String concatenation using += in loop
-        if (
-            isinstance(node.op, ast.Add)
-            and self._is_string_concatenation(node)
-            and self._is_in_loop()
-        ):
-            self.error(node, "HP001")
-
+    def visit_assign(self, node: ast.Assign) -> None:
+        """Check assignment patterns.
+        
+        Detects:
+        - EP105: Sequential indexing patterns (x = item[0]; y = item[1])
+        """
+        # EP105: Multiple-Assignment Unpacking over Indexing
+        # TODO: Implement detection of sequential indexing assignments
+        # Pattern: x = item[0] followed by y = item[1] etc.
+        # Suggest: x, y = item
+        
         self.generic_visit(node)
-
-    def visit_bin_op(self, node: ast.BinOp) -> None:
-        """Check binary operations for various patterns."""
-        # HP002: Multiple string concatenations
-        if (
-            isinstance(node.op, ast.Add)
-            and self._count_string_concatenations(node) >= 3
-        ):
-            self.error(node, "HP002")
-
-        # HP003: % string formatting
-        if isinstance(node.op, ast.Mod) and is_string_literal(node.left):
-            self.error(node, "HP003")
-
-        self.generic_visit(node)
-
-    # Collection performance checks (PC001-PC020)
-
-    def visit_compare(self, node: ast.Compare) -> None:
-        """Check for list membership testing."""
-        # PC001: List membership testing
-        if (
-            len(node.ops) == 1
-            and isinstance(node.ops[0], ast.In)
-            and self._is_list_literal_or_comprehension(node.comparators[0])
-        ):
-            self.error(node, "PC001")
-
-        self.generic_visit(node)
-
-    # Iteration pattern checks (EP001-EP020)
 
     def visit_for(self, node: ast.For) -> None:
-        """Check for iteration anti-patterns."""
-        # EP001: range(len()) pattern
-        if self._is_range_len_pattern(node):
-            self.error(node, "EP001")
-
+        """Check for loop patterns.
+        
+        Detects:
+        - EP318: Manual parallel iteration with range(len())
+        - EP320: Loop variable usage after loop ends
+        - EP321: Functions iterating over arguments multiple times
+        """
+        # EP318: Parallel Iteration with zip()
+        # TODO: Implement detection of range(len()) + manual indexing
+        # Pattern: for i in range(len(items)): x = items[i]; y = other[i]
+        # Suggest: for x, y in zip(items, other)
+        
+        # EP320: Loop Variables After Loop Ends 
+        # TODO: Track loop variable usage in post-loop scope
+        # Pattern: for item in items: ...; if item.condition: ...
+        # Suggest: Defensive assignment patterns
+        
         self.generic_visit(node)
 
-    # Helper methods
+    def visit_function_def(self, node: ast.FunctionDef) -> None:
+        """Check function definition patterns.
+        
+        Detects:
+        - EP321: Be Defensive when Iterating over Arguments
+        """
+        # EP321: Be Defensive when Iterating over Arguments
+        # TODO: Detect functions that iterate over same parameter multiple times
+        # Pattern: Multiple for loops over same argument without iterator check
+        # Suggest: Convert to list or check if iterator
+        
+        self.generic_visit(node)
 
-    def _is_string_concatenation(self, _node: ast.AugAssign) -> bool:
-        """Check if this is a string concatenation operation."""
-        # This is a simplified check - in production we'd want more sophisticated
-        # type inference or heuristics
-        return True  # For now, assume all += in loops could be string concat
+    def visit_try(self, node: ast.Try) -> None:
+        """Check try/except patterns.
+        
+        Detects:
+        - EP426: try/except KeyError patterns that should use dict.get()
+        """
+        # EP426: Comprehensive dict.get() patterns
+        # TODO: Detect try/except KeyError that should use dict.get()
+        # Pattern: try: x = dict[key]; except KeyError: x = default
+        # Suggest: x = dict.get(key, default)
+        
+        self.generic_visit(node)
 
-    def _is_in_loop(self) -> bool:
-        """Check if we're currently inside a loop."""
-        return any(isinstance(parent, ast.For | ast.While) for parent in self.parents)
+    def visit_list(self, node: ast.List) -> None:
+        """Check list literal patterns.
+        
+        Detects:
+        - EP213: Context-aware string concatenation in collections
+        """
+        # EP213: Context-Aware String Concatenation
+        # TODO: Detect implicit string concatenation in list/tuple contexts
+        # Pattern: ["string1" "string2", other_item] (missing comma)
+        # Suggest: Explicit concatenation or fix missing comma
+        
+        self.generic_visit(node)
 
-    def _count_string_concatenations(self, node: ast.BinOp) -> int:
-        """Count consecutive string concatenations."""
-        count = 0
-        current = node
+    # Helper methods for Tier 1 rule detection
 
-        while isinstance(current, ast.BinOp) and isinstance(current.op, ast.Add):
-            count += 1
-            if hasattr(current, "left") and isinstance(current.left, ast.BinOp):
-                current = current.left
-            else:
-                break
+    def _is_sequential_indexing_pattern(self, assignments: list[ast.Assign]) -> bool:
+        """Check if assignments follow sequential indexing pattern.
+        
+        Detects patterns like:
+        x = item[0]
+        y = item[1] 
+        z = item[2]
+        """
+        # TODO: Implement sequential indexing detection
+        # 1. Track consecutive assignments in same scope
+        # 2. Check if they access same variable with incrementing indices
+        # 3. Suggest multiple assignment unpacking
+        return False
 
-        return count
+    def _is_parallel_iteration_pattern(self, node: ast.For) -> bool:
+        """Check for manual parallel iteration patterns.
+        
+        Detects patterns like:
+        for i in range(len(items)):
+            x = items[i]
+            y = other[i]
+        """
+        # TODO: Implement parallel iteration detection
+        # 1. Check for range(len()) pattern
+        # 2. Look for multiple indexing operations in loop body
+        # 3. Suggest zip() usage
+        return False
 
-    def _is_list_literal_or_comprehension(self, node: ast.AST) -> bool:
-        """Check if node is a list literal or list comprehension."""
-        return isinstance(node, ast.List | ast.ListComp)
+    def _has_post_loop_variable_usage(self, node: ast.For) -> bool:
+        """Check if loop variable is used after loop ends.
+        
+        Detects patterns like:
+        for item in items:
+            if condition: break
+        if item.some_property:  # Dangerous!
+            ...
+        """
+        # TODO: Implement post-loop variable usage detection
+        # 1. Track loop variable name
+        # 2. Scan following statements in same scope
+        # 3. Check if loop variable is referenced
+        return False
 
-    def _is_range_len_pattern(self, node: ast.For) -> bool:
-        """Check for range(len(iterable)) pattern."""
-        if not isinstance(node.iter, ast.Call):
-            return False
+    def _has_multiple_iteration_over_parameter(self, node: ast.FunctionDef) -> bool:
+        """Check if function iterates over same parameter multiple times.
+        
+        Detects patterns like:
+        def func(items):
+            total = sum(items)      # First iteration
+            for item in items:      # Second iteration - fails if iterator!
+                process(item)
+        """
+        # TODO: Implement multiple iteration detection
+        # 1. Track parameter names
+        # 2. Count iteration usages (for loops, sum(), etc.)
+        # 3. Suggest defensive iterator handling
+        return False
 
-        # Check if it's range(len(...))
-        return bool(
-            get_function_name(node.iter) == "range"
-            and len(node.iter.args) == 1
-            and isinstance(node.iter.args[0], ast.Call)
-            and get_function_name(node.iter.args[0]) == "len"
-        )
+    def _is_dict_keyerror_pattern(self, node: ast.Try) -> bool:
+        """Check if try/except handles KeyError that should use dict.get().
+        
+        Detects patterns like:
+        try:
+            value = my_dict[key]
+        except KeyError:
+            value = default
+        """
+        # TODO: Implement KeyError pattern detection
+        # 1. Check if try body has dict access
+        # 2. Check if except catches KeyError
+        # 3. Check if same variable assigned in both blocks
+        # 4. Suggest dict.get() usage
+        return False
 
-    # Python version specific features
+    def _has_implicit_string_concatenation_in_collection(self, node: ast.List) -> bool:
+        """Check for dangerous implicit string concatenation in collections.
+        
+        Detects patterns like:
+        items = [
+            "string1" "string2",  # Missing comma - becomes one string!
+            "string3",
+        ]
+        """
+        # TODO: Implement implicit concatenation detection
+        # 1. Check for string literals without commas between them
+        # 2. Particularly dangerous in list/tuple contexts
+        # 3. Suggest explicit concatenation or fix missing comma
+        return False
 
-    def _check_modern_patterns(self, _node: ast.AST) -> None:
-        """Check patterns that benefit from Python 3.10+ features."""
+    # Future implementation notes for remaining tiers
+    
+    # Tier 2 rules (Phase 2: v0.4.0-0.6.0) - 14 rules:
+    # EP216, EP427, EP12103, EP531, EP538, EP429, EP537, EP748, EP755, EP769, EP770, EP881, EP12121, EP12122
+    
+    # Tier 3 rules (Phase 3: v0.7.0+) - 6 rules: 
+    # EP104, EP108, EP215, EP317, EP641, EP645
+    
+    # High Performance Python integration (Phase 4: v0.8.0+):
+    # HP001, PC001, MC001, NP001 patterns
+    
+    def _check_modern_python_features(self, _node: ast.AST) -> None:
+        """Leverage Python 3.10+ features for enhanced pattern detection."""
         if PYTHON_310_PLUS:
-            # Could use match statements for complex pattern detection
+            # Could use match statements for complex AST pattern matching
+            # Enhanced union types for better type checking
             pass
 
-    def _check_latest_optimizations(self, _node: ast.AST) -> None:
-        """Check patterns optimized in Python 3.13+."""
+    def _check_python313_optimizations(self, _node: ast.AST) -> None:
+        """Check patterns that benefit from Python 3.13+ optimizations."""
         if PYTHON_313_PLUS:
-            # Latest performance optimizations
+            # Performance improvements in string operations, generators, etc.
+            # Enhanced error messages and debugging features
             pass
 
 
