@@ -18,10 +18,10 @@ This is a flake8 plugin called `flake8-patterns` that detects anti-patterns in P
 ## Technical Requirements & Compatibility
 
 ### Python Version Support
-- **Primary Target**: Python 3.10+ (modern syntax and performance features)
-- **Fully Supported**: Python 3.10, 3.11, 3.12, 3.13
+- **Primary Target**: Python 3.11+ (modern syntax and performance features)
+- **Fully Supported**: Python 3.11, 3.12, 3.13
 - **Book Alignment**: Patterns optimized for Python 3.13 features and performance characteristics
-- **Legacy Support**: Python 3.8-3.9 supported with feature detection and graceful degradation
+- **Legacy Support**: Python 3.10 and below not supported (use modern syntax)
 
 ### Legacy Control Strategy
 ```python
@@ -50,11 +50,11 @@ if PYTHON_313_PLUS:
 
 ### Plugin Architecture Requirements
 - **Entry point**: Standard flake8 plugin registration via setuptools
-- **AST-based**: Use Python's `ast` module for code analysis (3.10+ enhanced features)
+- **AST-based**: Use Python's `ast` module for code analysis (3.11+ enhanced features)
 - **Non-invasive**: Read-only analysis, no code modification
 - **Performance**: <15% overhead on typical flake8 runs (educational plugin tolerance)
 - **Memory**: <30MB additional memory usage
-- **Compatibility**: Graceful degradation on Python 3.8-3.9
+- **Compatibility**: Modern syntax with Python 3.11+ requirement
 
 ## Development Strategy & Priorities
 
@@ -736,11 +736,11 @@ errors = list(checker.run())
 
 ### Performance Targets
 - **Plugin overhead**: <15% of flake8 runtime (educational plugin tolerance)
-- **Python 3.10+**: Primary target (3.13 optimized)
-- **Legacy support**: Python 3.8-3.9 with graceful degradation
+- **Python 3.11+**: Primary target (3.13 optimized)
+- **Legacy support**: None (Python 3.11+ only)
 
 ### CI/CD Strategy
-- **Testing**: Python 3.10, 3.11, 3.12, 3.13
+- **Testing**: Python 3.11, 3.12, 3.13
 - **Pre-commit**: black, isort, ruff, mypy validation
 - **Integration**: Test with other flake8 plugins for conflicts
 - **PyPI**: Auto-publish starting at v0.8.0 (manual until then)
@@ -777,7 +777,7 @@ All rules must include:
 
 ## Python Version Support
 
-- **Minimum**: Python 3.10+
+- **Minimum**: Python 3.11+
 - **Target**: Python 3.13 (optimized performance tier)
 - **Compatibility**: Uses `sys.version_info` checks for feature detection
 

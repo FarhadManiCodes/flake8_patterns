@@ -22,7 +22,6 @@ repos:
     hooks:
       - id: black
         args: [--line-length=88]
-        language_version: python3.13
 
   # Import sorting (compatible with black)
   - repo: https://github.com/pycqa/isort
@@ -36,7 +35,7 @@ repos:
     rev: v3.20.0
     hooks:
       - id: pyupgrade
-        args: [--py310-plus]
+        args: [--py311-plus]
 
   # Fast linting with Ruff (replaces many tools)
   - repo: https://github.com/astral-sh/ruff-pre-commit
