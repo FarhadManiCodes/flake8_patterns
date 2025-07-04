@@ -195,7 +195,7 @@ extend-select = B,C4,EP  # bugbear + comprehensions + educational
 ### Our Educational Niche: Book-Based Learning
 
 | **Aspect** | **flake8-patterns** | **Existing Tools** |
-|------------|---------------------|--------------------| 
+|------------|---------------------|--------------------|
 | **Focus** | 📚 Educational patterns from authoritative books | ⚙️ Production bug prevention |
 | **Error Messages** | 📚 Book references + impact + examples | 🚀 Concise problem descriptions |
 | **Coverage** | 🎯 26 verified gaps in mature ecosystem | 🔧 500+ comprehensive rules |
@@ -347,6 +347,12 @@ See the [LICENSE](LICENSE) file for details.
 - The **flake8** community for creating an extensible linting framework
 - **Python community** for continuous language improvements and best practices
 
+## 📘 Book References Disclaimer
+
+This project includes optional references to well-known programming books —
+_Effective Python (3rd Edition)_, _High Performance Python (3rd Edition)_, and _Fluent Python_ —
+within code comments to encourage best practices and support educational use.
+These references are provided solely for informational purposes and do **not** imply any affiliation, endorsement, or sponsorship by the authors or publishers of these books.
 *"Effective Python" provides the foundation with 26 verified rules, with "High Performance Python" integration planned for v0.8.0+.*
 
 ## 📚 Educational Resources
