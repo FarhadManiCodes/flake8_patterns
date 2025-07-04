@@ -1,5 +1,13 @@
 # flake8-patterns
 
+[![CI](https://github.com/FarhadManiCodes/flake8-patterns/workflows/CI/badge.svg)](https://github.com/FarhadManiCodes/flake8-patterns/actions)
+[![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![PyPI version](https://badge.fury.io/py/flake8-patterns.svg)](https://badge.fury.io/py/flake8-patterns)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![flake8](https://img.shields.io/badge/flake8-plugin-green.svg)](https://flake8.pycqa.org/)
+
 > An educational flake8 plugin that detects anti-patterns based on **"Effective Python" (3rd Edition)** by Brett Slatkin, with future **"High Performance Python"** integration planned.
 
 ## 🎯 What Makes This Plugin Special
@@ -7,7 +15,7 @@
 - **📚 Book-Based Rules**: Every rule references specific chapters from authoritative Python books
 - **🎓 Educational Focus**: Learn best practices while you code with detailed explanations
 - **📊 Impact Estimates**: Shows performance/readability improvements (e.g., "Prevents tuple confusion", "10x faster")
-- **🐍 Modern Python**: Optimized for Python 3.10+ with 3.13 performance features
+- **🐍 Modern Python**: Optimized for Python 3.11+ with 3.13 performance features
 - **🎯 Objective Patterns**: Focuses on clear, detectable anti-patterns first
 - **🚀 Complementary**: Works alongside existing flake8 plugins for comprehensive code quality
 
@@ -32,12 +40,29 @@ pip install flake8-patterns
 # Use with flake8
 flake8 your_code.py
 
-# Example output
+# Verify installation
+flake8 --version  # Should show flake8-patterns
+python -c "import flake8_patterns; print('✅ Installation verified')"
+
+# Example output (when rules are implemented)
 your_code.py:12:5: EFP105 Sequential indexing detected, use multiple-assignment unpacking
     → 'Effective Python' (3rd Edition), Item 5, Chapter 1: Pythonic Thinking
     → Readability: Cleaner, less error-prone, same performance
     → Example: x = item[0]; y = item[1] → x, y = item
 ```
+
+## 📊 Current Status
+
+![Implementation Progress](https://img.shields.io/badge/Rules%20Implemented-0%2F26-red?style=for-the-badge)
+![Phase](https://img.shields.io/badge/Phase-Infrastructure%20Complete-green?style=for-the-badge)
+![Next](https://img.shields.io/badge/Next-EFP105%20Implementation-blue?style=for-the-badge)
+
+- ✅ **Plugin Infrastructure**: Complete with flake8 integration
+- ✅ **CI/CD Pipeline**: Automated testing on Python 3.11-3.13
+- ✅ **Book Reference System**: All 26 rule references mapped
+- ✅ **Message System**: Educational error messages with examples
+- 🔄 **Rule Implementation**: Ready to start with EFP105 (Tier 1)
+- 📋 **Testing Framework**: Prepared for rule validation
 
 ## 🎯 Implementation Roadmap: 26 Verified Rules
 
@@ -230,9 +255,9 @@ python scripts/validate_book_references.py
 ## 📊 Performance & Compatibility
 
 ### Python Version Support
-- **Minimum**: Python 3.10+
+- **Minimum**: Python 3.11+
 - **Recommended**: Python 3.13 (optimized performance)
-- **Legacy**: Python 3.8-3.9 with graceful degradation
+- **Modern syntax**: Native union types and isinstance patterns
 
 ### Performance Targets
 - **Plugin overhead**: <15% of flake8 runtime (educational plugin tolerance)
