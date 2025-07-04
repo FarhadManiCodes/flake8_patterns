@@ -10,7 +10,7 @@ with direct references to authoritative Python performance books.
 from typing import Any
 
 from .book_refs import get_book_reference, get_book_stats, get_formatted_reference
-from .checker import PerformanceChecker
+from .checker import PatternChecker
 from .messages import (
     ALL_MESSAGES,
     get_all_error_codes,
@@ -32,7 +32,7 @@ __all__ = [
     # Utilities
     "PYTHON_VERSION",
     # Main checker class
-    "PerformanceChecker",
+    "PatternChecker",
     "__author__",
     "__email__",
     # Metadata
@@ -133,4 +133,4 @@ def get_version_info() -> dict[str, Any]:
 
 
 # Backwards compatibility
-PerformancePatternChecker = PerformanceChecker  # Alternative name for compatibility
+PerformanceChecker = PatternChecker  # Alternative name for compatibility

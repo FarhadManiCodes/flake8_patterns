@@ -124,12 +124,12 @@ def check_import_system():
 
     # Test main checker import
     try:
-        from flake8_patterns.checker import PerformanceChecker
+        from flake8_patterns.checker import PatternChecker
 
-        log_success("PerformanceChecker import works")
-        print(f"   Checker class: {PerformanceChecker}")
+        log_success("PatternChecker import works")
+        print(f"   Checker class: {PatternChecker}")
     except ImportError as e:
-        log_error(f"PerformanceChecker import failed: {e}")
+        log_error(f"PatternChecker import failed: {e}")
         return False
 
     # Test other components

@@ -70,7 +70,7 @@ repos:
     hooks:
       - id: test-plugin-import
         name: "Test plugin imports correctly"
-        entry: python -c "import sys; sys.path.insert(0, 'src'); from flake8_patterns import PatternChecker; print('✅ Plugin imports successfully')"
+        entry: python -c "import sys; sys.path.insert(0, 'src'); from flake8_patterns.checker import PatternChecker; print('✅ Plugin imports successfully')"
         language: python
         pass_filenames: false
         files: ^src/flake8_patterns/.*\.py$

@@ -4,16 +4,16 @@ import ast
 
 import pytest
 
-from flake8_patterns.checker import PerformanceChecker
+from flake8_patterns.checker import PatternChecker
 
 
 @pytest.fixture
 def checker():
-    """Create a PerformanceChecker instance."""
+    """Create a PatternChecker instance."""
 
     def _checker(code: str):
         tree = ast.parse(code)
-        return PerformanceChecker(tree, filename="test.py")
+        return PatternChecker(tree, filename="test.py")
 
     return _checker
 
@@ -24,7 +24,7 @@ def run_checker():
 
     def _run_checker(code: str) -> list[tuple[int, int, str]]:
         tree = ast.parse(code)
-        checker = PerformanceChecker(tree, filename="test.py")
+        checker = PatternChecker(tree, filename="test.py")
         return list(checker.run())
 
     return _run_checker

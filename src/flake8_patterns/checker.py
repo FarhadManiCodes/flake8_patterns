@@ -19,7 +19,7 @@ __version__ = "0.1.0"
 Error = tuple[int, int, str, type[Any]]
 
 
-class PerformanceChecker(NodeVisitorWithParents):
+class PatternChecker(NodeVisitorWithParents):
     """Main checker class for Effective Python patterns.
 
     Detects anti-patterns from "Effective Python" (3rd Edition) by Brett Slatkin.
@@ -254,11 +254,11 @@ class PerformanceChecker(NodeVisitorWithParents):
 
 
 # Entry point for flake8
-def checker_from_ast(tree: ast.AST, filename: str) -> PerformanceChecker:
+def checker_from_ast(tree: ast.AST, filename: str) -> PatternChecker:
     """Create a checker instance from an AST tree (flake8 entry point)."""
-    return PerformanceChecker(tree, filename)
+    return PatternChecker(tree, filename)
 
 
 # Compatibility function names
-PerformancePatternChecker = PerformanceChecker  # Alternative name
+PerformanceChecker = PatternChecker  # Alternative name for backwards compatibility
 checker = checker_from_ast  # Simple function name
