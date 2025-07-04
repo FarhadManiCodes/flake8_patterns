@@ -4,8 +4,8 @@ Basic CI test that bypasses pytest import issues.
 This will be used until the main test suite is working.
 """
 
-import sys
 import ast
+import sys
 from pathlib import Path
 
 # Add src to path for CI environments
@@ -14,39 +14,43 @@ src_path = project_root / "src"
 if str(src_path) not in sys.path:
     sys.path.insert(0, str(src_path))
 
+
 def test_basic_imports():
     """Test that basic imports work."""
     try:
-        from flake8_patterns.checker import PatternChecker
-        from flake8_patterns.messages import get_error_message, ALL_MESSAGES
         from flake8_patterns.book_refs import get_book_reference
+        from flake8_patterns.checker import PatternChecker
+        from flake8_patterns.messages import ALL_MESSAGES, get_error_message
+
         print("✅ All basic imports successful")
         return True
     except Exception as e:
         print(f"❌ Import failed: {e}")
         return False
 
+
 def test_checker_instantiation():
     """Test that the checker can be instantiated."""
     try:
         from flake8_patterns.checker import PatternChecker
-        
+
         code = "x = 1"
         tree = ast.parse(code)
         checker = PatternChecker(tree)
         errors = list(checker.run())
-        
+
         print(f"✅ Checker instantiation successful, found {len(errors)} errors")
         return True
     except Exception as e:
         print(f"❌ Checker instantiation failed: {e}")
         return False
 
+
 def test_message_system():
     """Test that the message system works."""
     try:
         from flake8_patterns.messages import ALL_MESSAGES, get_error_message
-        
+
         if len(ALL_MESSAGES) > 0:
             print(f"✅ Message system works, {len(ALL_MESSAGES)} messages loaded")
             return True
@@ -57,11 +61,12 @@ def test_message_system():
         print(f"❌ Message system failed: {e}")
         return False
 
+
 def test_book_references():
     """Test that book references work."""
     try:
         from flake8_patterns.book_refs import EFFECTIVE_PYTHON_REFS, get_book_reference
-        
+
         # Test a known reference
         ref = get_book_reference("EFP105")
         if ref:
@@ -74,6 +79,7 @@ def test_book_references():
         print(f"❌ Book reference system failed: {e}")
         return False
 
+
 def run_all_tests():
     """Run all basic tests."""
     tests = [
@@ -82,13 +88,13 @@ def run_all_tests():
         test_message_system,
         test_book_references,
     ]
-    
+
     passed = 0
     total = len(tests)
-    
+
     print("Running basic CI tests...")
     print("-" * 40)
-    
+
     for test in tests:
         try:
             if test():
@@ -97,16 +103,17 @@ def run_all_tests():
                 print(f"❌ {test.__name__} failed")
         except Exception as e:
             print(f"❌ {test.__name__} crashed: {e}")
-    
+
     print("-" * 40)
     print(f"Results: {passed}/{total} tests passed")
-    
+
     if passed == total:
         print("🎉 All basic tests passed!")
         return 0
     else:
         print("❌ Some tests failed")
         return 1
+
 
 if __name__ == "__main__":
     sys.exit(run_all_tests())

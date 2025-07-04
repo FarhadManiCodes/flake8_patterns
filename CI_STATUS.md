@@ -66,21 +66,21 @@ pytest --cov=flake8_patterns --cov-report=xml --cov-report=html --cov-report=ter
 
 ## Files Modified for CI Fix
 
-1. **`.github/workflows/ci.yml`**: 
+1. **`.github/workflows/ci.yml`**:
    - Temporarily disabled pytest
    - Added basic functionality tests
    - Added TODO comments for re-enabling
 
-2. **`test_ci_basic.py`**: 
+2. **`test_ci_basic.py`**:
    - Created minimal test that works in CI
    - Tests core functionality without complex imports
 
-3. **`scripts/verify_installation.py`**: 
+3. **`scripts/verify_installation.py`**:
    - Fixed variable name bug (`ep_issues` → `efp_issues`)
    - Replaced deprecated `pkg_resources` with `importlib.metadata`
    - Added missing return value
 
-4. **`.pre-commit-config.yaml`**: 
+4. **`.pre-commit-config.yaml`**:
    - Fixed error code selection (`HP,PC,PYX` → `EFP`)
    - Fixed typo (`ekip` → `skip`)
 
