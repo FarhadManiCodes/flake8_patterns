@@ -86,10 +86,11 @@ pytest --cov=flake8_patterns --cov-report=xml --cov-report=html --cov-report=ter
    - Fixed error code selection (`HP,PC,PYX` → `EFP`)
    - Fixed typo (`ekip` → `skip`)
 
-5. **Python Compatibility Fixes**:
-   - Added `from __future__ import annotations` to all source files
-   - Fixed `isinstance` calls to use tuple syntax instead of `|` union syntax
-   - Ensured Python 3.10+ compatibility across all modules
+5. **Python Modernization**:
+   - Updated to Python 3.11+ requirement
+   - Using native union syntax (`str | None`)
+   - Modern isinstance calls (`isinstance(node, ast.For | ast.While)`)
+   - Fixed all example file linting issues
 
 ## Current Test Coverage
 

@@ -9,6 +9,9 @@ Run with: flake8 --select=EFP examples/good_patterns.py
 Should produce no EFP### violations.
 """
 
+import itertools
+from dataclasses import dataclass
+
 
 # EFP105: Multiple-assignment unpacking (Item 5, Chapter 1)
 def process_user_data():
@@ -68,7 +71,7 @@ def calculate_scores():
     """Good: Using zip() for parallel iteration."""
     names = ["Alice", "Bob", "Charlie"]
     scores = [85, 92, 78]
-    for name, score in zip(names, scores):  # Good: zip() for parallel iteration
+    for name, score in zip(names, scores):  # Good: zip() for parallel iter
         print(f"{name}: {score}")
 
 
@@ -184,10 +187,11 @@ def extract_user_info(user_dict):
 
 def process_optional_fields(data):
     """Good: Using dict.get() for optional fields."""
-    result = {"id": data["id"]}  # Required field - can use []
-    result["description"] = data.get("description", "No description")
-    result["tags"] = data.get("tags", [])
-    return result
+    return {
+        "id": data["id"],  # Required field - can use []
+        "description": data.get("description", "No description"),
+        "tags": data.get("tags", []),
+    }
 
 
 def get_nested_value(data, path, default=None):
@@ -319,7 +323,6 @@ def good_generator_patterns():
             a, b = b, a + b
 
     # Good: Using itertools
-    import itertools
 
     def batched(iterable, n):
         """Good: Batching pattern."""
@@ -339,7 +342,8 @@ class GoodClass:
         self.value = value
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__name__}(name={self.name!r}, value={self.value})"
+        cls_name = self.__class__.__name__
+        return f"{cls_name}(name={self.name!r}, value={self.value})"
 
     def __eq__(self, other) -> bool:
         if not isinstance(other, self.__class__):
@@ -353,8 +357,6 @@ class GoodClass:
 
 
 # Data class pattern (Python 3.7+)
-from dataclasses import dataclass
-from typing import Optional
 
 
 @dataclass
@@ -394,7 +396,7 @@ def good_testing_patterns():
 
 
 # Performance-conscious patterns
-def performance_patterns():
+def performance_patterns(user_id=1):
     """Good: Performance-conscious patterns."""
     # Good: List comprehension over map/filter
     data = range(100)
