@@ -7,7 +7,7 @@ import pytest
 from flake8_patterns.checker import PerformanceChecker
 
 
-@pytest.fixture()
+@pytest.fixture
 def checker():
     """Create a PerformanceChecker instance."""
 
@@ -18,7 +18,7 @@ def checker():
     return _checker
 
 
-@pytest.fixture()
+@pytest.fixture
 def run_checker():
     """Run checker on code and return errors."""
 
@@ -150,7 +150,7 @@ if "item" in ["a", "b", "c", "d", "e"]:  # Will be PC001 in future
 """
 
 
-@pytest.fixture()
+@pytest.fixture
 def tier1_samples():
     """Provide Tier 1 rule test samples."""
     return {
@@ -175,7 +175,7 @@ def tier1_samples():
     }
 
 
-@pytest.fixture()
+@pytest.fixture
 def future_samples():
     """Provide samples for future High Performance Python rules."""
     return {
@@ -184,7 +184,7 @@ def future_samples():
     }
 
 
-@pytest.fixture()
+@pytest.fixture
 def comprehensive_bad_code():
     """Comprehensive test file with multiple Tier 1 violations."""
     return '''
@@ -235,7 +235,7 @@ def process_data():
 '''
 
 
-@pytest.fixture()
+@pytest.fixture
 def comprehensive_good_code():
     """Comprehensive test file with good patterns (should not trigger errors)."""
     return '''

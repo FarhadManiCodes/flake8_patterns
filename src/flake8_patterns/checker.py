@@ -52,7 +52,7 @@ class PerformanceChecker(NodeVisitorWithParents):
         yield from self.errors
 
     def error(
-        self, node: ast.AST, code: str, format_vars: dict[str, str] | None = None
+        self, node: ast.expr, code: str, format_vars: dict[str, Any] | None = None
     ) -> None:
         """Record an error for the given node and code."""
         message = get_error_message(code)
