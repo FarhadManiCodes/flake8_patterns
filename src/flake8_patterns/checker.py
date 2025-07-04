@@ -13,7 +13,7 @@ from .messages import get_error_message
 from .utils import PYTHON_310_PLUS, PYTHON_313_PLUS, NodeVisitorWithParents
 
 # Plugin metadata
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 # Error type: (line, column, message, type)
 Error = tuple[int, int, str, type[Any]]

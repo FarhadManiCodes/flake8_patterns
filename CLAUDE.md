@@ -62,7 +62,7 @@ if PYTHON_313_PLUS:
 
 *Based on comprehensive analysis of all 125 Effective Python items. Starting with Tier 1 rules that have the highest impact and clearest detection patterns.*
 
-**Phase 1: High Impact, Clear Gaps (v0.1.0-0.3.0) - 6 Rules**
+**Phase 1: High Impact, Clear Gaps (v0.1.1-0.3.0) - 6 Rules**
 - EP105: Multiple-Assignment Unpacking over Indexing (Item 5, Chapter 1)
 - EP213: Context-Aware String Concatenation (Item 13, Chapter 2)
 - EP318: Parallel Iteration with zip() (Item 18, Chapter 3)
@@ -503,7 +503,7 @@ pre-commit run --all-files
 # Test specific rule manually
 python -c "
 import ast
-from flake8_patterns.checker import PerformanceChecker
+from flake8_patterns.checker import PatternChecker
 code = '''
 # EP105: Sequential indexing pattern
 item = (1, 2, 3)
@@ -514,7 +514,7 @@ second = item[1]  # Part of pattern
 first, second, third = item
 '''
 tree = ast.parse(code)
-checker = PerformanceChecker(tree)
+checker = PatternChecker(tree)
 for error in checker.run():
     print(error)
 "
@@ -524,7 +524,7 @@ for error in checker.run():
 
 ### Core Components
 
-1. **checker.py**: Main `PerformanceChecker` class that inherits from `NodeVisitorWithParents`
+1. **checker.py**: Main `PatternChecker` class that inherits from `NodeVisitorWithParents`
    - Entry point for flake8 via `flake8.extension` in pyproject.toml
    - Implements AST visitors for each rule category
 
@@ -558,6 +558,7 @@ NP001-NP999   # NumPy performance patterns
 ```
 
 ### Semantic Versioning Strategy
+- **0.1.1**: Consistency and compatibility fixes (PatternChecker naming, pre-commit fixes)
 - **0.1.0**: Initial release (6 Tier 1 rules: EP105, EP213, EP318, EP320, EP321, EP426)
 - **0.2.0**: Add Tier 2 rules (code quality/API design patterns)
 - **0.3.0**: Complete Effective Python coverage (all 26 verified rules)
@@ -727,7 +728,7 @@ for name, age in zip(names, ages):
 
 # Test the plugin
 tree = ast.parse(code_example)
-checker = PerformanceChecker(tree)
+checker = PatternChecker(tree)
 errors = list(checker.run())
 ```
 

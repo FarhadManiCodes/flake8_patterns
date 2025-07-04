@@ -489,7 +489,7 @@ def check_book_references():
 def main():
     """Run all verification checks."""
     print(f"{Colors.BLUE}🔍 flake8-patterns Installation Verification{Colors.NC}")
-    print(f"{Colors.BLUE}Educational Effective Python Plugin (v0.1.0-dev){Colors.NC}")
+    print(f"{Colors.BLUE}Educational Effective Python Plugin (v0.1.1){Colors.NC}")
     print("=" * 60)
 
     checks = [

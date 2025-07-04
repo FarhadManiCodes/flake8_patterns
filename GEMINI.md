@@ -10,7 +10,7 @@ Guidelines for Gemini when handling tasks in the flake8-patterns educational lin
 
 *Note: We're starting with Effective Python patterns as they tend to be more objective and easier to implement. Comprehensive analysis identified 26 implementable rules across 3 priority tiers.*
 
-**Current Status:** v0.1.0-dev, implementing EP105 (multiple-assignment unpacking over indexing)
+**Current Status:** v0.1.1, implementing EP105 (multiple-assignment unpacking over indexing)
 
 **Your Role:** Handle simple, routine tasks while Claude focuses on complex architecture and implementation decisions.
 

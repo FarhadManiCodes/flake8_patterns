@@ -241,7 +241,7 @@ python scripts/validate_book_references.py
 
 ## 🗺️ Roadmap
 
-### Current Status: v0.1.0-dev
+### Current Status: v0.1.1
 - ✅ **Comprehensive analysis** of all 125 "Effective Python" items completed
 - ✅ **26 verified rules** identified across 3 implementation tiers
 - ✅ **Book reference system** implemented with correct Item/Chapter mappings
