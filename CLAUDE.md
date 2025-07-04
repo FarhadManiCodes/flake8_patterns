@@ -10,6 +10,11 @@ This is a flake8 plugin called `flake8-patterns` that detects anti-patterns in P
 
 **Current Status**: Implementing Effective Python patterns first (26 verified rules across 3 tiers), with High Performance Python integration planned for later phases.
 
+**Licence Requirement**: All example code files and test cases that contain patterns inspired by Effective Python must include the following header at the top:
+```python
+# This code is inspired by examples from Brett Slatkin’s
+# Effective Python repository, licensed under Apache 2.0.
+```
 ## Technical Requirements & Compatibility
 
 ### Python Version Support
@@ -759,6 +764,8 @@ All rules must include:
 - Performance/readability impact estimate
 - Before/after code examples
 
+
+
 ### Quality Standards
 - **Clarity over cleverness** - Code should be self-documenting
 - **Educational focus** - Comments explain the "why" behind patterns
@@ -781,3 +788,9 @@ All rules must include:
 - Pre-commit hooks ensure code quality with black, isort, ruff, and mypy
 - Focus on **verified, detectable patterns** from our comprehensive analysis
 - **26 total rules** across 3 tiers, starting with 6 high-impact Tier 1 rules
+
+**Licence Requirement**: All example code files and test cases that contain patterns inspired by Effective Python must include the following header at the top:
+```python
+# This code is inspired by examples from Brett Slatkin’s
+# Effective Python repository, licensed under Apache 2.0.
+```
