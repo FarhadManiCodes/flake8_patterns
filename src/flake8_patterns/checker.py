@@ -10,7 +10,7 @@ from collections.abc import Generator
 from typing import Any
 
 from .messages import get_error_message
-from .utils import PYTHON_310_PLUS, PYTHON_313_PLUS, NodeVisitorWithParents
+from .utils import PYTHON_313_PLUS, NodeVisitorWithParents
 
 # Plugin metadata
 __version__ = "0.1.1"
@@ -44,7 +44,7 @@ class PatternChecker(NodeVisitorWithParents):
         self.filename = filename
         self.errors: list[Error] = []
 
-    def run(self) -> Generator[Error, None, None]:
+    def run(self) -> Generator[Error]:
         """Run the checker and yield errors."""
         self.errors = []
         self.visit(self.tree)
@@ -240,7 +240,7 @@ class PatternChecker(NodeVisitorWithParents):
 
     def _check_modern_python_features(self, _node: ast.AST) -> None:
         """Leverage Python 3.10+ features for enhanced pattern detection."""
-        if PYTHON_310_PLUS:
+        if PYTHON_313_PLUS:
             # Could use match statements for complex AST pattern matching
             # Enhanced union types for better type checking
             pass
@@ -282,7 +282,7 @@ class PerformanceChecker(NodeVisitorWithParents):
         self.filename = filename
         self.errors: list[Error] = []
 
-    def run(self) -> Generator[Error, None, None]:
+    def run(self) -> Generator[Error]:
         """Run the performance checker and yield errors."""
         self.errors = []
         self.visit(self.tree)

@@ -104,10 +104,10 @@ def print_book_coverage() -> None:
 # Version compatibility info
 if PYTHON_313_PLUS:
     _performance_note = "Running on Python 3.13+ with latest performance optimizations"
-elif PYTHON_VERSION >= (3, 10):
-    _performance_note = "Running on Python 3.10+ with modern features"
+elif PYTHON_VERSION >= (3, 11):
+    _performance_note = "Running on Python 3.11+ with modern features"
 else:
-    _performance_note = "Running on legacy Python version with basic compatibility"
+    _performance_note = "Running on unsupported Python version (require 3.11+)"
 
 
 def get_version_info() -> dict[str, Any]:
@@ -120,12 +120,13 @@ def get_version_info() -> dict[str, Any]:
         "performance_tier": (
             "optimized"
             if PYTHON_313_PLUS
-            else "standard" if PYTHON_VERSION >= (3, 10) else "legacy"
+            else "standard" if PYTHON_VERSION >= (3, 11) else "unsupported"
         ),
         "performance_note": _performance_note,
         "supported_features": {
             "pattern_matching": PYTHON_VERSION >= (3, 10),
             "exception_groups": PYTHON_VERSION >= (3, 11),
+            "union_types": PYTHON_VERSION >= (3, 10),
             "type_hints": True,
             "modern_ast": True,
         },

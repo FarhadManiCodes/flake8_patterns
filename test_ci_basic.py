@@ -26,6 +26,9 @@ def test_basic_imports():
         return True
     except Exception as e:
         print(f"❌ Import failed: {e}")
+        import traceback
+
+        traceback.print_exc()
         return False
 
 
@@ -93,6 +96,7 @@ def run_all_tests():
     total = len(tests)
 
     print("Running basic CI tests...")
+    print(f"Python version: {sys.version}")
     print("-" * 40)
 
     for test in tests:

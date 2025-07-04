@@ -2,11 +2,11 @@
 
 ## Current Status ✅
 
-The GitHub CI is **working correctly** with a temporary testing strategy while the rule implementations are being developed.
+The GitHub CI is **working correctly** with Python 3.11+ support and modern syntax. Uses a temporary testing strategy while rule implementations are being developed.
 
 ## What's Working
 
-- ✅ **Package installation**: Plugin installs correctly across Python 3.10-3.13
+- ✅ **Package installation**: Plugin installs correctly across Python 3.11-3.13
 - ✅ **Flake8 integration**: Plugin appears in `flake8 --version` output
 - ✅ **Entry points**: Both EFP and HPP entry points registered properly
 - ✅ **Import system**: All core modules import successfully
@@ -70,10 +70,12 @@ pytest --cov=flake8_patterns --cov-report=xml --cov-report=html --cov-report=ter
    - Temporarily disabled pytest
    - Added basic functionality tests
    - Added TODO comments for re-enabling
+   - Added Python compatibility notes
 
 2. **`test_ci_basic.py`**:
    - Created minimal test that works in CI
    - Tests core functionality without complex imports
+   - Added Python version reporting and error tracebacks
 
 3. **`scripts/verify_installation.py`**:
    - Fixed variable name bug (`ep_issues` → `efp_issues`)
@@ -83,6 +85,11 @@ pytest --cov=flake8_patterns --cov-report=xml --cov-report=html --cov-report=ter
 4. **`.pre-commit-config.yaml`**:
    - Fixed error code selection (`HP,PC,PYX` → `EFP`)
    - Fixed typo (`ekip` → `skip`)
+
+5. **Python Compatibility Fixes**:
+   - Added `from __future__ import annotations` to all source files
+   - Fixed `isinstance` calls to use tuple syntax instead of `|` union syntax
+   - Ensured Python 3.10+ compatibility across all modules
 
 ## Current Test Coverage
 

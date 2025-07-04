@@ -6,7 +6,6 @@ import sys
 
 # Python version detection for feature compatibility
 PYTHON_VERSION = sys.version_info
-PYTHON_310_PLUS = PYTHON_VERSION >= (3, 10)
 PYTHON_311_PLUS = PYTHON_VERSION >= (3, 11)
 PYTHON_312_PLUS = PYTHON_VERSION >= (3, 12)
 PYTHON_313_PLUS = PYTHON_VERSION >= (3, 13)
