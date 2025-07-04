@@ -1,10 +1,18 @@
 """Pytest configuration and fixtures for flake8_patterns tests."""
 
 import ast
+import sys
+from pathlib import Path
 
 import pytest
 
-from flake8_patterns.checker import PatternChecker
+# Add src to path if needed
+src_path = Path(__file__).parent.parent / "src"
+src_path_str = str(src_path.resolve())
+if src_path_str not in sys.path:
+    sys.path.insert(0, src_path_str)
+
+from flake8_patterns.checker import PatternChecker  # noqa: E402
 
 
 @pytest.fixture

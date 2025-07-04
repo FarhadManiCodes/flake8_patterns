@@ -79,7 +79,7 @@ repos:
         name: "Test our plugin on examples"
         entry: bash -c "
           if [ -f examples/bad_patterns.py ]; then
-            python -m flake8 --select=HP,PC,PYX examples/bad_patterns.py || echo '✅ Plugin detected issues as expected';
+            python -m flake8 --select=EFP examples/bad_patterns.py || echo '✅ Plugin detected issues as expected';
           else
             echo '⚠️ No examples/bad_patterns.py found, skipping plugin test';
           fi
@@ -118,4 +118,4 @@ ci:
     for more information, see https://pre-commit.ci
   autofix_prs: true
   autoupdate_schedule: monthly
-  ekip: [test-plugin-import, run-our-plugin]  # Skip local hooks in CI
+  skip: [test-plugin-import, run-our-plugin]  # Skip local hooks in CI

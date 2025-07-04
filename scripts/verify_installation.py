@@ -79,6 +79,8 @@ def check_python_version():
     else:
         log_warning("Not in virtual environment - consider using one")
 
+    return True
+
 
 def check_package_installation():
     """Check if flake8-patterns is installed."""
@@ -293,14 +295,24 @@ def check_entry_points():
 
     try:
         # Check if we can find the entry point
-        import pkg_resources
+        import importlib.metadata
 
         # Look for flake8 extension entry points
         found_entry_point = False
-        for entry_point in pkg_resources.iter_entry_points("flake8.extension"):
-            if "flake8_patterns" in str(entry_point) or entry_point.name == "EFP":
-                log_success(f"Entry point found: {entry_point}")
-                found_entry_point = True
+        try:
+            entry_points = importlib.metadata.entry_points(group="flake8.extension")
+            for entry_point in entry_points:
+                if "flake8_patterns" in str(entry_point) or entry_point.name == "EFP":
+                    log_success(f"Entry point found: {entry_point}")
+                    found_entry_point = True
+        except TypeError:
+            # Fallback for older Python versions
+            entry_points = importlib.metadata.entry_points()
+            flake8_entries = entry_points.get("flake8.extension", [])
+            for entry_point in flake8_entries:
+                if "flake8_patterns" in str(entry_point) or entry_point.name == "EFP":
+                    log_success(f"Entry point found: {entry_point}")
+                    found_entry_point = True
 
         if not found_entry_point:
             log_warning("No flake8-patterns entry point found")
@@ -308,7 +320,7 @@ def check_entry_points():
         return found_entry_point
 
     except ImportError:
-        log_info("pkg_resources not available, skipping entry point check")
+        log_info("importlib.metadata not available, skipping entry point check")
     except Exception as e:
         log_warning(f"Entry point check failed: {e}")
 
@@ -445,7 +457,7 @@ def future_hp_patterns():
         total_issues = len([line for line in stdout.split("\n") if line.strip()])
         print(f"   Total flake8 issues found: {total_issues}")
 
-        return ep_issues > 0
+        return efp_issues > 0
 
     finally:
         os.unlink(temp_file)
