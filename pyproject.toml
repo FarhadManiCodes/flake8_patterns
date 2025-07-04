@@ -81,7 +81,7 @@ Issues = "https://github.com/FarhadManiCodes/flake8-patterns/issues"
 Changelog = "https://github.com/FarhadManiCodes/flake8-patterns/blob/main/CHANGELOG.md"
 
 [project.entry-points."flake8.extension"]
-EP = "flake8_patterns.checker:PerformanceChecker"
+PYX = "flake8_patterns.checker:PatternChecker"
 
 [tool.setuptools.packages.find]
 where = ["src"]
