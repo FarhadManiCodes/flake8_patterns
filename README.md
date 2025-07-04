@@ -112,42 +112,16 @@ your_code.py:12:5: EP105 Sequential indexing detected, use multiple-assignment u
 
 ## 💡 Before & After Examples
 
-### EP201: Single-Element Tuples
+### EP105: Multiple-Assignment Unpacking
 
 ```python
-# 🐌 Confusing - looks like grouping parentheses
-coordinates = (42)
-type(coordinates)  # <class 'int'> - NOT a tuple!
+# 🐌 Unpythonic - sequential indexing
+item = (1, 2, 3)
+first = item[0]
+second = item[1]
 
-# ⚡ Clear - explicitly a tuple
-coordinates = (42,)
-type(coordinates)  # <class 'tuple'> - correct!
-```
-
-### EP301: Iteration Patterns
-
-```python
-# 🐌 Unpythonic
-items = ['a', 'b', 'c']
-for i in range(len(items)):  # EP301
-    print(i, items[i])
-
-# ⚡ Pythonic
-for i, item in enumerate(items):
-    print(i, item)
-```
-
-### EP401: Dictionary Access
-
-```python
-# 🐌 Error-prone
-try:
-    value = my_dict[key]  # EP401
-except KeyError:
-    value = default
-
-# ⚡ Clean and efficient
-value = my_dict.get(key, default)
+# ⚡ Pythonic - multiple-assignment unpacking
+first, second, third = item
 ```
 
 ## ⚙️ Configuration
@@ -318,12 +292,12 @@ We welcome contributions! Here's how to help:
 
 ### Book Reference Validation
 ```python
-def test_ep201_book_reference():
-    """Ensure EP201 cites correct book section."""
-    ref = get_book_reference("EP201")
+def test_ep105_book_reference():
+    """Ensure EP105 cites correct book section."""
+    ref = get_book_reference("EP105")
     assert ref.book == "Effective Python"
-    assert ref.chapter == "Chapter 2: Strings and Slicing"
-    assert "Single-Element Tuples" in ref.section
+    assert ref.chapter == "Chapter 1: Pythonic Thinking"
+    assert "Multiple-Assignment Unpacking" in ref.section
 ```
 
 ### Development Guidelines
