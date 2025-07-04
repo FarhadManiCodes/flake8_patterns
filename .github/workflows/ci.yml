@@ -40,4 +40,4 @@ jobs:
 
     - name: Test plugin installation
       run: |
-        flake8 --version | grep flake8-performance-patterns
+        flake8 --version | grep flake8_patterns
