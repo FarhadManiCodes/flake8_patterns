@@ -789,8 +789,18 @@ All rules must include:
 - Focus on **verified, detectable patterns** from our comprehensive analysis
 - **26 total rules** across 3 tiers, starting with 6 high-impact Tier 1 rules
 
-**Licence Requirement**: All example code files and test cases that contain patterns inspired by Effective Python must include the following header at the top:
+**License Requirement**:
+All example code files and test cases that contain patterns inspired by either *Effective Python* or *High Performance Python (3rd Edition)* must include the appropriate header at the top.
+
+### For examples inspired by *Effective Python*:
 ```python
 # This code is inspired by examples from Brett Slatkin’s
-# Effective Python repository, licensed under Apache 2.0.
+# Effective Python repository, licensed under Apache 2.0.
+```
+
+
+### For examples inspired by *High Performance Python*:
+```python
+# This code is inspired by concepts from "High Performance Python, 3rd ed."
+# by Micha Gorelick and Ian Ozsvald (O'Reilly). Copyright 2025 Micha Gorelick and Ian Ozsvald, 978-1-098-16596-3.
 ```
