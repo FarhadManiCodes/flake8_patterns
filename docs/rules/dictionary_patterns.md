@@ -74,7 +74,7 @@ for item in items:
     groups[item.category].append(item)
 ```
 
-### Complex Nesting (EP429 - Future)  
+### Complex Nesting (EP429 - Future)
 ```python
 # ❌ Deep nested dictionary
 user = {
@@ -100,7 +100,7 @@ class PhoneNumbers:
     home: str
     work: str
 
-@dataclass  
+@dataclass
 class ContactInfo:
     email: str
     phone: PhoneNumbers
@@ -186,7 +186,7 @@ These rules come from Chapter 4: Comprehensions and Generators in "Effective Pyt
 ## Performance Considerations
 
 - `dict.get()` is faster than try/except for missing keys
-- `defaultdict` eliminates repeated setdefault calls  
+- `defaultdict` eliminates repeated setdefault calls
 - Chained `get()` calls create intermediate objects (minor overhead)
 - Classes with `__slots__` can be more memory efficient than nested dicts
 - Modern dict implementations (Python 3.7+) maintain insertion order

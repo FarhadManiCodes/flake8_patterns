@@ -120,7 +120,7 @@ def get_user_info():
 These rules span multiple chapters of "Effective Python":
 
 - **Chapter 1: Pythonic Thinking** - Basic unpacking patterns that make code more readable
-- **Chapter 2: Lists and Dictionaries** - Advanced unpacking with starred expressions  
+- **Chapter 2: Lists and Dictionaries** - Advanced unpacking with starred expressions
 - **Chapter 5: Classes and Inheritance** - When to use objects instead of complex tuples
 
 The common theme is making assignment operations more expressive and less error-prone while maintaining Python's philosophy of "explicit is better than implicit."
@@ -128,6 +128,6 @@ The common theme is making assignment operations more expressive and less error-
 ## Design Principles
 
 1. **Clarity Over Cleverness**: Assignment should make intent obvious
-2. **Reduce Index Errors**: Eliminate manual indexing where possible  
+2. **Reduce Index Errors**: Eliminate manual indexing where possible
 3. **Right Tool for Job**: Use unpacking for small tuples, objects for complex data
 4. **Modern Python**: Embrace newer language features when they improve readability

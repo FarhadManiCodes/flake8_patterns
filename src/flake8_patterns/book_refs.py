@@ -2,6 +2,8 @@
 
 from typing import Any, NamedTuple
 
+from .messages import ALL_MESSAGES
+
 
 class BookReference(NamedTuple):
     """Reference to a specific book section."""
@@ -162,7 +164,6 @@ EFFECTIVE_PYTHON_REFS: dict[str, BookReference] = {
         85,
         "Item 26: Prefer get over in and KeyError to Handle Missing Dictionary Keys",
     ),
-    
     # Tier 2: Code Quality/API Design (Phase 2) - 14 Rules
     "EP216": BookReference(
         "Effective Python",
@@ -190,7 +191,8 @@ EFFECTIVE_PYTHON_REFS: dict[str, BookReference] = {
         "3rd Edition",
         "Chapter 5: Classes and Inheritance",
         105,
-        "Item 31: Return Dedicated Result Objects Instead of Requiring Function Callers to Unpack More Than Three Variables",
+        "Item 31: Return Dedicated Result Objects Instead of Requiring Function "
+        "Callers to Unpack More Than Three Variables",
     ),
     "EP538": BookReference(
         "Effective Python",
@@ -204,7 +206,8 @@ EFFECTIVE_PYTHON_REFS: dict[str, BookReference] = {
         "3rd Edition",
         "Chapter 4: Comprehensions and Generators",
         95,
-        "Item 29: Compose Classes Instead of Deeply Nesting Dictionaries, Lists, and Tuples",
+        "Item 29: Compose Classes Instead of Deeply Nesting Dictionaries, Lists, "
+        "and Tuples",
     ),
     "EP537": BookReference(
         "Effective Python",
@@ -262,7 +265,6 @@ EFFECTIVE_PYTHON_REFS: dict[str, BookReference] = {
         388,
         "Item 122: Know How to Break Circular Dependencies",
     ),
-    
     # Tier 3: Advanced Patterns (Phase 3) - 6 Rules
     "EP104": BookReference(
         "Effective Python",
@@ -365,9 +367,6 @@ def get_chapter_mapping() -> dict[str, list[str]]:
 
 def validate_references() -> dict[str, list[str]]:
     """Validate that all error codes have proper references."""
-    # Delayed import to avoid circular dependency
-    from .messages import ALL_MESSAGES
-
     issues: dict[str, list[str]] = {
         "missing_references": [],
         "orphaned_references": [],
@@ -394,9 +393,6 @@ def validate_references() -> dict[str, list[str]]:
 
 def get_book_stats() -> dict[str, Any]:
     """Get statistics about book references."""
-    # Delayed import to avoid circular dependency
-    from .messages import ALL_MESSAGES
-
     stats: dict[str, Any] = {
         "total_error_codes": len(ALL_MESSAGES),
         "total_references": len(ALL_BOOK_REFS),

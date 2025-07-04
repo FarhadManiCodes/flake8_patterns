@@ -12,7 +12,7 @@ Documentation for iteration-related patterns from "Effective Python" (3rd Editio
 See [EP318 detailed documentation](EP318.md) for complete information.
 
 ### EP320: Loop Variables After Loop Ends
-- **Chapter**: Item 20, Chapter 3: Functions  
+- **Chapter**: Item 20, Chapter 3: Functions
 - **Status**: Tier 1 (High Priority)
 - **Focus**: Prevent bugs from post-loop variable usage
 
@@ -20,7 +20,7 @@ See [EP320 detailed documentation](EP320.md) for complete information.
 
 ### EP321: Be Defensive when Iterating over Arguments
 - **Chapter**: Item 21, Chapter 3: Functions
-- **Status**: Tier 1 (High Priority)  
+- **Status**: Tier 1 (High Priority)
 - **Focus**: Handle iterator exhaustion in functions
 
 See [EP321 detailed documentation](EP321.md) for complete information.
@@ -67,7 +67,7 @@ Iteration is fundamental to Python programming, but there are many subtle patter
 ## Implementation Status
 
 - ✅ **EP318, EP320, EP321**: Tier 1 priority (v0.1.0-0.3.0)
-- 🔄 **EP317, EP12103**: Tier 2 implementation (v0.4.0-0.6.0)  
+- 🔄 **EP317, EP12103**: Tier 2 implementation (v0.4.0-0.6.0)
 - 📋 **EP645**: Tier 3 implementation (v0.7.0+)
 
 ## Book Context

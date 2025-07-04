@@ -11,7 +11,7 @@ These 6 rules address the most common and dangerous anti-patterns with no existi
 - **Impact**: Readability, error prevention
 - **Gap**: No existing tool detects sequential indexing patterns
 
-### [EP213: Context-Aware String Concatenation](EP213.md)  
+### [EP213: Context-Aware String Concatenation](EP213.md)
 - **Pattern**: Implicit concatenation in collections → explicit concatenation
 - **Impact**: Bug prevention (missing commas)
 - **Gap**: flake8-implicit-str-concat lacks context awareness
@@ -109,7 +109,7 @@ EP### Brief description of the issue
 Our 26 verified rules systematically cover:
 
 - **Chapter 1**: Pythonic Thinking (4 rules)
-- **Chapter 2**: Lists and Dictionaries (3 rules)  
+- **Chapter 2**: Lists and Dictionaries (3 rules)
 - **Chapter 3**: Functions (5 rules)
 - **Chapter 4**: Comprehensions and Generators (4 rules)
 - **Chapter 5**: Classes and Inheritance (3 rules)

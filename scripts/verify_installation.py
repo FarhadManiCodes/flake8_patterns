@@ -5,7 +5,7 @@ Run this to verify everything is working correctly.
 
 Updated for verified Tier 1 rules from "Effective Python" (3rd Edition):
 - EP105: Multiple-Assignment Unpacking over Indexing
-- EP213: Context-Aware String Concatenation  
+- EP213: Context-Aware String Concatenation
 - EP318: Parallel Iteration with zip()
 - EP320: Loop Variables After Loop Ends
 - EP321: Be Defensive when Iterating over Arguments
@@ -147,7 +147,9 @@ def check_import_system():
             if obj is not None:
                 log_success(f"{module}.{component} import works")
             else:
-                log_warning(f"{module}.{component} not available (may not be implemented yet)")
+                log_warning(
+                    f"{module}.{component} not available (may not be implemented yet)"
+                )
         except Exception as e:
             log_warning(f"{module}.{component} import issue: {e}")
 
@@ -226,7 +228,7 @@ def find_user(users):
     for user in users:
         if user.is_admin:
             break
-    
+
     if user.is_admin:           # Should trigger EP320
         return user
 """,
@@ -371,7 +373,7 @@ def find_admin(users):
     for user in users:
         if user.is_admin:
             break
-    
+
     if user.is_admin:               # EP320
         return user
 
@@ -411,7 +413,7 @@ def future_hp_patterns():
     result = ""
     for item in ["a", "b", "c"]:
         result += item  # Will be HP001 in future
-    
+
     # PC001: List membership testing (future)
     if "item" in ["a", "b", "c", "d", "e"]:  # Will be PC001 in future
         print("found")
@@ -454,11 +456,11 @@ def check_book_references():
     print(f"\n{Colors.BLUE}📚 Book Reference System Check{Colors.NC}")
 
     try:
-        from flake8_patterns.book_refs import get_book_reference, EFFECTIVE_PYTHON_REFS
+        from flake8_patterns.book_refs import EFFECTIVE_PYTHON_REFS, get_book_reference
 
         # Check Tier 1 rule references
         tier1_rules = ["EP105", "EP213", "EP318", "EP320", "EP321", "EP426"]
-        
+
         for rule in tier1_rules:
             ref = get_book_reference(rule)
             if ref:
@@ -469,7 +471,7 @@ def check_book_references():
         # Check total reference count
         total_refs = len(EFFECTIVE_PYTHON_REFS)
         print(f"   Total Effective Python references: {total_refs}")
-        
+
         if total_refs >= 26:
             log_success("Complete reference coverage (26+ rules)")
         elif total_refs >= 6:
@@ -542,7 +544,7 @@ def main():
     print("• Start with EP105 implementation (current priority)")
     print("• Check docs/rules/ for detailed rule documentation")
     print("• Implement Tier 1 rules: EP105, EP213, EP318, EP320, EP321, EP426")
-    
+
     print(f"\n{Colors.BLUE}📚 Educational Resources{Colors.NC}")
     print("• Rule documentation: docs/rules/")
     print("• Implementation roadmap: docs/index.md")
