@@ -4,35 +4,35 @@ Documentation for iteration-related patterns from "Effective Python" (3rd Editio
 
 ## Current Rules (Tier 1)
 
-### EP318: Parallel Iteration with zip()
+### EFP318: Parallel Iteration with zip()
 - **Chapter**: Item 18, Chapter 3: Functions
 - **Status**: Tier 1 (High Priority)
 - **Focus**: Replace manual parallel iteration with zip()
 
-See [EP318 detailed documentation](EP318.md) for complete information.
+See [EFP318 detailed documentation](EFP318.md) for complete information.
 
-### EP320: Loop Variables After Loop Ends
+### EFP320: Loop Variables After Loop Ends
 - **Chapter**: Item 20, Chapter 3: Functions
 - **Status**: Tier 1 (High Priority)
 - **Focus**: Prevent bugs from post-loop variable usage
 
-See [EP320 detailed documentation](EP320.md) for complete information.
+See [EFP320 detailed documentation](EFP320.md) for complete information.
 
-### EP321: Be Defensive when Iterating over Arguments
+### EFP321: Be Defensive when Iterating over Arguments
 - **Chapter**: Item 21, Chapter 3: Functions
 - **Status**: Tier 1 (High Priority)
 - **Focus**: Handle iterator exhaustion in functions
 
-See [EP321 detailed documentation](EP321.md) for complete information.
+See [EFP321 detailed documentation](EFP321.md) for complete information.
 
 ## Future Iteration Rules
 
 ### Tier 3 Rules (v0.7.0+)
-- **EP317**: Comprehensive enumerate suggestions (Item 17) - when you need indices too
-- **EP645**: yield from for Generator Composition (Item 45) - generator patterns
+- **EFP317**: Comprehensive enumerate suggestions (Item 17) - when you need indices too
+- **EFP645**: yield from for Generator Composition (Item 45) - generator patterns
 
 ### Tier 2 Rules (v0.4.0+)
-- **EP12103**: deque for Producer-Consumer Queues (Item 103) - efficient queue operations
+- **EFP12103**: deque for Producer-Consumer Queues (Item 103) - efficient queue operations
 
 ## Overview
 
@@ -56,19 +56,19 @@ Iteration is fundamental to Python programming, but there are many subtle patter
 
 | Pattern | Instead of | Use | Rule |
 |---------|------------|-----|------|
-| Parallel iteration | `for i in range(len(a)): x=a[i]; y=b[i]` | `for x, y in zip(a, b):` | EP318 |
-| Post-loop usage | `for x in items: ...; use(x)` | `result = None; for x in items: result = x; use(result)` | EP320 |
-| Multiple iterations | `sum(items); for x in items: ...` | `items = list(items); sum(items); for x in items: ...` | EP321 |
-| Index + value | `for i in range(len(items)): print(i, items[i])` | `for i, item in enumerate(items): print(i, item)` | EP317* |
-| Queue operations | `items.pop(0)` in loop | `from collections import deque; queue.popleft()` | EP12103* |
+| Parallel iteration | `for i in range(len(a)): x=a[i]; y=b[i]` | `for x, y in zip(a, b):` | EFP318 |
+| Post-loop usage | `for x in items: ...; use(x)` | `result = None; for x in items: result = x; use(result)` | EFP320 |
+| Multiple iterations | `sum(items); for x in items: ...` | `items = list(items); sum(items); for x in items: ...` | EFP321 |
+| Index + value | `for i in range(len(items)): print(i, items[i])` | `for i, item in enumerate(items): print(i, item)` | EFP317* |
+| Queue operations | `items.pop(0)` in loop | `from collections import deque; queue.popleft()` | EFP12103* |
 
 *Future rules (Tier 2/3)
 
 ## Implementation Status
 
-- ✅ **EP318, EP320, EP321**: Tier 1 priority (v0.1.0-0.3.0)
-- 🔄 **EP317, EP12103**: Tier 2 implementation (v0.4.0-0.6.0)
-- 📋 **EP645**: Tier 3 implementation (v0.7.0+)
+- ✅ **EFP318, EFP320, EFP321**: Tier 1 priority (v0.1.0-0.3.0)
+- 🔄 **EFP317, EFP12103**: Tier 2 implementation (v0.4.0-0.6.0)
+- 📋 **EFP645**: Tier 3 implementation (v0.7.0+)
 
 ## Book Context
 

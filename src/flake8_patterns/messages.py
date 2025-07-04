@@ -5,38 +5,38 @@ ErrorInfo = tuple[str, str, str]
 
 # TIER 1: High Impact, Clear Gaps (Phase 1 - v0.1.0-0.3.0)
 TIER1_MESSAGES: dict[str, ErrorInfo] = {
-    "EP105": (
+    "EFP105": (
         "Sequential indexing pattern, prefer multiple-assignment unpacking",
         "'Effective Python' (3rd Edition), Item 5: "
         "Prefer Multiple-Assignment Unpacking over Indexing",
         "More readable, less error-prone, prevents index errors",
     ),
-    "EP213": (
+    "EFP213": (
         "Implicit string concatenation in collection, add explicit concatenation",
         "'Effective Python' (3rd Edition), Item 13: "
         "Prefer Explicit String Concatenation",
         "Prevents silent bugs from missing commas in lists",
     ),
-    "EP318": (
+    "EFP318": (
         "Manual parallel iteration, use zip() for cleaner code",
         "'Effective Python' (3rd Edition), Item 18: "
         "Use zip to Process Iterators in Parallel",
         "More readable, less error-prone, same performance",
     ),
-    "EP320": (
+    "EFP320": (
         "Loop variable used after loop completion, creates potential bugs",
         "'Effective Python' (3rd Edition), Item 20: "
         "Never Use for Loop Variables After the Loop Ends",
         "Prevents undefined behavior and runtime errors",
     ),
-    "EP321": (
+    "EFP321": (
         "Function iterates over same argument multiple times, "
         "check for iterator exhaustion",
         "'Effective Python' (3rd Edition), Item 21: "
         "Be Defensive when Iterating over Arguments",
         "Prevents silent bugs with generator arguments",
     ),
-    "EP426": (
+    "EFP426": (
         "Dictionary key access without default, "
         "consider dict.get() or try/except pattern",
         "'Effective Python' (3rd Edition), Item 26: Prefer get over in and KeyError",
@@ -46,86 +46,86 @@ TIER1_MESSAGES: dict[str, ErrorInfo] = {
 
 # TIER 2: Code Quality/API Design (Phase 2 - v0.4.0-0.6.0)
 TIER2_MESSAGES: dict[str, ErrorInfo] = {
-    "EP216": (
+    "EFP216": (
         "Slice assignment pattern, prefer catch-all unpacking",
         "'Effective Python' (3rd Edition), Item 16: "
         "Prefer Catch-All Unpacking over Slicing",
         "More readable, handles variable-length sequences better",
     ),
-    "EP427": (
+    "EFP427": (
         "Multiple setdefault() calls, consider collections.defaultdict",
         "'Effective Python' (3rd Edition), Item 27: "
         "Prefer defaultdict over setdefault",
         "Cleaner code, better performance for multiple operations",
     ),
-    "EP12103": (
+    "EFP12103": (
         "list.pop(0) in loop, use collections.deque.popleft() for queue operations",
         "'Effective Python' (3rd Edition), Item 103: "
         "Prefer deque for Producer-Consumer Queues",
         "O(n) → O(1), ~1000x faster for large queues",
     ),
-    "EP531": (
+    "EFP531": (
         "Function returns more than 3 values as tuple, "
         "consider dedicated result object",
         "'Effective Python' (3rd Edition), Item 31: " "Return Dedicated Result Objects",
         "Better API design, clearer variable unpacking",
     ),
-    "EP538": (
+    "EFP538": (
         "Decorator function missing functools.wraps, "
         "preserves original function metadata",
         "'Effective Python' (3rd Edition), Item 38: "
         "Define Function Decorators with functools.wraps",
         "Preserves function metadata, better debugging experience",
     ),
-    "EP429": (
+    "EFP429": (
         "Deeply nested dictionary/list/tuple structure, " "consider composing classes",
         "'Effective Python' (3rd Edition), Item 29: "
         "Compose Classes Instead of Deeply Nesting",
         "Better maintainability, clearer data access patterns",
     ),
-    "EP537": (
+    "EFP537": (
         "Function arguments could benefit from keyword-only or positional-only",
         "'Effective Python' (3rd Edition), Item 37: "
         "Enforce Clarity with Keyword-Only Arguments",
         "Clearer API, prevents argument coupling issues",
     ),
-    "EP748": (
+    "EFP748": (
         "Simple class interface, consider using function instead",
         "'Effective Python' (3rd Edition), Item 48: "
         "Accept Functions Instead of Classes",
         "Simpler API, better performance for simple interfaces",
     ),
-    "EP755": (
+    "EFP755": (
         "Overuse of private attributes, consider protected or public",
         "'Effective Python' (3rd Edition), Item 55: "
         "Prefer Public Attributes over Private Ones",
         "Better API design, reduces inheritance brittleness",
     ),
-    "EP769": (
+    "EFP769": (
         "Shared state access without proper locking in threaded code",
         "'Effective Python' (3rd Edition), Item 69: " "Use Lock to Prevent Data Races",
         "Prevents race conditions and data corruption",
     ),
-    "EP770": (
+    "EFP770": (
         "Manual queue implementation, use queue.Queue for thread coordination",
         "'Effective Python' (3rd Edition), Item 70: "
         "Use Queue to Coordinate Work Between Threads",
         "Thread-safe operations, prevents deadlocks",
     ),
-    "EP881": (
+    "EFP881": (
         "Incorrect assert/raise usage, assert for internal assumptions, "
         "raise for API validation",
         "'Effective Python' (3rd Edition), Item 81: "
         "assert Internal Assumptions and raise Missed Expectations",
         "Proper error handling, better debugging experience",
     ),
-    "EP12121": (
+    "EFP12121": (
         "Module raises built-in exceptions, define root exception hierarchy",
         "'Effective Python' (3rd Edition), Item 121: "
         "Define a Root Exception to Insulate Callers",
         "Better API design, easier exception handling for callers",
     ),
-    "EP12122": (
+    "EFP12122": (
         "Circular import dependency detected, consider refactoring",
         "'Effective Python' (3rd Edition), Item 122: "
         "Know How to Break Circular Dependencies",
@@ -135,36 +135,36 @@ TIER2_MESSAGES: dict[str, ErrorInfo] = {
 
 # TIER 3: Nice to Have (Phase 3 - v0.7.0+)
 TIER3_MESSAGES: dict[str, ErrorInfo] = {
-    "EP104": (
+    "EFP104": (
         "Complex expression, consider extracting helper function",
         "'Effective Python' (3rd Edition), Item 4: "
         "Write Helper Functions Instead of Complex Expressions",
         "Better readability, easier testing and debugging",
     ),
-    "EP108": (
+    "EFP108": (
         "Repeated expression, consider assignment expression (walrus operator)",
         "'Effective Python' (3rd Edition), Item 8: "
         "Prevent Repetition with Assignment Expressions",
         "Reduces repetition, Python 3.8+ feature",
     ),
-    "EP215": (
+    "EFP215": (
         "Striding and slicing in same expression, split for clarity",
         "'Effective Python' (3rd Edition), Item 15: "
         "Avoid Striding and Slicing in a Single Expression",
         "More readable, easier to understand intent",
     ),
-    "EP317": (
+    "EFP317": (
         "Manual counter increment, use enumerate() instead",
         "'Effective Python' (3rd Edition), Item 17: Prefer enumerate over range",
         "More readable, less error-prone, same performance",
     ),
-    "EP641": (
+    "EFP641": (
         "Comprehension with too many control subexpressions, " "consider regular loop",
         "'Effective Python' (3rd Edition), Item 41: "
         "Avoid More Than Two Control Subexpressions",
         "Better readability, easier debugging",
     ),
-    "EP645": (
+    "EFP645": (
         "Manual generator composition, use yield from",
         "'Effective Python' (3rd Edition), Item 45: "
         "Compose Multiple Generators with yield from",
@@ -211,8 +211,8 @@ def get_error_codes_by_priority() -> dict[str, list[str]]:
 def get_error_codes_by_category() -> dict[str, list[str]]:
     """Get error codes organized by traditional category."""
     return {
-        "Effective Python Patterns": [k for k in ALL_MESSAGES if k.startswith("EP")],
-        "High Performance Python": [k for k in ALL_MESSAGES if k.startswith("HP")],
+        "Effective Python Patterns": [k for k in ALL_MESSAGES if k.startswith("EFP")],
+        "High Performance Python": [k for k in ALL_MESSAGES if k.startswith("HPP")],
         "Collection Performance": [k for k in ALL_MESSAGES if k.startswith("PC")],
         "Memory Optimization": [k for k in ALL_MESSAGES if k.startswith("MC")],
         "NumPy Performance": [k for k in ALL_MESSAGES if k.startswith("NP")],

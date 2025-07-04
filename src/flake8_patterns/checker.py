@@ -26,12 +26,12 @@ class PatternChecker(NodeVisitorWithParents):
     Educational focus with book references for learning Pythonic patterns.
 
     Current implementation focuses on Tier 1 rules:
-    - EP105: Multiple-Assignment Unpacking over Indexing
-    - EP213: Context-Aware String Concatenation
-    - EP318: Parallel Iteration with zip()
-    - EP320: Loop Variables After Loop Ends
-    - EP321: Be Defensive when Iterating over Arguments
-    - EP426: Comprehensive dict.get() patterns
+    - EFP105: Multiple-Assignment Unpacking over Indexing
+    - EFP213: Context-Aware String Concatenation
+    - EFP318: Parallel Iteration with zip()
+    - EFP320: Loop Variables After Loop Ends
+    - EFP321: Be Defensive when Iterating over Arguments
+    - EFP426: Comprehensive dict.get() patterns
     """
 
     name = "flake8-patterns"
@@ -63,16 +63,16 @@ class PatternChecker(NodeVisitorWithParents):
             (node.lineno, node.col_offset, f"{code} {message}", type(self))
         )
 
-    # Tier 1: High Impact Effective Python Rules (EP105, EP213, EP318, EP320,
-    # EP321, EP426)
+    # Tier 1: High Impact Effective Python Rules (EFP105, EFP213, EFP318, EFP320,
+    # EFP321, EFP426)
 
     def visit_assign(self, node: ast.Assign) -> None:
         """Check assignment patterns.
 
         Detects:
-        - EP105: Sequential indexing patterns (x = item[0]; y = item[1])
+        - EFP105: Sequential indexing patterns (x = item[0]; y = item[1])
         """
-        # EP105: Multiple-Assignment Unpacking over Indexing
+        # EFP105: Multiple-Assignment Unpacking over Indexing
         # TODO: Implement detection of sequential indexing assignments
         # Pattern: x = item[0] followed by y = item[1] etc.
         # Suggest: x, y = item
@@ -83,16 +83,16 @@ class PatternChecker(NodeVisitorWithParents):
         """Check for loop patterns.
 
         Detects:
-        - EP318: Manual parallel iteration with range(len())
-        - EP320: Loop variable usage after loop ends
-        - EP321: Functions iterating over arguments multiple times
+        - EFP318: Manual parallel iteration with range(len())
+        - EFP320: Loop variable usage after loop ends
+        - EFP321: Functions iterating over arguments multiple times
         """
-        # EP318: Parallel Iteration with zip()
+        # EFP318: Parallel Iteration with zip()
         # TODO: Implement detection of range(len()) + manual indexing
         # Pattern: for i in range(len(items)): x = items[i]; y = other[i]
         # Suggest: for x, y in zip(items, other)
 
-        # EP320: Loop Variables After Loop Ends
+        # EFP320: Loop Variables After Loop Ends
         # TODO: Track loop variable usage in post-loop scope
         # Pattern: for item in items: ...; if item.condition: ...
         # Suggest: Defensive assignment patterns
@@ -103,9 +103,9 @@ class PatternChecker(NodeVisitorWithParents):
         """Check function definition patterns.
 
         Detects:
-        - EP321: Be Defensive when Iterating over Arguments
+        - EFP321: Be Defensive when Iterating over Arguments
         """
-        # EP321: Be Defensive when Iterating over Arguments
+        # EFP321: Be Defensive when Iterating over Arguments
         # TODO: Detect functions that iterate over same parameter multiple times
         # Pattern: Multiple for loops over same argument without iterator check
         # Suggest: Convert to list or check if iterator
@@ -116,9 +116,9 @@ class PatternChecker(NodeVisitorWithParents):
         """Check try/except patterns.
 
         Detects:
-        - EP426: try/except KeyError patterns that should use dict.get()
+        - EFP426: try/except KeyError patterns that should use dict.get()
         """
-        # EP426: Comprehensive dict.get() patterns
+        # EFP426: Comprehensive dict.get() patterns
 
         self.generic_visit(node)
 
@@ -126,9 +126,9 @@ class PatternChecker(NodeVisitorWithParents):
         """Check list literal patterns.
 
         Detects:
-        - EP213: Context-aware string concatenation in collections
+        - EFP213: Context-aware string concatenation in collections
         """
-        # EP213: Context-Aware String Concatenation
+        # EFP213: Context-Aware String Concatenation
         # TODO: Detect implicit string concatenation in list/tuple contexts
         # Pattern: ["string1" "string2", other_item] (missing comma)
         # Suggest: Explicit concatenation or fix missing comma
@@ -229,14 +229,14 @@ class PatternChecker(NodeVisitorWithParents):
     # Future implementation notes for remaining tiers
 
     # Tier 2 rules (Phase 2: v0.4.0-0.6.0) - 14 rules:
-    # EP216, EP427, EP12103, EP531, EP538, EP429, EP537, EP748, EP755, EP769,
-    # EP770, EP881, EP12121, EP12122
+    # EFP216, EFP427, EFP12103, EFP531, EFP538, EFP429, EFP537, EFP748, EFP755, EFP769,
+    # EFP770, EFP881, EFP12121, EFP12122
 
     # Tier 3 rules (Phase 3: v0.7.0+) - 6 rules:
-    # EP104, EP108, EP215, EP317, EP641, EP645
+    # EFP104, EFP108, EFP215, EFP317, EFP641, EFP645
 
     # High Performance Python integration (Phase 4: v0.8.0+):
-    # HP001, PC001, MC001, NP001 patterns
+    # HPP001, HPP002, HPP003, HPP004 patterns
 
     def _check_modern_python_features(self, _node: ast.AST) -> None:
         """Leverage Python 3.10+ features for enhanced pattern detection."""
@@ -259,6 +259,50 @@ def checker_from_ast(tree: ast.AST, filename: str) -> PatternChecker:
     return PatternChecker(tree, filename)
 
 
+class PerformanceChecker(NodeVisitorWithParents):
+    """Main checker class for High Performance Python patterns.
+
+    Detects performance anti-patterns from "High Performance Python" (3rd Edition).
+    Focus on optimization patterns and performance bottlenecks.
+
+    Future implementation for v0.8.0+:
+    - HPP001: String concatenation in loops → use str.join()
+    - HPP002: List membership testing → use set for O(1) lookup  
+    - HPP003: Missing __slots__ → memory optimization
+    - HPP004: Manual loops over arrays → use NumPy vectorization
+    """
+
+    name = "flake8-patterns-performance"
+    version = __version__
+
+    def __init__(self, tree: ast.AST, filename: str = "(none)") -> None:
+        """Initialize the performance checker with an AST tree."""
+        super().__init__()
+        self.tree = tree
+        self.filename = filename
+        self.errors: list[Error] = []
+
+    def run(self) -> Generator[Error, None, None]:
+        """Run the performance checker and yield errors."""
+        self.errors = []
+        self.visit(self.tree)
+        yield from self.errors
+
+    def error(
+        self, node: ast.expr, code: str, format_vars: dict[str, Any] | None = None
+    ) -> None:
+        """Record an error for the given node and code."""
+        message = get_error_message(code)
+        if format_vars:
+            message = message.format(**format_vars)
+
+        self.errors.append(
+            (node.lineno, node.col_offset, f"{code} {message}", type(self))
+        )
+
+    # Future High Performance Python rules implementation
+    # Will be implemented in v0.8.0+ phase
+
+
 # Compatibility function names
-PerformanceChecker = PatternChecker  # Alternative name for backwards compatibility
 checker = checker_from_ast  # Simple function name

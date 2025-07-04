@@ -10,7 +10,7 @@ Guidelines for Gemini when handling tasks in the flake8-patterns educational lin
 
 *Note: We're starting with Effective Python patterns as they tend to be more objective and easier to implement. Comprehensive analysis identified 26 implementable rules across 3 priority tiers.*
 
-**Current Status:** v0.1.1, implementing EP105 (multiple-assignment unpacking over indexing)
+**Current Status:** v0.1.1, implementing EFP105 (multiple-assignment unpacking over indexing)
 
 **Your Role:** Handle simple, routine tasks while Claude focuses on complex architecture and implementation decisions.
 
@@ -29,11 +29,11 @@ For **any complex task** (implementation, analysis, multi-file changes), use str
 }
 ```
 
-### Example: Implementing EP105 Detection
+### Example: Implementing EFP105 Detection
 ```json
 // Thought 1
 {
-  "thought": "Need to analyze EP105 requirements: detect sequential indexing like x = item[0]; y = item[1] that should use unpacking",
+  "thought": "Need to analyze EFP105 requirements: detect sequential indexing like x = item[0]; y = item[1] that should use unpacking",
   "thoughtNumber": 1,
   "totalThoughts": 4,
   "nextThoughtNeeded": true
@@ -145,25 +145,25 @@ examples/
 def visit_Assign(self, node: ast.Assign) -> None:
     """Check assignment patterns for unpacking opportunities.
 
-    Detects EP105: Sequential indexing that should use unpacking.
+    Detects EFP105: Sequential indexing that should use unpacking.
     Reference: "Effective Python" (3rd Edition), Item 5, Chapter 1.
     """
     if self._is_sequential_indexing(node):
-        self.error(node, "EP105")
+        self.error(node, "EFP105")
     self.generic_visit(node)
 
 # Error message format (CRITICAL - get approval for changes)
-EP105_MESSAGE = (
+EFP105_MESSAGE = (
     "Sequential indexing detected, use multiple-assignment unpacking",
     "'Effective Python' (3rd Edition), Item 5, Chapter 1: Pythonic Thinking",
     "Readability: Cleaner, less error-prone, same performance"
 )
 
 # Git commit format (use conventional commits)
-git commit -m "feat(EP105): implement multiple-assignment unpacking detection"
-git commit -m "test(EP105): add edge cases for nested indexing"
+git commit -m "feat(EFP105): implement multiple-assignment unpacking detection"
+git commit -m "test(EFP105): add edge cases for nested indexing"
 git commit -m "fix(utils): handle None values in get_variable_name"
-git commit -m "docs: update README with EP105 examples"
+git commit -m "docs: update README with EFP105 examples"
 ```
 
 ## 🔍 Large Codebase Analysis Commands
@@ -171,7 +171,7 @@ git commit -m "docs: update README with EP105 examples"
 ### Project-Wide Analysis
 ```bash
 # Check all rules for consistency
-gemini -p "@src/ @tests/ Are all EP### rules properly implemented and tested?"
+gemini -p "@src/ @tests/ Are all EFP### rules properly implemented and tested?"
 
 # Verify book reference accuracy
 gemini -p "@src/book_refs.py @src/messages.py Do all error codes cite correct Item numbers and chapters?"
@@ -204,7 +204,7 @@ gemini -p "@src/ Identify areas for simple refactoring to improve consistency"
 ```bash
 # Standard commits (use conventional format)
 git commit -m "fix(docs): correct typo in README examples"
-git commit -m "test(EP105): add edge case for different variable names"
+git commit -m "test(EFP105): add edge case for different variable names"
 git commit -m "style: format code with black and isort"
 git commit -m "chore(deps): update pytest to latest version"
 ```
@@ -271,16 +271,16 @@ pytest --cov=flake8_patterns --cov-report=html
 
 **Files modified:**
 - src/flake8_patterns/utils.py (minor typo fix)
-- tests/test_effective_python.py (added EP105 edge case)
+- tests/test_effective_python.py (added EFP105 edge case)
 
 **Issues found:**
-- EP105 test coverage missing for nested indexing
+- EFP105 test coverage missing for nested indexing
 - README example shows outdated syntax
 
 **Recommended next steps:**
-1. Claude review: EP105 nested indexing handling
+1. Claude review: EFP105 nested indexing handling
 2. Update README examples for current implementation
-3. Add performance benchmarks for EP105 detection
+3. Add performance benchmarks for EFP105 detection
 
 **Status:** Ready for Claude review of complex issues
 ```
@@ -300,11 +300,11 @@ pytest --cov=flake8_patterns --cov-report=html
 ### Phase 1: Tier 1 Rules (Highest Impact, Clear Gaps)
 *Based on comprehensive analysis of all 125 Effective Python items*
 
-#### EP105 (Multiple-Assignment Unpacking) - CURRENT PRIORITY
+#### EFP105 (Multiple-Assignment Unpacking) - CURRENT PRIORITY
 ```python
 # Pattern to detect:
 item = (1, 2, 3)
-first = item[0]     # Should trigger EP105
+first = item[0]     # Should trigger EFP105
 second = item[1]    # Part of sequential pattern
 
 # Good pattern:
@@ -318,11 +318,11 @@ first, second, third = item
 ```
 
 #### Next Tier 1 Rules in Pipeline (6 total)
-- **EP213**: Context-Aware String Concatenation (Item 13, Chapter 2)
-- **EP318**: Parallel Iteration with zip() (Item 18, Chapter 3)
-- **EP320**: Loop Variables After Loop Ends (Item 20, Chapter 3)
-- **EP321**: Be Defensive when Iterating over Arguments (Item 21, Chapter 3)
-- **EP426**: Comprehensive dict.get() patterns (Item 26, Chapter 4)
+- **EFP213**: Context-Aware String Concatenation (Item 13, Chapter 2)
+- **EFP318**: Parallel Iteration with zip() (Item 18, Chapter 3)
+- **EFP320**: Loop Variables After Loop Ends (Item 20, Chapter 3)
+- **EFP321**: Be Defensive when Iterating over Arguments (Item 21, Chapter 3)
+- **EFP426**: Comprehensive dict.get() patterns (Item 26, Chapter 4)
 
 ### Future: High Performance Python Integration
 - **HP001**: String concatenation in loops → str.join()
@@ -347,7 +347,7 @@ pip install -e ".[dev]"
 flake8 --version  # Should show flake8-patterns
 
 # Test plugin functionality
-flake8 examples/bad_patterns.py  # Should show EP### errors
+flake8 examples/bad_patterns.py  # Should show EFP### errors
 ```
 
 ### Configuration Files

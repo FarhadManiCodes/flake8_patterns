@@ -32,28 +32,28 @@ def run_checker():
 
 # Tier 1 Rule Test Patterns (Verified Implementation Priority)
 
-# EP105: Multiple-Assignment Unpacking over Indexing
-EP105_BAD_SEQUENTIAL_INDEXING = """
+# EFP105: Multiple-Assignment Unpacking over Indexing
+EFP105_BAD_SEQUENTIAL_INDEXING = """
 item = ("Alice", 25, "Engineer")
 name = item[0]      # Sequential indexing
-age = item[1]       # Should trigger EP105
+age = item[1]       # Should trigger EFP105
 job = item[2]       # Continues pattern
 """
 
-EP105_GOOD_UNPACKING = """
+EFP105_GOOD_UNPACKING = """
 item = ("Alice", 25, "Engineer")
 name, age, job = item  # Good multiple assignment
 """
 
-# EP213: Context-Aware String Concatenation
-EP213_BAD_IMPLICIT_CONCAT = """
+# EFP213: Context-Aware String Concatenation
+EFP213_BAD_IMPLICIT_CONCAT = """
 items = [
-    "first_item" "second_item",  # Missing comma - should trigger EP213
+    "first_item" "second_item",  # Missing comma - should trigger EFP213
     "third_item",
 ]
 """
 
-EP213_GOOD_EXPLICIT = """
+EFP213_GOOD_EXPLICIT = """
 items = [
     "first_item",     # Explicit comma
     "second_item",    # Clear separation
@@ -61,35 +61,35 @@ items = [
 ]
 """
 
-# EP318: Parallel Iteration with zip()
-EP318_BAD_MANUAL_PARALLEL = """
+# EFP318: Parallel Iteration with zip()
+EFP318_BAD_MANUAL_PARALLEL = """
 names = ["Alice", "Bob", "Charlie"]
 ages = [25, 30, 35]
-for i in range(len(names)):     # Should trigger EP318
+for i in range(len(names)):     # Should trigger EFP318
     name = names[i]
     age = ages[i]
     print(f"{name} is {age}")
 """
 
-EP318_GOOD_ZIP = """
+EFP318_GOOD_ZIP = """
 names = ["Alice", "Bob", "Charlie"]
 ages = [25, 30, 35]
 for name, age in zip(names, ages):  # Good parallel iteration
     print(f"{name} is {age}")
 """
 
-# EP320: Loop Variables After Loop Ends
-EP320_BAD_POST_LOOP_USAGE = """
+# EFP320: Loop Variables After Loop Ends
+EFP320_BAD_POST_LOOP_USAGE = """
 def find_user(users):
     for user in users:
         if user.is_admin:
             break
 
-    if user.is_admin:           # Should trigger EP320
+    if user.is_admin:           # Should trigger EFP320
         return user
 """
 
-EP320_GOOD_DEFENSIVE = """
+EFP320_GOOD_DEFENSIVE = """
 def find_user(users):
     admin_user = None
     for user in users:
@@ -101,18 +101,18 @@ def find_user(users):
         return admin_user
 """
 
-# EP321: Be Defensive when Iterating over Arguments
-EP321_BAD_MULTIPLE_ITERATION = """
+# EFP321: Be Defensive when Iterating over Arguments
+EFP321_BAD_MULTIPLE_ITERATION = """
 def normalize(numbers):
     total = sum(numbers)        # First iteration
     result = []
-    for value in numbers:       # Second iteration - should trigger EP321
+    for value in numbers:       # Second iteration - should trigger EFP321
         percent = 100 * value / total
         result.append(percent)
     return result
 """
 
-EP321_GOOD_DEFENSIVE = """
+EFP321_GOOD_DEFENSIVE = """
 def normalize(numbers):
     numbers = list(numbers)     # Defensive conversion
     total = sum(numbers)        # Now safe to iterate multiple times
@@ -123,15 +123,15 @@ def normalize(numbers):
     return result
 """
 
-# EP426: Comprehensive dict.get() Patterns
-EP426_BAD_TRY_EXCEPT = """
+# EFP426: Comprehensive dict.get() Patterns
+EFP426_BAD_TRY_EXCEFPT = """
 try:
-    value = my_dict[key]        # Should trigger EP426
+    value = my_dict[key]        # Should trigger EFP426
 except KeyError:
     value = default_value
 """
 
-EP426_GOOD_DICT_GET = """
+EFP426_GOOD_DICT_GET = """
 value = my_dict.get(key, default_value)  # Clean and efficient
 """
 
@@ -154,24 +154,24 @@ if "item" in ["a", "b", "c", "d", "e"]:  # Will be PC001 in future
 def tier1_samples():
     """Provide Tier 1 rule test samples."""
     return {
-        # EP105: Multiple-Assignment Unpacking
-        "ep105_bad": EP105_BAD_SEQUENTIAL_INDEXING,
-        "ep105_good": EP105_GOOD_UNPACKING,
-        # EP213: Context-Aware String Concatenation
-        "ep213_bad": EP213_BAD_IMPLICIT_CONCAT,
-        "ep213_good": EP213_GOOD_EXPLICIT,
-        # EP318: Parallel Iteration with zip()
-        "ep318_bad": EP318_BAD_MANUAL_PARALLEL,
-        "ep318_good": EP318_GOOD_ZIP,
-        # EP320: Loop Variables After Loop Ends
-        "ep320_bad": EP320_BAD_POST_LOOP_USAGE,
-        "ep320_good": EP320_GOOD_DEFENSIVE,
-        # EP321: Be Defensive when Iterating over Arguments
-        "ep321_bad": EP321_BAD_MULTIPLE_ITERATION,
-        "ep321_good": EP321_GOOD_DEFENSIVE,
-        # EP426: Comprehensive dict.get() Patterns
-        "ep426_bad": EP426_BAD_TRY_EXCEPT,
-        "ep426_good": EP426_GOOD_DICT_GET,
+        # EFP105: Multiple-Assignment Unpacking
+        "ep105_bad": EFP105_BAD_SEQUENTIAL_INDEXING,
+        "ep105_good": EFP105_GOOD_UNPACKING,
+        # EFP213: Context-Aware String Concatenation
+        "ep213_bad": EFP213_BAD_IMPLICIT_CONCAT,
+        "ep213_good": EFP213_GOOD_EXPLICIT,
+        # EFP318: Parallel Iteration with zip()
+        "ep318_bad": EFP318_BAD_MANUAL_PARALLEL,
+        "ep318_good": EFP318_GOOD_ZIP,
+        # EFP320: Loop Variables After Loop Ends
+        "ep320_bad": EFP320_BAD_POST_LOOP_USAGE,
+        "ep320_good": EFP320_GOOD_DEFENSIVE,
+        # EFP321: Be Defensive when Iterating over Arguments
+        "ep321_bad": EFP321_BAD_MULTIPLE_ITERATION,
+        "ep321_good": EFP321_GOOD_DEFENSIVE,
+        # EFP426: Comprehensive dict.get() Patterns
+        "ep426_bad": EFP426_BAD_TRY_EXCEFPT,
+        "ep426_good": EFP426_GOOD_DICT_GET,
     }
 
 
@@ -191,43 +191,43 @@ def comprehensive_bad_code():
 """Test file with multiple Tier 1 rule violations."""
 
 def process_data():
-    # EP105: Sequential indexing
+    # EFP105: Sequential indexing
     user_tuple = ("Alice", 25, "Engineer")
     name = user_tuple[0]    # Sequential indexing
-    age = user_tuple[1]     # Should trigger EP105
+    age = user_tuple[1]     # Should trigger EFP105
     job = user_tuple[2]     # Continues pattern
 
-    # EP213: Implicit string concatenation in collections
+    # EFP213: Implicit string concatenation in collections
     config_items = [
-        "database_host" "database_port",  # Missing comma - EP213
+        "database_host" "database_port",  # Missing comma - EFP213
         "redis_url",
     ]
 
-    # EP318: Manual parallel iteration
+    # EFP318: Manual parallel iteration
     names = ["Alice", "Bob"]
     scores = [85, 92]
-    for i in range(len(names)):      # EP318
+    for i in range(len(names)):      # EFP318
         name = names[i]
         score = scores[i]
         print(f"{name}: {score}")
 
-    # EP320: Loop variable used after loop
+    # EFP320: Loop variable used after loop
     for user in users:
         if user.is_admin:
             break
 
-    if user.is_admin:               # EP320
+    if user.is_admin:               # EFP320
         return user
 
-    # EP321: Multiple iterations over same parameter
+    # EFP321: Multiple iterations over same parameter
     def analyze(items):
         count = len(items)              # First iteration
-        total = sum(items)              # Second iteration - EP321
+        total = sum(items)              # Second iteration - EFP321
         return total / count
 
-    # EP426: try/except KeyError patterns
+    # EFP426: try/except KeyError patterns
     try:
-        value = config[key]         # EP426
+        value = config[key]         # EFP426
     except KeyError:
         value = "default"
 
@@ -288,12 +288,12 @@ class ErrorCodes:
     """Expected error codes for testing."""
 
     # Tier 1 rules
-    EP105 = "EP105"  # Multiple-Assignment Unpacking over Indexing
-    EP213 = "EP213"  # Context-Aware String Concatenation
-    EP318 = "EP318"  # Parallel Iteration with zip()
-    EP320 = "EP320"  # Loop Variables After Loop Ends
-    EP321 = "EP321"  # Be Defensive when Iterating over Arguments
-    EP426 = "EP426"  # Comprehensive dict.get() patterns
+    EFP105 = "EFP105"  # Multiple-Assignment Unpacking over Indexing
+    EFP213 = "EFP213"  # Context-Aware String Concatenation
+    EFP318 = "EFP318"  # Parallel Iteration with zip()
+    EFP320 = "EFP320"  # Loop Variables After Loop Ends
+    EFP321 = "EFP321"  # Be Defensive when Iterating over Arguments
+    EFP426 = "EFP426"  # Comprehensive dict.get() patterns
 
     # Future rules (for preparation)
     HP001 = "HP001"  # String concatenation in loops (future)

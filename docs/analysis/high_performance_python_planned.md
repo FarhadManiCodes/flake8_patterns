@@ -20,7 +20,7 @@ This document outlines the planned analysis and integration of "High Performance
 2. **Gap analysis** against existing performance tools
 3. **AST detectability assessment** for each pattern
 4. **Priority classification** based on impact and implementability
-5. **Integration planning** with existing EP rules
+5. **Integration planning** with existing EFP rules
 
 ### Anticipated Rule Categories
 
@@ -53,13 +53,13 @@ This document outlines the planned analysis and integration of "High Performance
 #### Phase 4 Implementation Plan (v0.8.0+)
 
 **Prerequisites:**
-- Complete "Effective Python" coverage (26 EP rules)
+- Complete "Effective Python" coverage (26 EFP rules)
 - Established user base and feedback
 - Performance baseline established
 
 **Approach:**
-1. **Complementary Rules**: Focus on performance where EP focuses on style
-2. **No Overlap**: Ensure HP rules don't duplicate EP educational value
+1. **Complementary Rules**: Focus on performance where EFP focuses on style
+2. **No Overlap**: Ensure HP rules don't duplicate EFP educational value
 3. **Unified Experience**: Consistent error message format and book references
 4. **Progressive Adoption**: Allow users to enable HP rules selectively
 
@@ -71,7 +71,7 @@ This document outlines the planned analysis and integration of "High Performance
 - Could require dataflow analysis for memory patterns
 
 **User Experience:**
-- Clear separation between style (EP) and performance (HP) suggestions
+- Clear separation between style (EFP) and performance (HP) suggestions
 - Configurable performance impact thresholds
 - Educational context for performance trade-offs
 
@@ -90,7 +90,7 @@ This document outlines the planned analysis and integration of "High Performance
 #### Educational Integration
 - **Different audience** (performance-focused vs style-focused)
 - **Combined learning curve** for both books
-- **Balanced recommendations** when EP and HP conflict
+- **Balanced recommendations** when EFP and HP conflict
 
 ## Preliminary Rule Examples
 
@@ -157,7 +157,7 @@ class DataPoint:
 ### v0.8.0: High Performance Python Foundation
 - Complete "High Performance Python" analysis
 - Implement first 5-10 HP rules
-- Establish HP/EP integration patterns
+- Establish HP/EFP integration patterns
 
 ### v0.9.0: Comprehensive Performance Coverage
 - 20+ High Performance Python rules
@@ -177,8 +177,8 @@ class DataPoint:
 - **Educational Value**: Each rule teaches performance concepts
 
 ### Integration Success
-- **Unified Experience**: Consistent with EP rules in format and quality
-- **User Adoption**: HP rules adopted by existing EP users
+- **Unified Experience**: Consistent with EFP rules in format and quality
+- **User Adoption**: HP rules adopted by existing EFP users
 - **Performance Impact**: Measurable improvements in flagged code
 
 ### Ecosystem Impact

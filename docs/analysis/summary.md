@@ -17,12 +17,12 @@
 
 | Rule | Book Reference | Pattern | Gap Verified |
 |------|----------------|---------|--------------|
-| **EP105** | Item 5, Ch. 1 | Sequential indexing → tuple unpacking | No tool detects |
-| **EP213** | Item 13, Ch. 2 | Implicit concatenation in collections | Context-unaware tools |
-| **EP318** | Item 18, Ch. 3 | Manual parallel iteration → zip() | No tool detects |
-| **EP320** | Item 20, Ch. 3 | Loop variables after loop ends | Different from B023 |
-| **EP321** | Item 21, Ch. 3 | Multiple iteration over arguments | No tool detects |
-| **EP426** | Item 26, Ch. 4 | try/except KeyError → dict.get() | Only ~25% covered |
+| **EFP105** | Item 5, Ch. 1 | Sequential indexing → tuple unpacking | No tool detects |
+| **EFP213** | Item 13, Ch. 2 | Implicit concatenation in collections | Context-unaware tools |
+| **EFP318** | Item 18, Ch. 3 | Manual parallel iteration → zip() | No tool detects |
+| **EFP320** | Item 20, Ch. 3 | Loop variables after loop ends | Different from B023 |
+| **EFP321** | Item 21, Ch. 3 | Multiple iteration over arguments | No tool detects |
+| **EFP426** | Item 26, Ch. 4 | try/except KeyError → dict.get() | Only ~25% covered |
 
 ### Phase 2: Code Quality (v0.4.0-0.6.0) - 14 Rules
 
@@ -48,7 +48,7 @@ Complete "Effective Python" coverage with sophisticated patterns.
 ### Key Findings
 
 **✅ Verified No Conflicts:**
-- Different error code prefixes (EP vs B/C/SIM/PERF)
+- Different error code prefixes (EFP vs B/C/SIM/PERF)
 - Complementary focus (educational vs production)
 - Gap-filling approach (missed patterns vs comprehensive coverage)
 
@@ -102,12 +102,12 @@ Complete "Effective Python" coverage with sophisticated patterns.
 ## Next Steps
 
 ### Immediate (v0.1.0)
-1. **Implement EP105** (Multiple-Assignment Unpacking) as foundation
+1. **Implement EFP105** (Multiple-Assignment Unpacking) as foundation
 2. **Validate approach** with real-world codebases
 3. **Establish testing framework** for educational effectiveness
 
 ### Short-term (v0.2.0-0.3.0)
-1. **Complete Tier 1 rules** (EP213, EP318, EP320, EP321, EP426)
+1. **Complete Tier 1 rules** (EFP213, EFP318, EFP320, EFP321, EFP426)
 2. **Community feedback** and refinement
 3. **Documentation polish** for public release
 
@@ -142,4 +142,4 @@ Complete "Effective Python" coverage with sophisticated patterns.
 
 The analysis confirms a strong foundation for flake8-patterns as a unique educational linting tool. With 26 verified implementable rules addressing genuine gaps in the Python tooling ecosystem, the project is positioned to provide significant value to developers learning Pythonic patterns.
 
-**Recommendation**: Proceed with confident implementation starting with EP105, knowing that the strategic foundation is solid and the market need is verified.
+**Recommendation**: Proceed with confident implementation starting with EFP105, knowing that the strategic foundation is solid and the market need is verified.

@@ -63,36 +63,36 @@ if PYTHON_313_PLUS:
 *Based on comprehensive analysis of all 125 Effective Python items. Starting with Tier 1 rules that have the highest impact and clearest detection patterns.*
 
 **Phase 1: High Impact, Clear Gaps (v0.1.1-0.3.0) - 6 Rules**
-- EP105: Multiple-Assignment Unpacking over Indexing (Item 5, Chapter 1)
-- EP213: Context-Aware String Concatenation (Item 13, Chapter 2)
-- EP318: Parallel Iteration with zip() (Item 18, Chapter 3)
-- EP320: Loop Variables After Loop Ends (Item 20, Chapter 3)
-- EP321: Be Defensive when Iterating over Arguments (Item 21, Chapter 3)
-- EP426: Comprehensive dict.get() patterns (Item 26, Chapter 4)
+- EFP105: Multiple-Assignment Unpacking over Indexing (Item 5, Chapter 1)
+- EFP213: Context-Aware String Concatenation (Item 13, Chapter 2)
+- EFP318: Parallel Iteration with zip() (Item 18, Chapter 3)
+- EFP320: Loop Variables After Loop Ends (Item 20, Chapter 3)
+- EFP321: Be Defensive when Iterating over Arguments (Item 21, Chapter 3)
+- EFP426: Comprehensive dict.get() patterns (Item 26, Chapter 4)
 
 **Phase 2: Code Quality/API Design (v0.4.0-0.6.0) - 14 Rules**
-- EP216: Catch-All Unpacking over Slicing (Item 16, Chapter 2)
-- EP427: defaultdict over setdefault (Item 27, Chapter 4)
-- EP12103: deque for Producer-Consumer Queues (Item 103, Chapter 12)
-- EP531: Return Objects vs >3 Tuple Unpacking (Item 31, Chapter 5)
-- EP538: functools.wraps for Decorators (Item 38, Chapter 5)
-- EP429: Avoid Deep Nesting → Classes (Item 29, Chapter 4)
-- EP537: Keyword-Only/Positional-Only Arguments (Item 37, Chapter 5)
-- EP748: Functions vs Classes for Simple Interfaces (Item 48, Chapter 7)
-- EP755: Public vs Private Attributes (Item 55, Chapter 7)
-- EP769: Use Lock to Prevent Data Races (Item 69, Chapter 9)
-- EP770: Use Queue for Thread Coordination (Item 70, Chapter 9)
-- EP881: assert vs raise patterns (Item 81, Chapter 10)
-- EP12121: Root Exception Hierarchies (Item 121, Chapter 14)
-- EP12122: Circular Dependencies (Item 122, Chapter 14)
+- EFP216: Catch-All Unpacking over Slicing (Item 16, Chapter 2)
+- EFP427: defaultdict over setdefault (Item 27, Chapter 4)
+- EFP12103: deque for Producer-Consumer Queues (Item 103, Chapter 12)
+- EFP531: Return Objects vs >3 Tuple Unpacking (Item 31, Chapter 5)
+- EFP538: functools.wraps for Decorators (Item 38, Chapter 5)
+- EFP429: Avoid Deep Nesting → Classes (Item 29, Chapter 4)
+- EFP537: Keyword-Only/Positional-Only Arguments (Item 37, Chapter 5)
+- EFP748: Functions vs Classes for Simple Interfaces (Item 48, Chapter 7)
+- EFP755: Public vs Private Attributes (Item 55, Chapter 7)
+- EFP769: Use Lock to Prevent Data Races (Item 69, Chapter 9)
+- EFP770: Use Queue for Thread Coordination (Item 70, Chapter 9)
+- EFP881: assert vs raise patterns (Item 81, Chapter 10)
+- EFP12121: Root Exception Hierarchies (Item 121, Chapter 14)
+- EFP12122: Circular Dependencies (Item 122, Chapter 14)
 
 **Phase 3: Advanced Patterns (v0.7.0+) - 6 Rules**
-- EP104: Helper Functions over Complex Expressions (Item 4, Chapter 1)
-- EP108: Assignment Expressions for Repetition (Item 8, Chapter 1)
-- EP215: Avoid Striding and Slicing Together (Item 15, Chapter 2)
-- EP317: Comprehensive enumerate suggestions (Item 17, Chapter 3)
-- EP641: Complex Comprehension Control (Item 41, Chapter 6)
-- EP645: yield from for Generator Composition (Item 45, Chapter 6)
+- EFP104: Helper Functions over Complex Expressions (Item 4, Chapter 1)
+- EFP108: Assignment Expressions for Repetition (Item 8, Chapter 1)
+- EFP215: Avoid Striding and Slicing Together (Item 15, Chapter 2)
+- EFP317: Comprehensive enumerate suggestions (Item 17, Chapter 3)
+- EFP641: Complex Comprehension Control (Item 41, Chapter 6)
+- EFP645: yield from for Generator Composition (Item 45, Chapter 6)
 
 **Phase 4: High Performance Python Integration (v0.8.0+)**
 - HP001: String concatenation in loops → use `str.join()`
@@ -126,11 +126,11 @@ For complex analysis tasks, structure your thinking process:
 
 ```json
 {
-  "thought": "Analyzing EP105 implementation across all files to ensure consistency",
+  "thought": "Analyzing EFP105 implementation across all files to ensure consistency",
   "thoughtNumber": 1,
   "totalThoughts": 5,
   "nextThoughtNeeded": true,
-  "context": "Reviewing checker.py, messages.py, tests, and examples for EP105"
+  "context": "Reviewing checker.py, messages.py, tests, and examples for EFP105"
 }
 ```
 
@@ -181,7 +181,7 @@ gemini -p "@./ Give me an overview of the flake8-patterns project structure and 
 
 **Rule consistency check:**
 ```bash
-gemini -p "@src/ @tests/ Are all EP### rules properly implemented with corresponding tests?"
+gemini -p "@src/ @tests/ Are all EFP### rules properly implemented with corresponding tests?"
 ```
 
 **Book reference validation:**
@@ -206,9 +206,9 @@ gemini -p "@src/messages.py Are all error messages following the same format tem
 
 ### Implementation Verification Commands
 
-**Check EP105 implementation:**
+**Check EFP105 implementation:**
 ```bash
-gemini -p "@src/ @tests/ Is EP105 (multiple-assignment unpacking) fully implemented with tests and examples?"
+gemini -p "@src/ @tests/ Is EFP105 (multiple-assignment unpacking) fully implemented with tests and examples?"
 ```
 
 **Verify book accuracy:**
@@ -254,7 +254,7 @@ gemini -p "@src/ Identify areas for simple refactoring to improve code consisten
 gemini --checkpointing
 
 # Manual checkpoint before major changes
-/checkpoint save "before-EP105-implementation"
+/checkpoint save "before-EFP105-implementation"
 
 # Restore if needed
 /restore <checkpoint-id>
@@ -293,7 +293,7 @@ For complex rule implementation and architectural decisions, use structured thin
 ### When to Use Sequential Thinking
 
 **Always use for:**
-- 🧠 **New rule implementation** (EP105, EP213, etc.)
+- 🧠 **New rule implementation** (EFP105, EFP213, etc.)
 - 🏗️ **AST visitor design** (complex pattern detection)
 - 📚 **Book reference validation** (accuracy critical)
 - ⚡ **Performance optimization** (system-wide impact)
@@ -302,9 +302,9 @@ For complex rule implementation and architectural decisions, use structured thin
 ### Structured Implementation Protocol
 
 ```json
-// Example: Implementing EP105 (Multiple-Assignment Unpacking)
+// Example: Implementing EFP105 (Multiple-Assignment Unpacking)
 {
-  "thought": "Analyzing EP105 requirements: detect x = item[0]; y = item[1] patterns",
+  "thought": "Analyzing EFP105 requirements: detect x = item[0]; y = item[1] patterns",
   "thoughtNumber": 1,
   "totalThoughts": 6,
   "nextThoughtNeeded": true,
@@ -320,7 +320,7 @@ For complex rule implementation and architectural decisions, use structured thin
 }
 
 {
-  "thought": "Implementation plan: 1) Add visit_Assign method 2) Track sequential indexing 3) Detect patterns like x=item[0], y=item[1] 4) Add EP105 to messages.py",
+  "thought": "Implementation plan: 1) Add visit_Assign method 2) Track sequential indexing 3) Detect patterns like x=item[0], y=item[1] 4) Add EFP105 to messages.py",
   "thoughtNumber": 3,
   "totalThoughts": 6,
   "nextThoughtNeeded": true
@@ -434,7 +434,7 @@ gemini --checkpointing
 # (GEMINI.md files are loaded hierarchically)
 
 # Create checkpoint before major changes
-/checkpoint save "before-EP105-visitor-implementation"
+/checkpoint save "before-EFP105-visitor-implementation"
 
 # Use MCP tools for analysis
 /tools show  # List available analysis tools
@@ -505,9 +505,9 @@ python -c "
 import ast
 from flake8_patterns.checker import PatternChecker
 code = '''
-# EP105: Sequential indexing pattern
+# EFP105: Sequential indexing pattern
 item = (1, 2, 3)
-first = item[0]   # Should trigger EP105
+first = item[0]   # Should trigger EFP105
 second = item[1]  # Part of pattern
 
 # Good: Multiple assignment unpacking
@@ -530,7 +530,7 @@ for error in checker.run():
 
 2. **messages.py**: Centralized error messages with book references
    - `ALL_MESSAGES`: Dict mapping error codes to (message, book_ref, impact)
-   - Error categories: EP (Effective Python), HP (High Performance Python - future)
+   - Error categories: EFP (Effective Python), HP (High Performance Python - future)
 
 3. **utils.py**: AST analysis utilities
    - `NodeVisitorWithParents`: Base class for tracking parent nodes
@@ -542,13 +542,13 @@ for error in checker.run():
 
 **Error Code Format:**
 ```python
-# Format: EP{ItemNumber} (based on actual Effective Python Item numbers)
-EP105   # Item 5: Multiple-Assignment Unpacking over Indexing
-EP213   # Item 13: Prefer Explicit String Concatenation
-EP318   # Item 18: Use zip to Process Iterators in Parallel
-EP320   # Item 20: Never Use for Loop Variables After the Loop Ends
-EP321   # Item 21: Be Defensive when Iterating over Arguments
-EP426   # Item 26: Prefer get over in and KeyError
+# Format: EFP{ItemNumber} (based on actual Effective Python Item numbers)
+EFP105   # Item 5: Multiple-Assignment Unpacking over Indexing
+EFP213   # Item 13: Prefer Explicit String Concatenation
+EFP318   # Item 18: Use zip to Process Iterators in Parallel
+EFP320   # Item 20: Never Use for Loop Variables After the Loop Ends
+EFP321   # Item 21: Be Defensive when Iterating over Arguments
+EFP426   # Item 26: Prefer get over in and KeyError
 
 # Future High Performance Python rules will use HP prefix:
 HP001-HP999   # High Performance Python patterns
@@ -559,7 +559,7 @@ NP001-NP999   # NumPy performance patterns
 
 ### Semantic Versioning Strategy
 - **0.1.1**: Consistency and compatibility fixes (PatternChecker naming, pre-commit fixes)
-- **0.1.0**: Initial release (6 Tier 1 rules: EP105, EP213, EP318, EP320, EP321, EP426)
+- **0.1.0**: Initial release (6 Tier 1 rules: EFP105, EFP213, EFP318, EFP320, EFP321, EFP426)
 - **0.2.0**: Add Tier 2 rules (code quality/API design patterns)
 - **0.3.0**: Complete Effective Python coverage (all 26 verified rules)
 - **0.7.0**: High Performance Python integration begins
@@ -591,19 +591,19 @@ src/flake8_patterns/
 ├── book_refs.py         # Book reference system
 └── rules/               # Rule implementations (expandable)
     ├── __init__.py
-    ├── effective_python.py    # EP### rules (current focus)
+    ├── effective_python.py    # EFP### rules (current focus)
     └── high_performance.py    # HP### rules (future)
 ```
 
 ## Current Development Focus
 
-### Immediate Priority: EP105 Implementation
+### Immediate Priority: EFP105 Implementation
 **Rule**: Multiple-Assignment Unpacking over Indexing
 **Pattern**: `x = item[0]; y = item[1]` → `x, y = item`
 **Book Reference**: "Effective Python" (3rd Edition), Item 5, Chapter 1
 **Detection**: AST pattern matching for sequential indexing assignments
 
-**Why EP105 First:**
+**Why EFP105 First:**
 - Clearest, most detectable pattern (high confidence implementation)
 - Common anti-pattern that beginners often use
 - Clear educational value with obvious improvement
@@ -625,25 +625,25 @@ src/flake8_patterns/
 
 ```python
 def test_ep105_book_reference():
-    """EP105 should reference Item 5, Chapter 1 correctly."""
-    ref = get_book_reference("EP105")
+    """EFP105 should reference Item 5, Chapter 1 correctly."""
+    ref = get_book_reference("EFP105")
     assert ref.item == "Item 5"
     assert ref.chapter == "Chapter 1: Pythonic Thinking"
     assert "Multiple-Assignment Unpacking" in ref.section
 
 def test_ep105_detection():
-    """EP105 should detect sequential indexing patterns."""
+    """EFP105 should detect sequential indexing patterns."""
     code = '''
 item = (1, 2, 3)
-first = item[0]   # Should trigger EP105
+first = item[0]   # Should trigger EFP105
 second = item[1]  # Part of pattern
 '''
     errors = run_checker(code)
     assert len(errors) == 1
-    assert "EP105" in errors[0][2]
+    assert "EFP105" in errors[0][2]
 
 def test_ep105_no_false_positives():
-    """EP105 should not trigger on correct unpacking."""
+    """EFP105 should not trigger on correct unpacking."""
     code = "first, second, third = item"
     errors = run_checker(code)
     assert len(errors) == 0
@@ -707,15 +707,15 @@ try {
 ```python
 # When creating test examples or analyzing patterns
 code_example = '''
-# EP105: Sequential indexing pattern
+# EFP105: Sequential indexing pattern
 item = (1, 2, 3)
-first = item[0]   # Should trigger EP105
+first = item[0]   # Should trigger EFP105
 second = item[1]  # Part of pattern
 
-# EP318: Manual parallel iteration
+# EFP318: Manual parallel iteration
 names = ["Alice", "Bob"]
 ages = [25, 30]
-for i in range(len(names)):  # Should trigger EP318
+for i in range(len(names)):  # Should trigger EFP318
     name = names[i]
     age = ages[i]
     print(f"{name} is {age}")

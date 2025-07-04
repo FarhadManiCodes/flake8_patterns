@@ -71,7 +71,7 @@ def get_plugin_info() -> dict[str, str | int]:
 RULE_COUNTS = {
     "string_operations": len([k for k in ALL_MESSAGES if k.startswith("HP")]),
     "collection_performance": len([k for k in ALL_MESSAGES if k.startswith("PC")]),
-    "iteration_patterns": len([k for k in ALL_MESSAGES if k.startswith("EP")]),
+    "iteration_patterns": len([k for k in ALL_MESSAGES if k.startswith("EFP")]),
     "memory_optimization": len([k for k in ALL_MESSAGES if k.startswith("MC")]),
     "numpy_patterns": len([k for k in ALL_MESSAGES if k.startswith("NP")]),
 }

@@ -4,21 +4,21 @@ Documentation for assignment-related patterns from "Effective Python" (3rd Editi
 
 ## Current Rules (Tier 1)
 
-### EP105: Multiple-Assignment Unpacking over Indexing
+### EFP105: Multiple-Assignment Unpacking over Indexing
 - **Chapter**: Item 5, Chapter 1: Pythonic Thinking
 - **Status**: Tier 1 (High Priority)
 - **Focus**: Replace sequential indexing with tuple unpacking
 
-See [EP105 detailed documentation](EP105.md) for complete information.
+See [EFP105 detailed documentation](EFP105.md) for complete information.
 
 ## Future Assignment Rules
 
 ### Tier 2 Rules (v0.4.0+)
-- **EP216**: Catch-All Unpacking over Slicing (Item 16) - advanced unpacking patterns
-- **EP531**: Return Objects vs >3 Tuple Unpacking (Item 31) - when unpacking gets complex
+- **EFP216**: Catch-All Unpacking over Slicing (Item 16) - advanced unpacking patterns
+- **EFP531**: Return Objects vs >3 Tuple Unpacking (Item 31) - when unpacking gets complex
 
 ### Tier 3 Rules (v0.7.0+)
-- **EP108**: Assignment Expressions for Repetition (Item 8) - walrus operator patterns
+- **EFP108**: Assignment Expressions for Repetition (Item 8) - walrus operator patterns
 
 ## Overview
 
@@ -42,16 +42,16 @@ Assignment patterns in Python offer powerful ways to write more readable and mai
 
 | Pattern | Instead of | Use | Rule |
 |---------|------------|-----|------|
-| Sequential indexing | `x = item[0]; y = item[1]` | `x, y = item` | EP105 |
-| Head/tail slicing | `head = items[0]; rest = items[1:]` | `head, *rest = items` | EP216* |
-| Repeated expressions | `if (x := func()) and x > 5: ...` | Use walrus operator | EP108* |
-| Complex returns | `return a, b, c, d, e` | Return object or namedtuple | EP531* |
+| Sequential indexing | `x = item[0]; y = item[1]` | `x, y = item` | EFP105 |
+| Head/tail slicing | `head = items[0]; rest = items[1:]` | `head, *rest = items` | EFP216* |
+| Repeated expressions | `if (x := func()) and x > 5: ...` | Use walrus operator | EFP108* |
+| Complex returns | `return a, b, c, d, e` | Return object or namedtuple | EFP531* |
 
 *Future rules (Tier 2/3)
 
 ## Examples by Complexity
 
-### Simple Unpacking (EP105)
+### Simple Unpacking (EFP105)
 ```python
 # ❌ Sequential indexing
 point = (10, 20)
@@ -62,7 +62,7 @@ y = point[1]
 x, y = point
 ```
 
-### Advanced Unpacking (EP216 - Future)
+### Advanced Unpacking (EFP216 - Future)
 ```python
 # ❌ Manual slicing
 items = [1, 2, 3, 4, 5]
@@ -73,7 +73,7 @@ rest = items[1:]
 first, *rest = items
 ```
 
-### Assignment Expressions (EP108 - Future)
+### Assignment Expressions (EFP108 - Future)
 ```python
 # ❌ Repetitive expression
 data = expensive_function()
@@ -85,7 +85,7 @@ if (data := expensive_function()) and len(data) > 10:
     process(data)
 ```
 
-### Complex Returns (EP531 - Future)
+### Complex Returns (EFP531 - Future)
 ```python
 # ❌ Too many return values
 def get_user_info():
@@ -111,9 +111,9 @@ def get_user_info():
 
 ## Implementation Status
 
-- ✅ **EP105**: Tier 1 priority (v0.1.0-0.3.0)
-- 🔄 **EP216, EP531**: Tier 2 implementation (v0.4.0-0.6.0)
-- 📋 **EP108**: Tier 3 implementation (v0.7.0+)
+- ✅ **EFP105**: Tier 1 priority (v0.1.0-0.3.0)
+- 🔄 **EFP216, EFP531**: Tier 2 implementation (v0.4.0-0.6.0)
+- 📋 **EFP108**: Tier 3 implementation (v0.7.0+)
 
 ## Book Context
 

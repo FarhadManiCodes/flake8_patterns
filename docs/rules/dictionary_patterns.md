@@ -4,18 +4,18 @@ Documentation for dictionary-related patterns from "Effective Python" (3rd Editi
 
 ## Current Rules (Tier 1)
 
-### EP426: Comprehensive dict.get() Patterns
+### EFP426: Comprehensive dict.get() Patterns
 - **Chapter**: Item 26, Chapter 4: Comprehensions and Generators
 - **Status**: Tier 1 (High Priority)
 - **Focus**: Use dict.get() over KeyError handling and manual key checking
 
-See [EP426 detailed documentation](EP426.md) for complete information.
+See [EFP426 detailed documentation](EFP426.md) for complete information.
 
 ## Future Dictionary Rules
 
 ### Tier 2 Rules (v0.4.0+)
-- **EP427**: defaultdict over setdefault (Item 27) - when setdefault gets repetitive
-- **EP429**: Avoid Deep Nesting → Classes (Item 29) - complex nested dictionaries
+- **EFP427**: defaultdict over setdefault (Item 27) - when setdefault gets repetitive
+- **EFP429**: Avoid Deep Nesting → Classes (Item 29) - complex nested dictionaries
 
 ## Overview
 
@@ -39,16 +39,16 @@ Dictionaries are fundamental to Python programming, but there are many patterns 
 
 | Pattern | Instead of | Use | Rule |
 |---------|------------|-----|------|
-| KeyError handling | `try: x = d[k]; except KeyError: x = default` | `x = d.get(k, default)` | EP426 |
-| Check-then-access | `if k in d: x = d[k]; else: x = default` | `x = d.get(k, default)` | EP426 |
-| Repeated setdefault | Multiple `d.setdefault(k, []).append(v)` | `from collections import defaultdict` | EP427* |
-| Deep nesting | `d['a']['b']['c']['d'] = value` | Use classes or namedtuples | EP429* |
+| KeyError handling | `try: x = d[k]; except KeyError: x = default` | `x = d.get(k, default)` | EFP426 |
+| Check-then-access | `if k in d: x = d[k]; else: x = default` | `x = d.get(k, default)` | EFP426 |
+| Repeated setdefault | Multiple `d.setdefault(k, []).append(v)` | `from collections import defaultdict` | EFP427* |
+| Deep nesting | `d['a']['b']['c']['d'] = value` | Use classes or namedtuples | EFP429* |
 
 *Future rules (Tier 2)
 
 ## Examples by Complexity
 
-### Basic Access Patterns (EP426)
+### Basic Access Patterns (EFP426)
 ```python
 # ❌ Try/except KeyError
 try:
@@ -60,7 +60,7 @@ except KeyError:
 value = config.get('database', {}).get('host', 'localhost')
 ```
 
-### Repeated Operations (EP427 - Future)
+### Repeated Operations (EFP427 - Future)
 ```python
 # ❌ Repetitive setdefault
 groups = {}
@@ -74,7 +74,7 @@ for item in items:
     groups[item.category].append(item)
 ```
 
-### Complex Nesting (EP429 - Future)
+### Complex Nesting (EFP429 - Future)
 ```python
 # ❌ Deep nested dictionary
 user = {
@@ -171,8 +171,8 @@ if 'new_feature' not in config:
 
 ## Implementation Status
 
-- ✅ **EP426**: Tier 1 priority (v0.1.0-0.3.0)
-- 🔄 **EP427, EP429**: Tier 2 implementation (v0.4.0-0.6.0)
+- ✅ **EFP426**: Tier 1 priority (v0.1.0-0.3.0)
+- 🔄 **EFP427, EFP429**: Tier 2 implementation (v0.4.0-0.6.0)
 
 ## Book Context
 

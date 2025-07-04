@@ -33,7 +33,7 @@ pip install flake8-patterns
 flake8 your_code.py
 
 # Example output
-your_code.py:12:5: EP105 Sequential indexing detected, use multiple-assignment unpacking
+your_code.py:12:5: EFP105 Sequential indexing detected, use multiple-assignment unpacking
     → 'Effective Python' (3rd Edition), Item 5, Chapter 1: Pythonic Thinking
     → Readability: Cleaner, less error-prone, same performance
     → Example: x = item[0]; y = item[1] → x, y = item
@@ -47,27 +47,27 @@ your_code.py:12:5: EP105 Sequential indexing detected, use multiple-assignment u
 
 **Tier 1 rules with maximum educational value and no existing tool coverage:**
 
-- **EP105**: Multiple-Assignment Unpacking over Indexing (Item 5, Chapter 1)
+- **EFP105**: Multiple-Assignment Unpacking over Indexing (Item 5, Chapter 1)
   - Pattern: `x = item[0]; y = item[1]` → `x, y = item`
   - Gap: No existing tool detects sequential indexing patterns
 
-- **EP213**: Context-Aware String Concatenation (Item 13, Chapter 2)
+- **EFP213**: Context-Aware String Concatenation (Item 13, Chapter 2)
   - Pattern: Implicit concatenation in collections → explicit concatenation
   - Gap: flake8-implicit-str-concat lacks context awareness
 
-- **EP318**: Parallel Iteration with zip() (Item 18, Chapter 3)
+- **EFP318**: Parallel Iteration with zip() (Item 18, Chapter 3)
   - Pattern: `for i in range(len(names)): name=names[i]` → `zip(names, ages)`
   - Gap: No existing tool detects manual parallel iteration
 
-- **EP320**: Loop Variables After Loop Ends (Item 20, Chapter 3)
+- **EFP320**: Loop Variables After Loop Ends (Item 20, Chapter 3)
   - Pattern: Using loop variables after loop completion
   - Gap: flake8-bugbear B023 covers closures, not direct usage
 
-- **EP321**: Be Defensive when Iterating over Arguments (Item 21, Chapter 3)
+- **EFP321**: Be Defensive when Iterating over Arguments (Item 21, Chapter 3)
   - Pattern: Functions iterating same parameter multiple times
   - Gap: No existing tool detects iterator exhaustion patterns
 
-- **EP426**: Comprehensive dict.get() patterns (Item 26, Chapter 4)
+- **EFP426**: Comprehensive dict.get() patterns (Item 26, Chapter 4)
   - Pattern: `try: x = d[key]; except KeyError:` → `x = d.get(key, default)`
   - Gap: flake8-simplify SIM124 covers only ~25% of patterns
 
@@ -75,31 +75,31 @@ your_code.py:12:5: EP105 Sequential indexing detected, use multiple-assignment u
 
 **Medium-impact rules focusing on code quality and API design:**
 
-- **EP216**: Catch-All Unpacking over Slicing (Item 16, Chapter 2)
-- **EP427**: defaultdict over setdefault (Item 27, Chapter 4)
-- **EP12103**: deque for Producer-Consumer Queues (Item 103, Chapter 12)
-- **EP531**: Return Objects vs >3 Tuple Unpacking (Item 31, Chapter 5)
-- **EP538**: functools.wraps for Decorators (Item 38, Chapter 5)
-- **EP429**: Avoid Deep Nesting → Classes (Item 29, Chapter 4)
-- **EP537**: Keyword-Only/Positional-Only Arguments (Item 37, Chapter 5)
-- **EP748**: Functions vs Classes for Simple Interfaces (Item 48, Chapter 7)
-- **EP755**: Public vs Private Attributes (Item 55, Chapter 7)
-- **EP769**: Use Lock to Prevent Data Races (Item 69, Chapter 9)
-- **EP770**: Use Queue for Thread Coordination (Item 70, Chapter 9)
-- **EP881**: assert vs raise patterns (Item 81, Chapter 10)
-- **EP12121**: Root Exception Hierarchies (Item 121, Chapter 14)
-- **EP12122**: Circular Dependencies (Item 122, Chapter 14)
+- **EFP216**: Catch-All Unpacking over Slicing (Item 16, Chapter 2)
+- **EFP427**: defaultdict over setdefault (Item 27, Chapter 4)
+- **EFP12103**: deque for Producer-Consumer Queues (Item 103, Chapter 12)
+- **EFP531**: Return Objects vs >3 Tuple Unpacking (Item 31, Chapter 5)
+- **EFP538**: functools.wraps for Decorators (Item 38, Chapter 5)
+- **EFP429**: Avoid Deep Nesting → Classes (Item 29, Chapter 4)
+- **EFP537**: Keyword-Only/Positional-Only Arguments (Item 37, Chapter 5)
+- **EFP748**: Functions vs Classes for Simple Interfaces (Item 48, Chapter 7)
+- **EFP755**: Public vs Private Attributes (Item 55, Chapter 7)
+- **EFP769**: Use Lock to Prevent Data Races (Item 69, Chapter 9)
+- **EFP770**: Use Queue for Thread Coordination (Item 70, Chapter 9)
+- **EFP881**: assert vs raise patterns (Item 81, Chapter 10)
+- **EFP12121**: Root Exception Hierarchies (Item 121, Chapter 14)
+- **EFP12122**: Circular Dependencies (Item 122, Chapter 14)
 
 ### Phase 3: Advanced Patterns (v0.7.0+) - 6 Rules
 
 **Lower-priority but valuable patterns:**
 
-- **EP104**: Helper Functions over Complex Expressions (Item 4, Chapter 1)
-- **EP108**: Assignment Expressions for Repetition (Item 8, Chapter 1)
-- **EP215**: Avoid Striding and Slicing Together (Item 15, Chapter 2)
-- **EP317**: Comprehensive enumerate suggestions (Item 17, Chapter 3)
-- **EP641**: Complex Comprehension Control (Item 41, Chapter 6)
-- **EP645**: yield from for Generator Composition (Item 45, Chapter 6)
+- **EFP104**: Helper Functions over Complex Expressions (Item 4, Chapter 1)
+- **EFP108**: Assignment Expressions for Repetition (Item 8, Chapter 1)
+- **EFP215**: Avoid Striding and Slicing Together (Item 15, Chapter 2)
+- **EFP317**: Comprehensive enumerate suggestions (Item 17, Chapter 3)
+- **EFP641**: Complex Comprehension Control (Item 41, Chapter 6)
+- **EFP645**: yield from for Generator Composition (Item 45, Chapter 6)
 
 ### Phase 4: High Performance Python Integration (v0.8.0+)
 
@@ -112,7 +112,7 @@ your_code.py:12:5: EP105 Sequential indexing detected, use multiple-assignment u
 
 ## 💡 Before & After Examples
 
-### EP105: Multiple-Assignment Unpacking
+### EFP105: Multiple-Assignment Unpacking
 
 ```python
 # 🐌 Unpythonic - sequential indexing
@@ -131,16 +131,16 @@ Add to your `setup.cfg` or `pyproject.toml`:
 ```ini
 [flake8]
 # Enable Effective Python rules (recommended)
-select = E,W,F,EP
+select = E,W,F,EFP
 
 # Focus on Tier 1 high-impact rules
-select = EP105,EP213,EP318,EP320,EP321,EP426
+select = EFP105,EFP213,EFP318,EFP320,EFP321,EFP426
 
 # Educational mode (all implemented rules)
-extend-select = EP
+extend-select = EFP
 
 # Combine with existing tools (recommended)
-extend-select = B,C4,EP  # bugbear + comprehensions + educational
+extend-select = B,C4,EFP  # bugbear + comprehensions + educational
 ```
 
 ## 🤝 Competitive Analysis: No Conflicts Found
@@ -159,12 +159,12 @@ extend-select = B,C4,EP  # bugbear + comprehensions + educational
 ### ✅ Verified No Conflicts
 
 **Our Tier 1 rules address genuine gaps:**
-- **EP105**: No existing tool detects sequential indexing patterns
-- **EP213**: flake8-implicit-str-concat lacks context awareness
-- **EP318**: No tool detects manual parallel iteration
-- **EP320**: flake8-bugbear B023 covers closures, not direct usage
-- **EP321**: No tool detects iterator exhaustion patterns
-- **EP426**: flake8-simplify SIM124 covers only ~25% of dict.get patterns
+- **EFP105**: No existing tool detects sequential indexing patterns
+- **EFP213**: flake8-implicit-str-concat lacks context awareness
+- **EFP318**: No tool detects manual parallel iteration
+- **EFP320**: flake8-bugbear B023 covers closures, not direct usage
+- **EFP321**: No tool detects iterator exhaustion patterns
+- **EFP426**: flake8-simplify SIM124 covers only ~25% of dict.get patterns
 
 ### Our Educational Niche: Book-Based Learning
 
@@ -185,7 +185,7 @@ pip install flake8-patterns                       # Educational layer
 
 # Your .flake8 config:
 [flake8]
-extend-select = B,C4,EP  # Bugbear + Comprehensions + Educational patterns
+extend-select = B,C4,EFP  # Bugbear + Comprehensions + Educational patterns
 ```
 
 **Think of flake8-patterns as:** A study guide that points you to "Effective Python" chapters while you code.
@@ -247,24 +247,24 @@ python scripts/validate_book_references.py
 - ✅ **Book reference system** implemented with correct Item/Chapter mappings
 - ✅ **Testing framework** with manual validation
 - ✅ **Competitive analysis** completed (no conflicts found)
-- 🔄 **EP105 implementation** in progress (current priority)
+- 🔄 **EFP105 implementation** in progress (current priority)
 
 ### Upcoming Releases
 
 **v0.1.0-0.3.0** - Tier 1: High Impact Rules (6 rules)
-- EP105: Multiple-Assignment Unpacking over Indexing
-- EP213: Context-Aware String Concatenation
-- EP318: Parallel Iteration with zip()
-- EP320: Loop Variables After Loop Ends
-- EP321: Be Defensive when Iterating over Arguments
-- EP426: Comprehensive dict.get() patterns
+- EFP105: Multiple-Assignment Unpacking over Indexing
+- EFP213: Context-Aware String Concatenation
+- EFP318: Parallel Iteration with zip()
+- EFP320: Loop Variables After Loop Ends
+- EFP321: Be Defensive when Iterating over Arguments
+- EFP426: Comprehensive dict.get() patterns
 
 **v0.4.0-0.6.0** - Tier 2: Code Quality/API Design (14 rules)
-- EP216, EP427, EP12103, EP531, EP538, EP429, EP537, EP748, EP755, EP769, EP770, EP881, EP12121, EP12122
+- EFP216, EFP427, EFP12103, EFP531, EFP538, EFP429, EFP537, EFP748, EFP755, EFP769, EFP770, EFP881, EFP12121, EFP12122
 - Focus on API design and code quality patterns
 
 **v0.7.0+** - Tier 3: Advanced Patterns (6 rules)
-- EP104, EP108, EP215, EP317, EP641, EP645
+- EFP104, EFP108, EFP215, EFP317, EFP641, EFP645
 - Complete "Effective Python" coverage (26 total rules)
 
 **v0.8.0+** - High Performance Python Integration
@@ -293,8 +293,8 @@ We welcome contributions! Here's how to help:
 ### Book Reference Validation
 ```python
 def test_ep105_book_reference():
-    """Ensure EP105 cites correct book section."""
-    ref = get_book_reference("EP105")
+    """Ensure EFP105 cites correct book section."""
+    ref = get_book_reference("EFP105")
     assert ref.book == "Effective Python"
     assert ref.chapter == "Chapter 1: Pythonic Thinking"
     assert "Multiple-Assignment Unpacking" in ref.section

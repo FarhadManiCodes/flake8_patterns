@@ -31,7 +31,7 @@ Complete detailed analysis of all 125 "Effective Python" (3rd Edition) items, in
 Forward-looking analysis for Phase 4 integration of "High Performance Python" patterns.
 
 **Contents:**
-- Integration strategy with existing EP rules
+- Integration strategy with existing EFP rules
 - Anticipated rule categories and examples
 - Technical challenges and solutions
 - Timeline and success metrics

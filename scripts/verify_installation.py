@@ -4,12 +4,12 @@ Comprehensive verification script for flake8-patterns installation.
 Run this to verify everything is working correctly.
 
 Updated for verified Tier 1 rules from "Effective Python" (3rd Edition):
-- EP105: Multiple-Assignment Unpacking over Indexing
-- EP213: Context-Aware String Concatenation
-- EP318: Parallel Iteration with zip()
-- EP320: Loop Variables After Loop Ends
-- EP321: Be Defensive when Iterating over Arguments
-- EP426: Comprehensive dict.get() patterns
+- EFP105: Multiple-Assignment Unpacking over Indexing
+- EFP213: Context-Aware String Concatenation
+- EFP318: Parallel Iteration with zip()
+- EFP320: Loop Variables After Loop Ends
+- EFP321: Be Defensive when Iterating over Arguments
+- EFP426: Comprehensive dict.get() patterns
 """
 
 import os
@@ -186,42 +186,42 @@ def check_plugin_functionality():
     # Test cases for verified Tier 1 rules
     test_cases = [
         {
-            "name": "EP105 - Sequential indexing patterns",
+            "name": "EFP105 - Sequential indexing patterns",
             "code": """
-# Sequential indexing that should trigger EP105
+# Sequential indexing that should trigger EFP105
 item = ("Alice", 25, "Engineer")
 name = item[0]      # Sequential indexing
-age = item[1]       # Should trigger EP105
+age = item[1]       # Should trigger EFP105
 job = item[2]       # Continues pattern
 """,
-            "expected_error": "EP105",
+            "expected_error": "EFP105",
         },
         {
-            "name": "EP213 - Implicit string concatenation in collections",
+            "name": "EFP213 - Implicit string concatenation in collections",
             "code": """
 # Missing comma - dangerous implicit concatenation
 items = [
-    "first_item" "second_item",  # Should trigger EP213
+    "first_item" "second_item",  # Should trigger EFP213
     "third_item",
 ]
 """,
-            "expected_error": "EP213",
+            "expected_error": "EFP213",
         },
         {
-            "name": "EP318 - Manual parallel iteration",
+            "name": "EFP318 - Manual parallel iteration",
             "code": """
-# Manual parallel iteration that should trigger EP318
+# Manual parallel iteration that should trigger EFP318
 names = ["Alice", "Bob", "Charlie"]
 ages = [25, 30, 35]
-for i in range(len(names)):     # Should trigger EP318
+for i in range(len(names)):     # Should trigger EFP318
     name = names[i]
     age = ages[i]
     print(f"{name} is {age}")
 """,
-            "expected_error": "EP318",
+            "expected_error": "EFP318",
         },
         {
-            "name": "EP320 - Loop variable used after loop",
+            "name": "EFP320 - Loop variable used after loop",
             "code": """
 # Loop variable used after loop ends
 def find_user(users):
@@ -229,35 +229,35 @@ def find_user(users):
         if user.is_admin:
             break
 
-    if user.is_admin:           # Should trigger EP320
+    if user.is_admin:           # Should trigger EFP320
         return user
 """,
-            "expected_error": "EP320",
+            "expected_error": "EFP320",
         },
         {
-            "name": "EP321 - Multiple iterations over same parameter",
+            "name": "EFP321 - Multiple iterations over same parameter",
             "code": """
 # Function iterating over parameter multiple times
 def normalize(numbers):
     total = sum(numbers)        # First iteration
     result = []
-    for value in numbers:       # Second iteration - should trigger EP321
+    for value in numbers:       # Second iteration - should trigger EFP321
         percent = 100 * value / total
         result.append(percent)
     return result
 """,
-            "expected_error": "EP321",
+            "expected_error": "EFP321",
         },
         {
-            "name": "EP426 - try/except KeyError patterns",
+            "name": "EFP426 - try/except KeyError patterns",
             "code": """
 # try/except KeyError that should use dict.get()
 try:
-    value = my_dict[key]        # Should trigger EP426
+    value = my_dict[key]        # Should trigger EFP426
 except KeyError:
     value = default_value
 """,
-            "expected_error": "EP426",
+            "expected_error": "EFP426",
         },
     ]
 
@@ -271,7 +271,7 @@ except KeyError:
 
         try:
             # Run flake8 on the test file
-            success, stdout, stderr = run_command(f"flake8 --select=EP {temp_file}")
+            success, stdout, stderr = run_command(f"flake8 --select=EFP {temp_file}")
 
             if test_case["expected_error"] in stdout:
                 log_success(f"Detected {test_case['expected_error']} correctly")
@@ -298,7 +298,7 @@ def check_entry_points():
         # Look for flake8 extension entry points
         found_entry_point = False
         for entry_point in pkg_resources.iter_entry_points("flake8.extension"):
-            if "flake8_patterns" in str(entry_point) or entry_point.name == "EP":
+            if "flake8_patterns" in str(entry_point) or entry_point.name == "EFP":
                 log_success(f"Entry point found: {entry_point}")
                 found_entry_point = True
 
@@ -344,49 +344,49 @@ def run_comprehensive_test():
     test_code = '''
 """Test file for flake8-patterns comprehensive check."""
 
-# EP105: Sequential indexing patterns
+# EFP105: Sequential indexing patterns
 def process_user_data():
     user_tuple = ("Alice", 25, "Engineer")
-    name = user_tuple[0]    # EP105
-    age = user_tuple[1]     # EP105
-    job = user_tuple[2]     # EP105
+    name = user_tuple[0]    # EFP105
+    age = user_tuple[1]     # EFP105
+    job = user_tuple[2]     # EFP105
     return f"{name} ({age}) - {job}"
 
-# EP213: Implicit string concatenation in collections
+# EFP213: Implicit string concatenation in collections
 config_items = [
-    "database_host" "database_port",  # EP213 - missing comma!
+    "database_host" "database_port",  # EFP213 - missing comma!
     "redis_url",
     "api_key",
 ]
 
-# EP318: Manual parallel iteration
+# EFP318: Manual parallel iteration
 def calculate_scores():
     names = ["Alice", "Bob", "Charlie"]
     scores = [85, 92, 78]
-    for i in range(len(names)):      # EP318
+    for i in range(len(names)):      # EFP318
         name = names[i]
         score = scores[i]
         print(f"{name}: {score}")
 
-# EP320: Loop variable used after loop
+# EFP320: Loop variable used after loop
 def find_admin(users):
     for user in users:
         if user.is_admin:
             break
 
-    if user.is_admin:               # EP320
+    if user.is_admin:               # EFP320
         return user
 
-# EP321: Multiple iterations over same parameter
+# EFP321: Multiple iterations over same parameter
 def analyze_data(items):
     count = len(items)              # First iteration
-    total = sum(items)              # Second iteration - EP321
+    total = sum(items)              # Second iteration - EFP321
     return total / count
 
-# EP426: try/except KeyError patterns
+# EFP426: try/except KeyError patterns
 def get_config_value(config, key):
     try:
-        value = config[key]         # EP426
+        value = config[key]         # EFP426
     except KeyError:
         value = "default"
     return value
@@ -425,20 +425,20 @@ def future_hp_patterns():
 
     try:
         # Run flake8 with Effective Python rules
-        success, stdout, stderr = run_command(f"flake8 --select=EP {temp_file}")
+        success, stdout, stderr = run_command(f"flake8 --select=EFP {temp_file}")
 
         if stdout.strip():
             print("   Detected Effective Python issues:")
             for line in stdout.strip().split("\n"):
                 if line.strip():
                     print(f"     {line}")
-            log_success("Plugin is detecting EP patterns correctly")
+            log_success("Plugin is detecting EFP patterns correctly")
         else:
-            log_info("No EP issues detected (rules may need implementation)")
+            log_info("No EFP issues detected (rules may need implementation)")
 
         # Count different rule types
-        ep_issues = len([line for line in stdout.split("\n") if "EP" in line])
-        print(f"   Effective Python (EP) issues found: {ep_issues}")
+        efp_issues = len([line for line in stdout.split("\n") if "EFP" in line])
+        print(f"   Effective Python (EFP) issues found: {efp_issues}")
 
         # Try with all error codes to see what else is detected
         success, stdout, stderr = run_command(f"flake8 {temp_file}")
@@ -459,7 +459,7 @@ def check_book_references():
         from flake8_patterns.book_refs import EFFECTIVE_PYTHON_REFS, get_book_reference
 
         # Check Tier 1 rule references
-        tier1_rules = ["EP105", "EP213", "EP318", "EP320", "EP321", "EP426"]
+        tier1_rules = ["EFP105", "EFP213", "EFP318", "EFP320", "EFP321", "EFP426"]
 
         for rule in tier1_rules:
             ref = get_book_reference(rule)
@@ -540,10 +540,10 @@ def main():
         print("• Try reinstalling: pip uninstall flake8-patterns && pip install -e .")
         print("• Check that you're in the right virtual environment")
 
-    print("• Test on your actual code: flake8 --select=EP your_file.py")
-    print("• Start with EP105 implementation (current priority)")
+    print("• Test on your actual code: flake8 --select=EFP your_file.py")
+    print("• Start with EFP105 implementation (current priority)")
     print("• Check docs/rules/ for detailed rule documentation")
-    print("• Implement Tier 1 rules: EP105, EP213, EP318, EP320, EP321, EP426")
+    print("• Implement Tier 1 rules: EFP105, EFP213, EFP318, EFP320, EFP321, EFP426")
 
     print(f"\n{Colors.BLUE}📚 Educational Resources{Colors.NC}")
     print("• Rule documentation: docs/rules/")
