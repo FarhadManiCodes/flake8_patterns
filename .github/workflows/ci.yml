@@ -172,7 +172,7 @@ jobs:
       run: |
         echo "Testing with flake8 $(flake8 --version)"
         flake8 --version | grep flake8_patterns || echo "Plugin not visible in version output"
-        
+
         # Test plugin works with this flake8 version
         python scripts/verify_installation.py
 
@@ -180,12 +180,12 @@ jobs:
       run: |
         # Install other popular flake8 plugins
         pip install flake8-bugbear flake8-comprehensions flake8-simplify
-        
+
         # Test no conflicts
         flake8 --version
         echo "Testing plugin compatibility..."
         flake8 --select=EFP,B,C examples/bad_patterns.py || echo "Some violations expected"
-        
+
         # Test good patterns don't trigger our rules
         flake8 --select=EFP examples/good_patterns.py
 
@@ -225,15 +225,15 @@ jobs:
             return first + second
         '''
             tree = ast.parse(code)
-            
+
             def run_checker():
                 checker = PatternChecker(tree)
                 return list(checker.run())
-            
+
             result = benchmark(run_checker)
             assert isinstance(result, list)
         EOF
-        
+
         pytest benchmark_test.py --benchmark-only --benchmark-json=benchmark-results.json || true
 
     - name: Upload performance artifacts

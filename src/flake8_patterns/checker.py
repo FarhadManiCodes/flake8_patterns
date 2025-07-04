@@ -267,7 +267,7 @@ class PerformanceChecker(NodeVisitorWithParents):
 
     Future implementation for v0.8.0+:
     - HPP001: String concatenation in loops → use str.join()
-    - HPP002: List membership testing → use set for O(1) lookup  
+    - HPP002: List membership testing → use set for O(1) lookup
     - HPP003: Missing __slots__ → memory optimization
     - HPP004: Manual loops over arrays → use NumPy vectorization
     """
