@@ -1,6 +1,5 @@
 # flake8-patterns
 
-[![CI](https://github.com/FarhadManiCodes/flake8-patterns/workflows/CI/badge.svg)](https://github.com/FarhadManiCodes/flake8-patterns/actions)
 [![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![PyPI version](https://badge.fury.io/py/flake8-patterns.svg)](https://badge.fury.io/py/flake8-patterns)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
