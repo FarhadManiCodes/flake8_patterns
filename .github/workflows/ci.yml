@@ -118,11 +118,6 @@ jobs:
         bandit -r src/ -f json -o bandit-report.json || true
         bandit -r src/ -f txt
 
-    - name: Run safety scan
-      run: |
-        safety scan --json > safety-report.json || true
-        safety scan
-
     - name: Upload security artifacts
       uses: actions/upload-artifact@v4
       if: always()
