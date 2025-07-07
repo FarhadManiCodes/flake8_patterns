@@ -8,7 +8,7 @@ import ast
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ..checker import PatternChecker
+    from flake8_patterns.checker import PatternChecker
 
 
 class AssignmentPatternRules:
@@ -18,12 +18,12 @@ class AssignmentPatternRules:
         self, node: ast.Assign, checker: "PatternChecker"
     ) -> None:
         """Check EFP105: Multiple-Assignment Unpacking over Indexing.
-        
+
         Detects patterns like:
         x = item[0]
         y = item[1]
         z = item[2]
-        
+
         Suggests: x, y, z = item
         """
         if self._is_sequential_indexing_assignment(node, checker):
@@ -33,12 +33,11 @@ class AssignmentPatternRules:
         self, node: ast.Assign, checker: "PatternChecker"
     ) -> None:
         """Check EFP216: Catch-All Unpacking over Slicing.
-        
+
         Future implementation for Phase 2.
         Detects slice assignment patterns that could use catch-all unpacking.
         """
         # TODO: Implement in Phase 2
-        pass
 
     def _is_sequential_indexing_assignment(
         self, node: ast.Assign, checker: "PatternChecker"
@@ -54,9 +53,8 @@ class AssignmentPatternRules:
 
         # Check if subscript is accessing with a numeric index
         subscript = node.value
-        if (
-            not isinstance(subscript.slice, ast.Constant)
-            or not isinstance(subscript.slice.value, int)
+        if not isinstance(subscript.slice, ast.Constant) or not isinstance(
+            subscript.slice.value, int
         ):
             return False
 
@@ -82,7 +80,7 @@ class AssignmentPatternRules:
         """Check if there are other assignments that form a sequential pattern."""
         # Get the parent node (should be a statement list)
         parent = checker.get_parent()
-        if not hasattr(parent, "body"):
+        if not parent or not hasattr(parent, "body"):
             return False
 
         # Find all assignments in the same scope

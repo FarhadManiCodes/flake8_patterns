@@ -12,7 +12,7 @@ from .string_patterns import StringPatternRules
 
 __all__ = [
     "AssignmentPatternRules",
-    "ComprehensionPatternRules", 
+    "ComprehensionPatternRules",
     "DictionaryPatternRules",
     "FunctionPatternRules",
     "IterationPatternRules",

@@ -18,7 +18,7 @@ from .rules import (
     IterationPatternRules,
     StringPatternRules,
 )
-from .utils import PYTHON_313_PLUS, NodeVisitorWithParents
+from .utils import NodeVisitorWithParents
 
 # Plugin metadata
 __version__ = "0.1.1"
@@ -51,7 +51,7 @@ class PatternChecker(NodeVisitorWithParents):
         self.tree = tree
         self.filename = filename
         self.errors: list[Error] = []
-        
+
         # Initialize rule modules
         self.assignment_rules = AssignmentPatternRules()
         self.iteration_rules = IterationPatternRules()
@@ -68,7 +68,10 @@ class PatternChecker(NodeVisitorWithParents):
         yield from self.errors
 
     def error(
-        self, node: ast.expr, code: str, format_vars: dict[str, Any] | None = None
+        self,
+        node: ast.expr | ast.stmt,
+        code: str,
+        format_vars: dict[str, Any] | None = None,
     ) -> None:
         """Record an error for the given node and code."""
         message = get_error_message(code)
@@ -86,12 +89,12 @@ class PatternChecker(NodeVisitorWithParents):
         """Check assignment patterns."""
         # Tier 1 rules
         self.assignment_rules.check_efp105_sequential_indexing(node, self)
-        
+
         # Future Tier 2 rules
         self.assignment_rules.check_efp216_catch_all_unpacking(node, self)
         self.dictionary_rules.check_efp429_avoid_deep_nesting(node, self)
-        
-        # Future Tier 3 rules  
+
+        # Future Tier 3 rules
         self.function_rules.check_efp104_helper_functions(node, self)
         self.function_rules.check_efp108_assignment_expressions(node, self)
 
@@ -102,7 +105,7 @@ class PatternChecker(NodeVisitorWithParents):
         # Tier 1 rules
         self.iteration_rules.check_efp318_parallel_iteration(node, self)
         self.iteration_rules.check_efp320_loop_variables_after_loop(node, self)
-        
+
         # Future Tier 3 rules
         self.iteration_rules.check_efp317_enumerate_usage(node, self)
 
@@ -112,12 +115,11 @@ class PatternChecker(NodeVisitorWithParents):
         """Check function definition patterns."""
         # Tier 1 rules
         self.iteration_rules.check_efp321_defensive_iteration(node, self)
-        
+
         # Future Tier 2 rules
-        self.function_rules.check_efp531_return_objects(node, self)
         self.function_rules.check_efp537_keyword_only_arguments(node, self)
         self.function_rules.check_efp538_functools_wraps(node, self)
-        
+
         # Future Tier 3 rules
         self.iteration_rules.check_efp645_yield_from(node, self)
 
@@ -136,47 +138,46 @@ class PatternChecker(NodeVisitorWithParents):
         self.string_rules.check_efp213_context_aware_concatenation(node, self)
 
         self.generic_visit(node)
-    
+
     def visit_Call(self, node: ast.Call) -> None:
         """Check function call patterns."""
         # Future Tier 2 rules
         self.dictionary_rules.check_efp427_defaultdict_usage(node, self)
         self.comprehension_rules.check_efp12103_deque_for_queues(node, self)
-        
+
         self.generic_visit(node)
-    
+
     def visit_Return(self, node: ast.Return) -> None:
         """Check return statement patterns."""
-        # Future Tier 2 rules  
+        # Future Tier 2 rules
         self.function_rules.check_efp531_return_objects(node, self)
-        
+
         self.generic_visit(node)
-    
+
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
         """Check class definition patterns."""
         # Future Tier 2 rules
         self.function_rules.check_efp748_functions_vs_classes(node, self)
-        
+
         self.generic_visit(node)
-    
+
     def visit_Subscript(self, node: ast.Subscript) -> None:
         """Check subscript patterns."""
         # Future Tier 3 rules
         self.string_rules.check_efp215_avoid_striding_slicing(node, self)
-        
+
         self.generic_visit(node)
-    
+
     def visit_ListComp(self, node: ast.ListComp) -> None:
         """Check list comprehension patterns."""
         # Future Tier 3 rules
         self.comprehension_rules.check_efp641_comprehension_complexity(node, self)
-        
-        self.generic_visit(node)
 
+        self.generic_visit(node)
 
     # Future implementation notes for remaining tiers
     # All rule logic has been moved to organized rule modules in rules/ directory
-    # 
+    #
     # Tier 2 rules (Phase 2: v0.4.0-0.6.0) - 14 rules:
     # EFP216, EFP427, EFP12103, EFP531, EFP538, EFP429, EFP537, EFP748, EFP755, EFP769,
     # EFP770, EFP881, EFP12121, EFP12122
@@ -224,7 +225,10 @@ class PerformanceChecker(NodeVisitorWithParents):
         yield from self.errors
 
     def error(
-        self, node: ast.expr, code: str, format_vars: dict[str, Any] | None = None
+        self,
+        node: ast.expr | ast.stmt,
+        code: str,
+        format_vars: dict[str, Any] | None = None,
     ) -> None:
         """Record an error for the given node and code."""
         message = get_error_message(code)
