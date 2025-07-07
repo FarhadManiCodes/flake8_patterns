@@ -120,7 +120,7 @@ jobs:
 
     - name: Run safety scan
       run: |
-        safety scan --json --output safety-report.json || true
+        safety scan --json > safety-report.json || true
         safety scan
 
     - name: Upload security artifacts
