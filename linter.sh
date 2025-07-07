@@ -1,1 +1,0 @@
-/home/farhad/dotfiles/tmux/layouts/development/linter.sh
