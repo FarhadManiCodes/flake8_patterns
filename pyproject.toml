@@ -196,6 +196,9 @@ ignore = [
 "tests/*" = ["S101", "ANN", "D", "PLR2004", "N999"]
 "scripts/*" = ["T20", "S101"]
 "src/flake8_patterns/checker.py" = ["N802"]
+"examples/*" = ["T20", "ANN", "D", "RET", "PERF", "PLR", "INP001", "SIM103"]
+"tests/rule_analysis/analyze_rule.py" = ["T20", "S603", "BLE001", "TRY300", "EXE001"]
+"tests/rule_analysis/*" = ["PLR0913", "PLR0912", "PERF401", "ARG001"]
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
