@@ -13,37 +13,75 @@ FORMATTING_VIOLATIONS = {
     "INP001",  # Missing __init__.py
     "ANN201",  # Missing return type annotation
     "ANN001",  # Missing type annotation
-
     # Documentation
-    "D100", "D101", "D102", "D103", "D104", "D105", "D106", "D107",
-
+    "D100",
+    "D101",
+    "D102",
+    "D103",
+    "D104",
+    "D105",
+    "D106",
+    "D107",
     # Style/formatting
-    "W292", "W293", "C0304", "C0305",  # Newlines
-    "E302", "E303", "E501",            # Spacing/length
-    "COM812", "COM819",                # Commas
-    "Q000", "Q001", "Q002", "Q003",    # Quotes
-    "I001", "I002",                    # Imports
-
+    "W292",
+    "W293",
+    "C0304",
+    "C0305",  # Newlines
+    "E302",
+    "E303",
+    "E501",  # Spacing/length
+    "COM812",
+    "COM819",  # Commas
+    "Q000",
+    "Q001",
+    "Q002",
+    "Q003",  # Quotes
+    "I001",
+    "I002",  # Imports
     # Unused/naming
-    "F401", "F811", "F841",  # Unused
-    "C0103", "C0114", "C0115", "C0116",  # Naming/docs
-    "W0611", "W0613", "W0622",         # Unused/redefining
-
+    "F401",
+    "F811",
+    "F841",  # Unused
+    "C0103",
+    "C0114",
+    "C0115",
+    "C0116",  # Naming/docs
+    "W0611",
+    "W0613",
+    "W0622",  # Unused/redefining
     # Design (not patterns)  # noqa: ERA001
-    "R0903", "R0913", "R0914",         # Too few/many
+    "R0903",
+    "R0913",
+    "R0914",  # Too few/many
 }
 
 # Pattern detection rules that ARE relevant
 PATTERN_RULES = {
     # flake8-bugbear patterns
-    "B006", "B007", "B008", "B011", "B015", "B018", "B023",
-
+    "B006",
+    "B007",
+    "B008",
+    "B011",
+    "B015",
+    "B018",
+    "B023",
     # Pylint patterns
-    "R1701", "R1703", "R1705", "R1712", "R1713", "R1715", "R1726",
-    "W0102", "W0104", "W0120",
-
+    "R1701",
+    "R1703",
+    "R1705",
+    "R1712",
+    "R1713",
+    "R1715",
+    "R1726",
+    "W0102",
+    "W0104",
+    "W0120",
     # Ruff patterns
-    "PERF", "SIM", "UP", "PIE", "C4",
+    "PERF",
+    "SIM",
+    "UP",
+    "PIE",
+    "C4",
 }
 
 
@@ -65,14 +103,10 @@ def is_pattern_violation(rule_code: str) -> bool:
         return True
 
     # Pylint R-rules (refactoring suggestions)
-    return (
-        rule_code.startswith("R1") and rule_code not in FORMATTING_VIOLATIONS
-    )
+    return rule_code.startswith("R1") and rule_code not in FORMATTING_VIOLATIONS
 
 
-def parse_linter_violations(
-    linter_name: str, stdout: str, _stderr: str
-) -> list[dict]:
+def parse_linter_violations(linter_name: str, stdout: str, _stderr: str) -> list[dict]:
     """Parse violations from linter output."""
     violations = []
 
@@ -86,19 +120,23 @@ def parse_linter_violations(
 
             if linter_name == "ruff":
                 for item in data:
-                    violations.append({
-                        "rule_code": item.get("code", "UNKNOWN"),
-                        "line": item.get("location", {}).get("row", 0),
-                        "message": item.get("message", ""),
-                    })
+                    violations.append(
+                        {
+                            "rule_code": item.get("code", "UNKNOWN"),
+                            "line": item.get("location", {}).get("row", 0),
+                            "message": item.get("message", ""),
+                        }
+                    )
 
             elif linter_name == "pylint":
                 for item in data:
-                    violations.append({
-                        "rule_code": item.get("message-id", "UNKNOWN"),
-                        "line": item.get("line", 0),
-                        "message": item.get("message", ""),
-                    })
+                    violations.append(
+                        {
+                            "rule_code": item.get("message-id", "UNKNOWN"),
+                            "line": item.get("line", 0),
+                            "message": item.get("message", ""),
+                        }
+                    )
         except json.JSONDecodeError:
             pass  # No violations or unparseable output
 
@@ -108,11 +146,13 @@ def parse_linter_violations(
             data = json.loads(stdout)
             for file_violations in data.values():
                 for item in file_violations:
-                    violations.append({
-                        "rule_code": item.get("code", "UNKNOWN"),
-                        "line": item.get("line_number", 0),
-                        "message": item.get("text", ""),
-                    })
+                    violations.append(
+                        {
+                            "rule_code": item.get("code", "UNKNOWN"),
+                            "line": item.get("line_number", 0),
+                            "message": item.get("text", ""),
+                        }
+                    )
         except json.JSONDecodeError:
             # Fallback to text parsing
             for line in stdout.strip().split("\n"):
@@ -124,20 +164,20 @@ def parse_linter_violations(
                             code_msg = parts[3].strip()
                             if " " in code_msg:
                                 code, message = code_msg.split(" ", 1)
-                                violations.append({
-                                    "rule_code": code,
-                                    "line": line_num,
-                                    "message": message,
-                                })
+                                violations.append(
+                                    {
+                                        "rule_code": code,
+                                        "line": line_num,
+                                        "message": message,
+                                    }
+                                )
                         except (ValueError, IndexError):
                             continue
 
     return violations
 
 
-def analyze_linter_output(
-    rule_code: str, linter_results: dict[str, dict]
-) -> dict:
+def analyze_linter_output(rule_code: str, linter_results: dict[str, dict]) -> dict:
     """Analyze linter results for redundancy."""
     total_violations = 0
     pattern_violations = 0
@@ -175,9 +215,7 @@ def analyze_linter_output(
     # Calculate redundancy
     redundancy_percentage = 0.0
     if total_violations > 0:
-        redundancy_percentage = (
-            pattern_violations / max(1, total_violations)
-        ) * 100
+        redundancy_percentage = (pattern_violations / max(1, total_violations)) * 100
 
     # Determine recommendation
     if pattern_violations == 0:
@@ -208,9 +246,7 @@ def analyze_linter_output(
     }
 
 
-def generate_report(
-    analysis: dict, detailed_results: dict | None = None
-) -> str:
+def generate_report(analysis: dict, detailed_results: dict | None = None) -> str:
     """Generate a formatted report."""
     lines = [
         "=" * 60,
@@ -230,30 +266,36 @@ def generate_report(
     ]
 
     if analysis["linters_with_patterns"]:
-        lines.extend([
-            "🔍 LINTERS WITH PATTERN DETECTION",
-            "-" * 35,
-        ])
+        lines.extend(
+            [
+                "🔍 LINTERS WITH PATTERN DETECTION",
+                "-" * 35,
+            ]
+        )
         for linter in analysis["linters_with_patterns"]:
             lines.append(f"  • {linter}")
         lines.append("")
 
     if analysis["pattern_rules_found"]:
-        lines.extend([
-            "📋 PATTERN RULES DETECTED",
-            "-" * 25,
-        ])
+        lines.extend(
+            [
+                "📋 PATTERN RULES DETECTED",
+                "-" * 25,
+            ]
+        )
         for rule in analysis["pattern_rules_found"]:
             lines.append(f"  • {rule}")
         lines.append("")
 
     if detailed_results:
-        lines.extend([
-            "=" * 60,
-            "DETAILED RESULTS",
-            "=" * 60,
-            "",
-        ])
+        lines.extend(
+            [
+                "=" * 60,
+                "DETAILED RESULTS",
+                "=" * 60,
+                "",
+            ]
+        )
 
         for linter, result in detailed_results.items():
             lines.append(f"📝 {linter.upper()}")
@@ -273,8 +315,7 @@ def generate_report(
                     lines.append("Pattern violations found:")
                     for v in linter_result["pattern_violations"]:
                         lines.append(
-                            f"  {v['rule_code']} (line {v['line']}): "
-                            f"{v['message']}"
+                            f"  {v['rule_code']} (line {v['line']}): " f"{v['message']}"
                         )
                 else:
                     lines.append("✅ No pattern violations")

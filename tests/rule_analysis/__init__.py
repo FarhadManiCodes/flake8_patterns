@@ -48,9 +48,7 @@ class LinterResults:
     """Results from running linters against a code sample."""
 
     sample_name: str  # Name of the tested sample
-    violations_by_linter: dict[
-        str, list[LinterViolation]
-    ]  # Linter name -> violations
+    violations_by_linter: dict[str, list[LinterViolation]]  # Linter name -> violations
     execution_errors: dict[str, str]  # Linter name -> error message
 
 
@@ -63,9 +61,7 @@ class RedundancyAnalysis:
     samples_with_existing_coverage: list[
         str
     ]  # Samples where existing linters found issues
-    samples_with_no_coverage: list[
-        str
-    ]  # Samples where no existing linter found issues
+    samples_with_no_coverage: list[str]  # Samples where no existing linter found issues
     overlapping_rules: dict[
         str, list[str]
     ]  # Linter name -> list of overlapping rule codes

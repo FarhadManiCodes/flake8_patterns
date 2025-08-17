@@ -20,8 +20,7 @@ RULE_DESCRIPTION = (
     "Prefer multiple-assignment unpacking over indexing."
 )
 BOOK_REFERENCE = (
-    "Effective Python Item 5: "
-    "Prefer Multiple Assignment Unpacking Over Indexing"
+    "Effective Python Item 5: " "Prefer Multiple Assignment Unpacking Over Indexing"
 )
 
 # Positive test cases - patterns that SHOULD trigger EFP105
@@ -443,9 +442,7 @@ def process_data(data: list[str]) -> tuple[str, str]:
 
 ''',
         should_trigger=False,
-        description=(
-            "Sequential indices in different functions should not trigger"
-        ),
+        description=("Sequential indices in different functions should not trigger"),
         category=TestCategory.NEGATIVE,
     ),
 ]

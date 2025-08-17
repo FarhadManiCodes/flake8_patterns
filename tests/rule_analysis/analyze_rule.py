@@ -29,12 +29,8 @@ def run_linter(linter_name: str, file_path: Path) -> dict:
 
     commands = {
         "ruff": ["ruff", "check", "--output-format=json", str(file_path)],
-        "pylint": [
-            "pylint", "--output-format=json", "--reports=n", str(file_path)
-        ],
-        "flake8-bugbear": [
-            "flake8", "--select=B", "--format=json", str(file_path)
-        ],
+        "pylint": ["pylint", "--output-format=json", "--reports=n", str(file_path)],
+        "flake8-bugbear": ["flake8", "--select=B", "--format=json", str(file_path)],
         "flake8": ["flake8", "--format=json", str(file_path)],
     }
 
@@ -47,7 +43,7 @@ def run_linter(linter_name: str, file_path: Path) -> dict:
             capture_output=True,
             text=True,
             timeout=30,
-            check=False  # Don't raise on lint violations
+            check=False,  # Don't raise on lint violations
         )
 
         return {
@@ -91,29 +87,24 @@ Examples:
   python analyze_rule.py efp105
   python analyze_rule.py efp105 --linters ruff,pylint
   python analyze_rule.py efp105 --output json
-        """.strip()
+        """.strip(),
     )
 
     parser.add_argument("rule_code", help="Rule code (e.g., efp105)")
     parser.add_argument(
         "--linters",
         default="ruff,pylint,flake8-bugbear,flake8",
-        help="Comma-separated linters (default: all)"
+        help="Comma-separated linters (default: all)",
     )
     parser.add_argument(
-        "--output",
-        choices=["console", "json"],
-        default="console",
-        help="Output format"
+        "--output", choices=["console", "json"], default="console", help="Output format"
     )
     parser.add_argument("--verbose", "-v", action="store_true")
 
     args = parser.parse_args()
 
     # Find the analysis file
-    analysis_file = (
-        Path(__file__).parent / f"{args.rule_code.lower()}_analysis.py"
-    )
+    analysis_file = Path(__file__).parent / f"{args.rule_code.lower()}_analysis.py"
     if not analysis_file.exists():
         print(f"Error: Analysis file not found: {analysis_file}")
         available = list(Path(__file__).parent.glob("*_analysis.py"))
@@ -123,9 +114,7 @@ Examples:
         return 1
 
     # Parse linters
-    linters = [
-        linter.strip() for linter in args.linters.split(",") if linter.strip()
-    ]
+    linters = [linter.strip() for linter in args.linters.split(",") if linter.strip()]
 
     if args.verbose:
         print(f"Analyzing {args.rule_code.upper()} redundancy...")
