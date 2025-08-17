@@ -85,3 +85,4 @@ backup_*/
 .venvrc
 .projectrc
 .envrc
+.kiro
