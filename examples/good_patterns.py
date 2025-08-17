@@ -80,7 +80,7 @@ def process_matched_data():
     """Good: Using zip() for parallel processing."""
     keys = ["name", "age", "job"]
     values = ["Alice", 25, "Engineer"]
-    result = dict(zip(keys, values, strict=False))  # Good: zip() for dict creation
+    result = dict(zip(keys, values, strict=False))  # Good: zip() for dict
     return result
 
 
