@@ -69,20 +69,19 @@ class AssignmentPatternRules:
             return None
 
         subscript = node.value
-        assert isinstance(subscript, ast.Subscript)  # Already checked above
+        # Type narrowing: we already validated this is ast.Subscript above
 
         valid_index = (
-            isinstance(subscript.slice, ast.Constant)
-            and isinstance(subscript.slice.value, int)
-            and subscript.slice.value >= 0
+            isinstance(subscript.slice, ast.Constant)  # type: ignore[attr-defined]
+            and isinstance(subscript.slice.value, int)  # type: ignore[attr-defined]
+            and subscript.slice.value >= 0  # type: ignore[attr-defined]
         )
 
-        if not valid_index or not isinstance(subscript.value, ast.Name):
+        if not valid_index or not isinstance(subscript.value, ast.Name):  # type: ignore[attr-defined]
             return None
 
-        assert isinstance(subscript.slice, ast.Constant)  # Already checked above
-        assert isinstance(subscript.value, ast.Name)  # Already checked above
-        return subscript.value.id, subscript.slice.value
+        # Type narrowing: we already validated these types above
+        return subscript.value.id, subscript.slice.value  # type: ignore[attr-defined]
 
     def _check_for_sequential_pattern(
         self,
