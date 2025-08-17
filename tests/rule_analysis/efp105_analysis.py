@@ -253,6 +253,31 @@ def extract_coordinates(
         description="Sequential indexing of same nested object",
         category=TestCategory.POSITIVE,
     ),
+    create_code_sample(
+        name="intermediate_variable_indices",
+        code='''"""Module demonstrating intermediate variable index access."""
+
+from __future__ import annotations
+
+
+def get_by_indices(
+    data: list[str], indices: list[int]
+) -> tuple[str, str, str]:
+    """Get elements using intermediate variables from sequential indexing."""
+    first_idx = indices[0]   # Sequential indexing pattern
+    second_idx = indices[1]  # that should use unpacking:
+    third_idx = indices[2]   # first_idx, second_idx, third_idx = indices
+
+    a = data[first_idx]      # Subsequent usage doesn't change
+    b = data[second_idx]     # the initial anti-pattern
+    c = data[third_idx]
+    return a, b, c
+
+''',
+        should_trigger=True,
+        description="Sequential indexing for intermediate variables should trigger",
+        category=TestCategory.POSITIVE,
+    ),
 ]
 
 # Negative test cases - patterns that should NOT trigger EFP105
@@ -328,31 +353,6 @@ def process_first(items: list[str]) -> tuple[str, str, str]:
 ''',
         should_trigger=False,
         description="Repeated access to same index should not trigger",
-        category=TestCategory.NEGATIVE,
-    ),
-    create_code_sample(
-        name="variable_indices",
-        code='''"""Module demonstrating variable index access."""
-
-from __future__ import annotations
-
-
-def get_by_indices(
-    data: list[str], indices: list[int]
-) -> tuple[str, str, str]:
-    """Get elements using variable indices."""
-    first_idx = indices[0]
-    second_idx = indices[1]
-    third_idx = indices[2]
-
-    a = data[first_idx]
-    b = data[second_idx]
-    c = data[third_idx]
-    return a, b, c
-
-''',
-        should_trigger=False,
-        description="Variable indices should not trigger",
         category=TestCategory.NEGATIVE,
     ),
     create_code_sample(
