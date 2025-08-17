@@ -114,6 +114,7 @@ class AssignmentPatternRules:
             for assignment in assignments
             if isinstance(assignment.value, ast.Subscript)
             and isinstance(assignment.value.slice, ast.Constant)
+            and isinstance(assignment.value.slice.value, int)
         ]
 
         # Look for any consecutive subsequence of length >= 2
