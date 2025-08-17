@@ -597,17 +597,14 @@ src/flake8_patterns/
 
 ## Current Development Focus
 
-### Immediate Priority: EFP105 Implementation
-**Rule**: Multiple-Assignment Unpacking over Indexing
-**Pattern**: `x = item[0]; y = item[1]` → `x, y = item`
-**Book Reference**: "Effective Python" (3rd Edition), Item 5, Chapter 1
-**Detection**: AST pattern matching for sequential indexing assignments
+### EFP105 Implementation: Complete
+The EFP105 rule is fully implemented, tested, and documented.
 
-**Why EFP105 First:**
-- Clearest, most detectable pattern (high confidence implementation)
-- Common anti-pattern that beginners often use
-- Clear educational value with obvious improvement
-- No complex AST analysis required (good starting point)
+### Immediate Priority: EFP213 Implementation
+**Rule**: Context-Aware String Concatenation
+**Pattern**: Implicit concatenation in collections → explicit concatenation
+**Book Reference**: "Effective Python" (3rd Edition), Item 13, Chapter 2
+**Detection**: Identify `ast.JoinedStr` nodes within list/tuple/dict literals where explicit concatenation would be clearer.
 
 ### Testing Strategy: Manual Book Reference Validation
 
