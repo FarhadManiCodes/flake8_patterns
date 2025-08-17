@@ -1,8 +1,7 @@
 # This code is inspired by examples from Brett Slatkin's
 # Effective Python repository, licensed under Apache 2.0.
 
-"""
-Bad patterns that should trigger flake8-patterns rules.
+"""Bad patterns that should trigger flake8-patterns rules.
 These examples demonstrate anti-patterns from "Effective Python" (3rd Edition).
 
 Run with: flake8 --select=EFP examples/bad_patterns.py

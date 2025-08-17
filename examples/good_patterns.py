@@ -1,8 +1,7 @@
 # This code is inspired by examples from Brett Slatkin's
 # Effective Python repository, licensed under Apache 2.0.
 
-"""
-Good patterns that follow "Effective Python" (3rd Edition) recommendations.
+"""Good patterns that follow "Effective Python" (3rd Edition) recommendations.
 These examples demonstrate proper Pythonic patterns.
 
 Run with: flake8 --select=EFP examples/good_patterns.py
@@ -71,7 +70,9 @@ def calculate_scores():
     """Good: Using zip() for parallel iteration."""
     names = ["Alice", "Bob", "Charlie"]
     scores = [85, 92, 78]
-    for name, score in zip(names, scores):  # Good: zip() for parallel iter
+    for name, score in zip(
+        names, scores, strict=False
+    ):  # Good: zip() for parallel iter
         print(f"{name}: {score}")
 
 
@@ -79,7 +80,7 @@ def process_matched_data():
     """Good: Using zip() for parallel processing."""
     keys = ["name", "age", "job"]
     values = ["Alice", 25, "Engineer"]
-    result = dict(zip(keys, values))  # Good: zip() for dict creation
+    result = dict(zip(keys, values, strict=False))  # Good: zip() for dict creation
     return result
 
 
@@ -87,7 +88,7 @@ def merge_lists():
     """Good: Using zip() for merging lists."""
     list1 = [1, 2, 3]
     list2 = [4, 5, 6]
-    merged = list(zip(list1, list2))  # Good: zip() for merging
+    merged = list(zip(list1, list2, strict=False))  # Good: zip() for merging
     return merged
 
 
@@ -211,7 +212,7 @@ def complex_good_example():
     data_pairs = [("Alice", 25), ("Bob", 30), ("Charlie", 35)]
 
     # Good: Direct unpacking in loop
-    names, ages = zip(*data_pairs)  # Good: zip unpacking
+    names, ages = zip(*data_pairs, strict=False)  # Good: zip unpacking
 
     # Good: zip() for parallel processing
     results = [f"{name}: {age}" for name, age in data_pairs]
@@ -439,7 +440,6 @@ def process(item):
 
 def log_last_item(item):
     """Placeholder for logging function."""
-    pass
 
 
 # Main demonstration

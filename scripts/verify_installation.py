@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-Comprehensive verification script for flake8-patterns installation.
+"""Comprehensive verification script for flake8-patterns installation.
 Run this to verify everything is working correctly.
 
 Updated for verified Tier 1 rules from "Effective Python" (3rd Edition):
@@ -16,7 +15,6 @@ import os
 import subprocess
 import sys
 import tempfile
-from pathlib import Path
 
 
 # Colors for output
@@ -48,7 +46,12 @@ def run_command(cmd, capture_output=True):
     """Run a command and return success, stdout, stderr."""
     try:
         result = subprocess.run(
-            cmd, shell=True, capture_output=capture_output, text=True, timeout=30
+            cmd,
+            check=False,
+            shell=True,
+            capture_output=capture_output,
+            text=True,
+            timeout=30,
         )
         return result.returncode == 0, result.stdout, result.stderr
     except subprocess.TimeoutExpired:

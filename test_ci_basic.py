@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-Basic CI test that bypasses pytest import issues.
+"""Basic CI test that bypasses pytest import issues.
 This will be used until the main test suite is working.
 """
 
@@ -18,9 +17,6 @@ if str(src_path) not in sys.path:
 def test_basic_imports():
     """Test that basic imports work."""
     try:
-        from flake8_patterns.book_refs import get_book_reference
-        from flake8_patterns.checker import PatternChecker
-        from flake8_patterns.messages import ALL_MESSAGES, get_error_message
 
         print("✅ All basic imports successful")
         return True
@@ -52,14 +48,13 @@ def test_checker_instantiation():
 def test_message_system():
     """Test that the message system works."""
     try:
-        from flake8_patterns.messages import ALL_MESSAGES, get_error_message
+        from flake8_patterns.messages import ALL_MESSAGES
 
         if len(ALL_MESSAGES) > 0:
             print(f"✅ Message system works, {len(ALL_MESSAGES)} messages loaded")
             return True
-        else:
-            print("⚠️ Message system works but no messages found")
-            return False
+        print("⚠️ Message system works but no messages found")
+        return False
     except Exception as e:
         print(f"❌ Message system failed: {e}")
         return False
@@ -68,16 +63,15 @@ def test_message_system():
 def test_book_references():
     """Test that book references work."""
     try:
-        from flake8_patterns.book_refs import EFFECTIVE_PYTHON_REFS, get_book_reference
+        from flake8_patterns.book_refs import get_book_reference
 
         # Test a known reference
         ref = get_book_reference("EFP105")
         if ref:
             print(f"✅ Book reference system works, found: {ref.item}")
             return True
-        else:
-            print("⚠️ Book reference system works but EFP105 not found")
-            return False
+        print("⚠️ Book reference system works but EFP105 not found")
+        return False
     except Exception as e:
         print(f"❌ Book reference system failed: {e}")
         return False
@@ -114,9 +108,8 @@ def run_all_tests():
     if passed == total:
         print("🎉 All basic tests passed!")
         return 0
-    else:
-        print("❌ Some tests failed")
-        return 1
+    print("❌ Some tests failed")
+    return 1
 
 
 if __name__ == "__main__":
